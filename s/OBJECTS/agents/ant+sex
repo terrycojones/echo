@@ -1,0 +1,10 @@
+Name : ant+sex
+Initial_Reserves : 10 10 10 10
+Trading_Resource : a
+Uptake_Mask : 1111
+Offense_Tag : b
+Defense_Tag : b
+Mating_Tag : bc
+Combat_Condition : a
+Trade_Condition : d
+Mating_Condition : bc

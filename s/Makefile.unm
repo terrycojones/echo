@@ -1,0 +1,65 @@
+VERSION = 0.1
+RELEASE = Echo-$(VERSION)
+#CC = cc
+CC = gcc
+#DEFINES = -DCHECK_ARGS -DGRAPHICS -DJHH_SILLINESS
+DEFINES = -DCHECK_ARGS -DGRAPHICS
+INCLUDES = -I. -I/usr/include/X11 -IWIDGETS/fwf/include -IWIDGETS/At/include -IWIDGETS/Athena3d/include
+GCCFLAGS = -Wall -O 
+#CFLAGS  = -pipe -g $(INCLUDES) $(DEFINES)
+CFLAGS  = -pipe -g $(INCLUDES) $(DEFINES) $(GCCFLAGS)
+WIDGETS=/nfs/mammoth/u1/terry/Echo/WIDGETS
+LDFLAGS = -L/usr/local/X11/lib -L$(WIDGETS)/Athena3d/lib -L$(WIDGETS)/fwf/lib -L$(WIDGETS)/At/lib
+
+
+SRC     = agents.c agents.h chromosomes.c chromosomes.h defaults.h defs.h error.c \
+          free.c free.h globals.h graphics.c graphics.h hash.c hash.h interaction.c \
+          interaction.h main.c main.h main_options.c misc_graphics.c misc_graphics.h \
+          options.c options.h random.c random.h regexp.c regexp.h regsub.c regmagic.h \
+          resources.c resources.h running.c running.h schema.c schema.h sites.c \
+          sites.h syscalls.c syscalls.h types.h worlds.c worlds.h
+
+OBJS    = agents.o chromosomes.o error.o free.o graphics.o hash.o interaction.o \
+          main.o misc_graphics.o options.o random.o regexp.o regsub.o resources.o \
+          running.o schema.o sites.o syscalls.o worlds.o
+
+Echo : $(OBJS)
+	$(CC) -o $@ $(OBJS) $(LDFLAGS)  -lfwf -lDir -lAt -lXaw3d -lXmu -lXt -lXext -lX11 -lm
+
+depend:
+	@makedepend $(INCLUDES) $(DEFINES) $(SRC)
+
+tags: co
+	etags *.[ch]
+
+clean :
+	rm -f *.o
+
+clobber : clean
+	rm -f Echo Makefile.bak
+
+wc : co
+	wc *.[ch] Makefile
+
+co:
+	@for i in $(SRC); do \
+		if [ ! -f $$i ]; then co $$i; fi \
+	done
+
+col:
+	@for i in $(SRC); do \
+		if [ ! -f $$i ]; then co -l $$i; fi \
+	done
+
+tar:
+	rm -fr $(RELEASE) OBJECTS/core
+	mkdir $(RELEASE)
+	for i in $(SRC); do \
+		if [ -f $$i ]; then cp $$i $(RELEASE)/$$i; else co -p $$i > $(RELEASE)/$$i; fi \
+	done
+	cp Makefile $(RELEASE)
+	cp -r OBJECTS $(RELEASE)
+	cp -r WIDGETS $(RELEASE)
+	tar cvf $(RELEASE).tar $(RELEASE)
+	compress -f $(RELEASE).tar
+	rm -fr $(RELEASE)

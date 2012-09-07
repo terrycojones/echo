@@ -1,0 +1,4 @@
+ECHO ()
+{
+	xterm -title 'ECHO status' -fn 9x15 -sl 1000 -sb -geometry 85x24+355+54 -bg LightSteelBlue -e $HOME/r/echo/Echo &
+}

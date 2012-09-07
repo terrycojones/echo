@@ -1,0 +1,19 @@
+Name : 4x4-insects
+Trading_Fraction : 0.5
+Interaction_Fraction : 0.02
+Self_Replication_Fraction : 0.5
+Self_Replication_Threshold : 2.0
+Maintenance_Probability : 0.2
+Neighborhood : EIGHT
+Rows : 4
+Columns : 4
+Number_Of_Resources : 4
+Combat_Matrix : 4 3 2 1
+Combat_Matrix : 0 4 2 1
+Combat_Matrix : 2 2 4 0
+Combat_Matrix : 2 2 0 4
+Sites : 
+4x4-insects 4x4-insects 4x4-insects 4x4-insects
+4x4-insects 4x4-insects 4x4-insects 4x4-insects
+4x4-insects 4x4-insects 4x4-insects 4x4-insects
+4x4-insects 4x4-insects 4x4-insects 4x4-insects

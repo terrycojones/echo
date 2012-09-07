@@ -1,0 +1,13 @@
+#!/usr/bin/perl
+
+while (<>){
+    chop;
+    $count = split;
+    printf("%s %s ", @_[0], @_[$count - 1]);
+
+    for ($i = 1; $i < $count - 1; $i++){
+	printf("%s ", @_[$i]);
+    }
+
+    print "\n";
+}

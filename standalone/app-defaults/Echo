@@ -1,0 +1,111 @@
+Echo*font:                                7x13bold
+!Echo*background:                          LightSteelBlue
+!Echo*SimpleMenu.background:               CornflowerBlue
+!Echo*Text*background:                     CornflowerBlue
+!Echo*ScrolledList*background:             CornflowerBlue
+Echo*background:                          DodgerBlue1
+Echo*SimpleMenu.background:               LightSteelBlue
+Echo*Text*background:                     LightSteelBlue
+Echo*ScrolledList*background:             LightSteelBlue
+Echo*beNiceToColorMap:                    False
+Echo*MenuButton.background:               Red
+Echo*MenuButton.foreground:               White
+Echo*Command.background:                  Red
+Echo*Command.foreground:                  White
+Echo*Dialog.borderWidth:                  0
+Echo*Text.borderWidth:                    1
+Echo*Label.shadowWidth:                   2
+Echo*Label.borderWidth:                   0
+Echo*Label.foreground:                    White
+!!
+!! LOCATIONS (IPC)
+!! xterm should be xterm -fn 9x15 -sl 1000 -sb -geometry 85x24+355+53 -bg SkyBlue &
+!!
+Echo.geometry:                            782+355+0
+! editors
+Echo*worldEditor.geometry:                +0+0
+Echo*siteEditor.geometry:                 +0+307
+Echo*agentEditor.geometry:                +0+567
+! stack dump
+Echo*stackDump.geometry:                  +355+53
+Echo*stackEditor.width:                   500
+Echo*stackEditor.height:                  500
+! selectors
+Echo*agentSelector.geometry:              700x365+355+53
+Echo*siteSelector.geometry:               700x365+355+53
+Echo*worldSelector.geometry:              700x365+355+53
+! graphs
+Echo*speciesGraph.geometry:               395x410+355+441
+Echo*resourcesGraph.geometry:             387x410+756+441
+Echo*populationGraph.geometry:            387x410+753+441
+Echo*schemaGraph.geometry:                387x410+756+441
+Echo*variantGraph.geometry:               387x410+756+441
+! small editors
+Echo*worldSiteEditor.geometry:            252x143+355+53
+Echo*worldCombatEditor.geometry:          252x105+355+53
+Echo*siteAgentEditor.geometry:            154x460+355+53
+! other popups
+Echo*stackDumpHelp.geometry:              +435+154
+Echo*generationSelector.geometry:         +355+53
+Echo*seedSelector.geometry:               +355+53
+Echo*schemaSelector.geometry:             +355+53
+Echo*verboseSelector.geometry:            +355+53
+Echo*messagePopup.geometry:               +355+53
+Echo*stackSelector.geometry:              +355+53
+!!
+!!
+!! AGENT EDITOR
+!!
+Echo*agentEditor*Label.width:              190
+Echo*agentEditor*Label.borderWidth:        0
+Echo*agentEditor*Text.width:               147
+!!
+!! SITE EDITOR
+!!
+Echo*siteEditor*Label.width:               190
+Echo*siteEditor*Label.borderWidth:         0
+Echo*siteEditor*Text.width:                147
+!!
+!! WORLD EDITOR
+!!
+Echo*worldEditor*Label.width:               190
+Echo*worldEditor*Label.borderWidth:         0
+Echo*worldEditor*Text.width:                147
+!!
+!! SPECIES GRAPH
+!!
+Echo*speciesGraph*ant.foreground:               Blue
+Echo*speciesGraph*4x4-ant.foreground:           Blue
+Echo*speciesGraph*ant+sex.foreground:           Blue
+Echo*speciesGraph*cat.foreground:               Red
+Echo*speciesGraph*4x4-cat.foreground:           Red
+Echo*speciesGraph*cat+sex.foreground:           Red
+Echo*speciesGraph*caterpillar.foreground:       Red
+Echo*speciesGraph*caterpillar+sex.foreground:   Red
+Echo*speciesGraph*fly.foreground:               Green
+Echo*speciesGraph*4x4-fly.foreground:           Green
+Echo*speciesGraph*fly+sex.foreground:           Green
+!!
+!!
+!! RESOURCE GRAPH
+!!
+Echo*resourcesGraph*aLine.foreground:       Red
+Echo*resourcesGraph*bLine.foreground:       Blue
+Echo*resourcesGraph*cLine.foreground:       Green
+Echo*resourcesGraph*dLine.foreground:       Black
+Echo*resourcesGraph*eLine.foreground:       Chartreuse
+Echo*resourcesGraph*fLine.foreground:       Cyan1
+Echo*resourcesGraph*gLine.foreground:       Orchid
+!!
+!! POPULATION GRAPH
+!!
+Echo*populationGraph*line.foreground:       Blue
+!!
+!! SCHEMA GRAPH
+!!
+Echo*schemaGraph*line.foreground:           Blue
+!!
+!! VARIANT GRAPH
+!!
+Echo*variantGraph*alive_line.foreground:    Blue
+Echo*variantGraph*total_line.foreground:    Red

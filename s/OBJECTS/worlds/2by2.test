@@ -1,0 +1,16 @@
+Name : 2by2
+Trading_Fraction : 1.0
+Interaction_Fraction : 0.5
+Self_Replication_Fraction : 0.3
+Self_Replication_Threshold : 2.0
+Neighborhood : NONE
+Rows : 2
+Columns : 2
+Number_Of_Resources : 4
+Combat_Matrix : 1 2 3 4
+Combat_Matrix : 5 6 7 8
+Combat_Matrix : 9 10 1 1
+Combat_Matrix : 13 14 1 5
+Sites : 
+2by2-site.test    2by2-site.test
+2by2-site.test    2by2-site.test

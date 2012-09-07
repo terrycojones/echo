@@ -1,0 +1,26 @@
+#!/bin/sh
+
+d=/net/user/terry/r/echo/standalone
+dir=$d/normal
+
+ECHO_LOCATION=$dir/OBJECTS
+export ECHO_LOCATION
+
+ECHO_WORLD=insects1
+ECHO_SITE=insects1
+ECHO_AGENT=fly
+
+export ECHO_WORLD
+export ECHO_SITE
+export ECHO_AGENT
+
+PATH=$dir/bin:$PATH
+export PATH
+
+TK_LIBRARY=$d/lib/tk
+TCL_LIBRARY=$d/lib/tcl
+
+export TK_LIBRARY TCL_LIBRARY
+
+xterm -title 'Echo Status' -fn 9x15 -sl 1000 -sb -geometry 85x24+355+53 \
+      -bg DodgerBlue1 -fg white -e $dir/Echo $* &

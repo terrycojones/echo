@@ -1,0 +1,57 @@
+
+Definites:
+
+  Bug fixes:
+        - Find out why generation numbers are one off in graphics and nographics modes.
+
+  Big things:
+	- run time editing of the world.
+	- add window that shows what some set of agents will do to each other. combat/trade/mate
+        - window to show actual species as defined by mating tag/cond.
+        - add window showing agents at a site.
+        - add random agents?
+
+  Small things:
+	- get rid of flickering in graph update.
+	- add mutation interarrival time speed up. use for maintenance charging too.
+          and for all other such rare things.
+	- multiple agent editing.
+	- add a color to agent editor?
+	- add a remove agent/site/world menu.
+	- make sites and agents read and stored as combat array is.
+
+Probables:
+	- change widget representation of uptake resource mask.
+	- generalize number of chromosomes, make it world-specific
+	  and let the world file name the chromosomes too?
+	  can the world also specify interactions? (ambitious)
+	  this should eventually happen - make it more gassy-like,
+	  let the user write interaction functions.
+
+Possibles:
+	- make some parameters movable. e.g. make the mutation rate moveable from
+	  sites to worlds or even to agents. think of a fast general way to do this
+	  (inheritance?). and have it displayed correctly when editing etc.
+
+Dreams:
+	- Echo run programming language. Would be nice to have it interpreted.
+	  Otherwise have a C program that is compiled and called at the end of
+	  each generation & its output captured. A bit horrible but nicer from
+	  the compilation/translation aspect.
+
+	  * things that apply to the whole run
+	  
+	  	stop if {schema X is found,
+		   species X level falls below Y
+		   species X level rises above Y
+		   generation = X
+		  }
+	  
+	  * things to be done sequentially
+	  	run X generations
+	  	add the following individual
+	  	start tracing this schema
+	  	turn on/off graphics
+
+	  
+

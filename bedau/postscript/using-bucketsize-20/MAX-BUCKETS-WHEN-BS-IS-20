@@ -1,0 +1,25 @@
+~/r/echo/bedau/tools $ print 0.uc 0.ut 1 2 4 5
+bedau_stats: reading options from file 'options.gene0.uc'.
+The maximum number of buckets was 288
+ssplot: processing gene0.uc.usage ... 
+ssplot: writing Usage Plot to file: gene0.uc.ps
+bedau_stats: reading options from file 'options.gene0.ut'.
+The maximum number of buckets was 16
+ssplot: processing gene0.ut.usage ... 
+ssplot: writing Usage Plot to file: gene0.ut.ps
+bedau_stats: reading options from file 'options.gene1'.
+The maximum number of buckets was 254
+ssplot: processing gene1.usage ... 
+ssplot: writing Usage Plot to file: gene1.ps
+bedau_stats: reading options from file 'options.gene2'.
+The maximum number of buckets was 23
+ssplot: processing gene2.usage ... 
+ssplot: writing Usage Plot to file: gene2.ps
+bedau_stats: reading options from file 'options.gene4'.
+The maximum number of buckets was 42
+ssplot: processing gene4.usage ... 
+ssplot: writing Usage Plot to file: gene4.ps
+bedau_stats: reading options from file 'options.gene5'.
+The maximum number of buckets was 97
+ssplot: processing gene5.usage ... 
+ssplot: writing Usage Plot to file: gene5.ps

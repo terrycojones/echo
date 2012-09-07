@@ -1,0 +1,170 @@
+#!/bin/sh
+
+#
+# This script tries to arrange for Echo's environment
+# variables to be initialized in the appropriate shell
+# startup file.
+#
+
+#
+# Source the common function and variable definitions.
+#
+if [ ! -f echo-sh-common ]
+then
+	echo "Could not find echo-sh-common! Check your Echo distribution."
+	exit 1
+else
+	. echo-sh-common
+fi
+
+csh_add()
+{
+	message "Adding environment variables to \"$1\"."
+
+	cat >> $1 << EOT
+
+#
+# Environment variables for Echo
+#
+setenv ECHO_LOCATION $cwd/OBJECTS
+setenv ECHO_WORLD    insects
+setenv ECHO_SITE     insects
+setenv ECHO_AGENT    fly
+EOT
+}
+
+sh_add()
+{
+	message "Adding environment variables to \"$1\"."
+
+	cat >> $1 << EOT
+
+#
+# Environment variables for Echo
+#
+ECHO_LOCATION=$cwd/OBJECTS
+ECHO_WORLD=insects
+ECHO_SITE=insects
+ECHO_AGENT=fly
+
+export ECHO_LOCATION ECHO_WORLD ECHO_SITE ECHO_AGENT
+EOT
+}
+
+
+#
+# Add Echo's environment variables to the user's .login (or whatever)
+# file. The file name is based on what the environment variable SHELL
+# looks like (we are passed either sh or csh as our first argument).
+#
+add ()
+{
+	done=0
+	shell=$1
+	shift
+	last_resort=$HOME/$1
+
+	case $shell in
+		sh)
+			for f in "$@"
+			do
+				file=$HOME/$f
+				if file_exists $file
+				then
+					if file_writable $file
+					then
+						cp $file $file.bak
+						sh_add $file
+						done=1
+						break
+					else
+						message "\"$file\" exists but is not writable."
+					fi
+				fi
+			done
+		;;
+
+		csh)
+			for f in "$@"
+			do
+				file=$HOME/$f
+				if file_exists $file
+				then
+					if file_writable $file
+					then
+						cp $file $file.bak
+						csh_add $file
+						done=1
+						break
+					else
+						message "\"$file\" exists but is not writable."
+					fi
+				fi
+			done
+		;;
+	esac
+
+	case $done in
+		0) 
+			case $shell in
+				sh) sh_add $last_resort ;;
+				csh) csh_add $last_resort ;;
+			esac
+		;;
+	esac
+}
+
+
+#
+# Try to find the user's shell. We are being invoked by make,
+# so $SHELL will always be /bin/sh :-(
+#
+
+if [ -z "$USER" ]
+then
+	# find out their name if we can.
+	tty=`tty | cut -c6-`
+	name=`who | grep $tty | awk '{print $1}'`
+
+	if [ -z "$name" ]
+	then
+		fatal "Could not determine your username. Set the USER environment variable and try again."
+	fi
+else
+	name=$USER
+fi
+
+shell=`egrep "^${name}:" /etc/passwd 2>/dev/null | cut -f7 -d: `
+
+if [ -z "$shell" ]
+then
+	if dir_exists /var/yp
+	then
+		shell=`ypmatch $name passwd 2>/dev/null | cut -f7 -d:`
+	fi
+fi
+
+if [ -z "$shell" ]
+then
+	fatal "Could not determine your shell!"
+fi
+
+SHELL=$shell
+
+
+case "$HOME" in
+	"") fatal "You have no \$HOME environment variable set!" ;;
+	*) check_dir_exists $HOME ;;
+esac
+
+case "$SHELL" in
+	"") fatal "Could not identify your shell -- \$SHELL is empty." ;;
+	*csh) add csh .login .cshrc ;;
+	*bash) add sh .bash_profile .profile .bashrc ;;
+	*sh) add sh .profile ;;
+	*) fatal "Unrecognised shell suffix!" ;;
+esac
+
+
+			
+

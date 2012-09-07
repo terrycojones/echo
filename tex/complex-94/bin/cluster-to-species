@@ -1,0 +1,102 @@
+#!/bin/sh
+
+PATH=$HOME/r/echo/tex/oz-complexity-paper/bin:$PATH
+
+#
+# This takes one argument, the seed from an Echo run
+# and from that it makes the name of the cluster file
+# which it uses to make the species file.
+#
+
+case $# in
+	2) seed=$1; distance=$2;;
+	*) echo usage: `basename $0` seed distance; exit 1;;
+esac
+
+cluster_file=$seed.cluster
+output=$seed.species
+
+if [ ! -f $cluster_file ]
+then
+	echo Could not find cluster file $cluster_file
+	exit 1
+fi
+
+if [ -f $output ]
+then
+	echo $output already exists!
+	exit 1
+fi
+
+echo "Making species file $output (cluster distance = $distance)...."
+
+gawk '$4 < '$distance' {print}' $cluster_file  | 
+cut -f5- -d' ' | 
+tr -d '()' | 
+tr -s '' ' ' | 
+# gawk '{printf "%d%s\n", NR, $0}' |
+tac > $output.tmp
+
+> $output
+
+cat $output.tmp |
+while read species
+do
+	#agent="`echo $species | cut -f3 -d' '`"
+	set $species
+	if grep -s $1 $output
+	then
+		:
+	else
+		echo $species >> $output
+	fi
+done
+
+# max_species=`head -1 $output | cut -f1 -d' '`
+n_species=`wc -l < $output | tr -d ' '`
+
+# get the agents that are already in a species into a file.
+
+assigned=/tmp/$$.assigned
+
+#cut -f2- -d' ' < $output | 
+sed -e 's/^ *//' < $output |
+tr ' ' '\012' | 
+sort -u > $assigned
+
+echo `wc -l < $assigned | tr -d ' '` agents were initially assigned to $n_species species.
+
+# get all the agents that existed into a file.
+
+all_agents=/tmp/$$.all_agents
+
+cut -f6- -d' ' < $cluster_file |
+tr -d '()' |
+tr -s '' ' ' |
+sed -e 's/^ //' -e 's/ $//' |
+tr ' ' '\012' | 
+sort -u > $all_agents
+
+# now get the agents that are singleton species and append
+# them to the output.
+
+extras=/tmp/$$.extras
+
+comm -23 $all_agents $assigned | 
+tee $extras >> $output
+# gawk '{printf "%d %s\n", '$max_species'+NR, $0}' >> $output
+
+echo `wc -l < $extras | tr -d ' '` agents were assigned to singleton species.
+echo `wc -l < $output | tr -d ' '` species were formed.
+
+mv $output $output.tmp
+
+gawk '{printf "%d %s\n", NF, $0}' $output.tmp |
+sort -n -r |
+cut -f2- -d' ' |
+gawk '{printf "%d %s\n", NR, $0}' > $output
+
+# clean up
+rm -f $all_agents $assigned $extras $output.tmp
+
+echo Done.

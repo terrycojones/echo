@@ -1,0 +1,67 @@
+\section{An Overview of Echo}
+\label{echo-overview}
+
+Echo was designed to capture the essential features of ecological
+systems.  All of the entities and interactions in Echo are highly
+abstract, and it is not yet known whether Echo can be used to model
+real-world phenomena directly.  Many CAS can be viewed as ecologies
+(e.g., \cite{Huberman91},TIERRA?), but our focus in this paper is on
+the analogy with natural ecologies.  
+
+In Echo, an agent replicates (makes a copy of itself, possibly with
+mutation) when it has acquired enough resources to copy its
+genome.  The local state of an agent is exactly the amount of these
+resources it has stored and its location in the world.  Agents acquire
+resources through interactions with other agents (combat or trade) or
+from the environment.  This mechanism for endogenous reproduction
+is much closer to the way fitness is assessed in natural settings than
+conventional fitness functions in genetic algorithms.
+
+Along with these extensions to the evolutionary component, Echo
+specifies certain structural features of the environment in which
+agents evolve.  Specifically, there is a two-dimensional grid of
+``sites'' and each agent is located at a site, although it is possible
+for agents to move between sites.  There are usually many agents at
+one site, and there is a linear neighborhood within a
+site.\footnote{This definition of locality within a site may be
+changed in future Echo implementations.}  Each site can produce
+renewable resources.  Resources are represented by different letters
+of the alphabet, and genomes are constructed from the same letters.
+The number of resources in an Echo world is typically small. These are
+denoted by lower-case letters: {\em a}, {\em b}, {\em c\/} and so
+forth.  Resources can exist as part of an agent's genome, as part of
+an agent's local state (in its reservoir), or free in the environment.
+
+There are three forms of interactions among agents: trade, combat, and
+mating.  In trade, resources stored internally are exchanged; in
+combat, all resources (both genetic and stored) are transferred from
+loser to winner; in mating, genetic material is exchanged through
+crossover, thus creating hybrids and providing a primitive form of
+sexual reproduction.  Mating, together with mutation during the
+replication process, provides the mechanism for new types of agents to
+evolve, as shown in Figure~\ref{fig:agent-evolution}.  Resource
+constraints provide the pressure for agents to diversify and occupy
+new niches.
+
+\begin{figure}[htbp]
+\begin{center}
+\leavevmode
+\psfig{figure=figures/agent-evolution.ps}
+\caption{Operations introducing genetic change in Echo agents.
+\label{fig:agent-evolution}}
+\end{center}
+\end{figure}
+
+In each Echo run there is a fixed number of resource types which is
+determined by the user of the system. These can be representative of
+resources in a real-world system, or can correspond to a more abstract
+notion of something that is required to ensure survival.  For example,
+the environment can be designed to require that agents possess a
+certain resource, which some agents can only obtain through trade. In
+this situation, the resource need not be thought of as corresponding
+to a physical entity, but as something that requires a certain type of
+agent-agent interaction for agent survival. 
+
+The following sections describe Echo in more detail. Much of this is
+devoted to describing agents and the interactions that can occur, both
+between pairs of agents and between an agent and its environment.

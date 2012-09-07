@@ -1,0 +1,10 @@
+Name : fly
+Initial_Reserves : 10 10 10 10
+Trading_Resource : c
+Uptake_Mask : 1111
+Offense_Tag : a
+Defense_Tag : b
+Mating_Tag : a
+Combat_Condition : d
+Trade_Condition : c
+Mating_Condition : b

@@ -1,0 +1,14 @@
+#
+# This is a test site.
+#
+Name : test
+Mutation_Probability : 0.0001
+Crossover_Probability : 0.7
+Random_Death_Probability : 0.0003
+Production_Function : 10 20 30 40
+Initial_Resource_Levels : 45 72 0 11
+Maximums : 100 100 100 100
+Maintenance : 2 1 4 1
+Agents : 
+test 100
+

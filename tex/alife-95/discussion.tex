@@ -1,0 +1,224 @@
+\section{Discussion}
+
+Our results show that the original and neutral versions of Echo behave
+differently with respect to species richness and population size
+in a site, as well as the scaling exponent in the species-area 
+relation.  This suggests that the dynamics of the two models differ.
+%However, it is not clear which is a better model of ecological and
+%evolutionary dynamics.  
+Both models produce distributions of abundance which resemble Preston
+distributions, though neither produces a canonical distribution.
+Both models yield scaling exponents far greater than the expected
+value of $\frac{1}{4}$.  We attribute this result to a combination of factors,
+discussed below, some of which have interesting implications for the
+Echo model.
+
+Our choice of simulation parameters was largely arbitrary.
+A different choice of parameter settings could yield different results
+than observed here, and some combination of parameters might produce
+the expected value.  However, our experience with Echo has shown that
+the general patterns reported here appear to be relatively insensitive to
+parameter settings.  We have obtained similar results in experiments
+with lower mutation rates, increased interaction fractions, and
+different initial populations (data not shown).
+
+A second factor affecting our results is the definition of
+species in Echo.  In this study, we used the provisional definition
+of unique genotypes as species.  A previous study
+\cite{ForrestAndJones94} defined species based on 
+clustering genomes by a distance metric (number of mutations to
+produce one genotype from another).  This clustering technique
+produces curves that more closely approximate the canonical Preston
+distribution.  Using that method here might reduce the number of
+species in a population, and thus lower the slope of the
+species-area curve.  We decided not to use the clustering technique
+here because of the problem of defining species by an arbitrary
+genetic distance, but it could significantly change the outcome of our
+experiment by reducing the number of singletons.
+
+Species-area curves are typically constructed by sampling from the
+total number of individuals present, rather than a complete census.
+We checked to see if sampling might affect our results by constructing
+species-area curves using subsampling.  Rather than including each
+individual in a sample with a probability of one, we tried
+subsampling both $\frac{1}{10}$ and $\frac{1}{4}$ of the population and
+recalculating the species-area curves.  This procedure did not
+noticably change the slope of the curve (data not shown).  Sampling
+and complete censusing of Echo populations produce similar
+species-area curves.
+
+In nature, habitat heterogeneity plays a role in limiting the
+distributions of species across the landscape.  No species is so well
+adapted as to be equally successful in all habitats.  This mechanism
+to limit species success does not exist in the Echo worlds we have
+studied to date.  Our Echo worlds are not heterogenous but are made
+of similar sites tiled together.  In these simulations, there are no
+gradients in resource availability or favorability of climate such as
+those that are believed to limit organisms in nature.  Rather, a
+species which is successful at one site in the world should be equally
+successful throughout the world.  [SO, WHY DON'T WE DO SOME RUNS TO
+TEST THIS?]
+
+It is likely that the discrepancy between expected and observed values
+for $z$ reflects an imbalance between rates of speciation and
+extinction in our model.  New species are formed by mutating
+existing species, and by recombining genotypes through mating.
+Formation of new species is thus controlled by mutation and
+recombination rates.  Species go extinct on the death of the last
+surviving individual, whether through competition or by chance.
+However, the mechanisms of extinction in natural systems may include
+exogenous events never before experienced by the species.
+
+Raup proposes that many extinctions could be caused by events that
+occur on a time scale greater than species' evolutionary time scales
+\cite{Raup91}.  This idea is promising, because it parsimoniously
+explains how widespread species might suffer extinction.  If the
+exogenous events were to occur on an evolutionary time scale, natural
+selection should favor species that can tolerate such adversity.
+Species with small populations are more likely to suffer extinction by
+mechanisms such as fluctuations in population size or competition than
+widespread species.  Again, this would have the effect of decreasing the 
+slope of the species-area curve.  For a firmly established (widespread) 
+species to suffer extinction requires some extreme circumstances, or rare
+events.  Raup calls such unnatural events ``first strikes'' and argues
+that these rare events play a major role in driving common species
+to extinction.  Unlike earth, the Echo model we used here is a closed
+system; there are no meteorite impacts or global changes in climate or
+sea level to drive species nearer to extinction through previously
+unencountered adversity.
+
+We conclude from these considerations that the mechanisms in the
+current implementation of Echo are not sufficient to limit species'
+success.  Competition and random death as means for extinction are
+insufficient to produce the quantity of extinctions necessary to agree
+with empirically based predictions made by the species-area scaling
+relation.  However, Echo does exhibit a robust species-area scaling
+relation as well as a log-normal species-abundance curve similar to a
+Preston curve.  The degree of quantitative agreement between these
+curves and those found in natural ecosystems may be less important
+than the fact that we see similar kinds of curves.
+[PTH disagrees with this very stongly.  The whole point of the canonical
+lognormal distribution is that a special kind of curve is observed.
+Random processes can produce lognormal distributions, so it's easy to 
+make curves which look like these.  The whole reason for using the neutral 
+model is to ask whether these curves result from community interactions or 
+noise.  PTH cares about degree of quantitative agreement between these
+curves and those found in natural ecosystems.]
+
+More generally, these results represent a first step towards
+validating Echo as a model of natural ecological systems.  Echo is
+clearly quite a different kind of model than those typically used in
+ecological studies, and it is relevant to ask what we can hope to
+learn from a highly abstract model that by design does not directly
+correspond to any real system.  There are at least three possible
+answers to such a question:
+\begin{itemize}
+\item Echo as a patch of dirt,
+\item Echo as a flight simulator, and [STEPH: if we take John's name
+off the paper we should either cite this or change the language slightly.]
+\item Echo as a theory of complex adaptive systems.
+\end{itemize}
+
+By ``Echo as a patch of dirt,'' we mean to suggest the possibility of
+constructing Echo worlds that do correspond directly to some real
+ecosystem.  This would allow careful quantitative validation of Echo's
+behavior and might possibly lead to concrete predictions.  This kind
+of modeling is well beyond the current state of the Echo research
+program.  Although it would be an important achievement for Echo to
+simulate one real ecosystem accurately, this may not be its most
+important contribution.  Other modeling systems have traditionally
+focused on exactly this problem of making quantitative predictions
+about the behavior of specific systems with given parameter settings.
+
+A second use of Echo is as a kind of ``flight simulator'' to be used
+for building intuitions about how ecosystems work, what is critical
+to their stability, etc.  Under this view, Echo itself is a rich enough
+ecology to be worth studying in its own right, along the lines that we
+have outlined in the previous sections.
+We can study patterns of behavior,
+e.g., how resources flow through different kinds of ecologies, how
+cooperation among agents can arise through evolution, and arms races
+\cite{Holland94}.  We can also use such a model to identify 
+parameters or collections of parameters that are critical, i.e., to
+perform a kind of sensitivity analysis.  As with any simulation tool, 
+it is much easier to run hypothetical what-if experiments than to conduct
+experiments on a real system.  If a model like Echo were successful
+and correct, it would enable users to build deep intuitions about how
+different aspects of an ecological system affect one another,
+important dependencies, and an appreciation of how evolution interacts
+with the internal dynamics of an ecosystem.  The neutral model that we
+introduced in this paper is an example of how these intuitions can be
+developed and explored.  This is perhaps the most important
+contribution that models like Echo can make.
+%[MAYBE A MORE CONCRETE STATEMENT HERE ABOUT PETER'S AMERICAN NATURALIST PAPER HERE.]
+
+A third, and more ambitious, view of Echo is as a theory of complex
+adaptive systems \cite{Holland95a}.  Echo can be viewed as a
+computational artifact that captures what we believe are the essential
+components and interactions in a wide variety of CAS.  As such, it
+encodes a theory about which mechanisms are relevant and which are
+not.  The theory can be confirmed or disconfirmed by running the model
+under a wide variety of operating conditions and observing the extent
+to which the expected macro-level behaviors arise spontaneously.  Our
+experiments on species diversity are an example of such a confirmation
+process, and our introduction of the neutral model provides another
+way of testing the extent to which the current Echo mechanisms are all
+required to produce the behaviors of interest.  It should be noted
+that the version of Echo reported here is an early attempt at a broad
+CAS theory, and we expect that many of the details will need to be
+modified over time (e.g., to address the problem of extinctions) and
+when careful comparisons to other CAS (e.g., economic models) are made
+Nevertheless, an important contribution of computational systems like
+Echo is to distill features that are common across many CAS in a
+testable model.
+
+Although we are optimistic about the insights that artificial-life
+models like Echo can contribute to understanding real ecosystems and
+other CAS, it is important to note that such models have several
+apparent drawbacks.  These include a mapping problem, what concrete
+questions they can address, scaling issues, and nonlinear interactions
+(already discussed).  We discuss the first three of these issues
+briefly in the following paragraphs.
+
+Because CAS models tend to strip away many details, it is often
+impossible to say what any component of one of these models
+corresponds to in the real world---a mapping problem.  In
+the immune system, for example, many theoretical immunologists use string
+matching to model receptor/ligand binding
+\cite{PerelsonAndOster79}.  Patterns of bits (or other symbols) are
+used to represent both molecular shape and electrostatic charge.
+Consequently, it is difficult to say what one bit in the model
+corresponds to in the immune system.  Because different alphabets and
+different matching rules can have very different properties, the
+challenge is to select an alphabet and matching rule that have general
+properties similar to the real system without worrying too much what
+each bit really stands for \cite{Smith94a}.  By contrast, most
+theories of modeling are based on the premise that a correspondence
+can be established between the modeled system and the primitive
+components of its model.
+
+As a consequence of this mapping problem, it is not always clear what
+scientific questions are being addressed by CAS models.  In more
+conventional simulation-based modeling, models are used to make
+quantitative predictions based on certain predicated inputs, for
+example, to determine optimal parameter values.  Agent-based models of
+CAS are rarely able to make this kind of quantitative prediction, and
+as a result the focus is on identifying broad categories of behavior
+and critical parameters (but not necessarily the exact critical
+parameter values), as we discussed earlier.
+
+A third problem faced by agent-based models is one of scale.  Because
+they are simulations, agent-based models typically operate on vastly
+different time scales of evolution and with much smaller population
+sizes than those of the systems they model.  Also, we tend to be
+intolerant of high failure rates such as those often observed in
+nature.  For example, consider the selection algorithms typically used
+in genetic algorithms.  Selection pressure is maintained at an
+artificially high rate and often scaled to maintain increased pressure
+near the end of a run.  Evolution thus occurs orders of magnitude more
+quickly than in natural systems, and as a result, we may lose some of
+the richness of the natural evolutionary process.
+
+Despite these drawbacks, we believe that there is much to be learned
+from discrete, agent-based models such as Echo.  [REITERATE the 
+discrete/spatial inhomogenetity stuff from intro].

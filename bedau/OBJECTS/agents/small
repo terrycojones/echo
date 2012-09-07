@@ -1,0 +1,10 @@
+Name : small
+Initial_Reserves : 10 12 8 6
+Trading_Resource : b
+Uptake_Mask : 1011
+Offense_Tag : aa
+Defense_Tag : bc
+Mating_Tag : ac
+Combat_Condition : abbbc
+Trade_Condition : abdc
+Mating_Condition : dd

@@ -1,0 +1,5 @@
+nbuckets : 300
+bucket_size : 6.51
+period : 14
+generations : 10000
+ssplot : on

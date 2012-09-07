@@ -1,0 +1,410 @@
+%
+% SLIDE 1
+%
+\begin{slide}{}
+\centerline{\bf Ecological Modeling}
+\centerline{\bf with Echo}
+\vskip 1.0truein
+\centerline{Stephanie Forrest}
+\centerline{Dept. of Computer Science}
+\centerline{University of New Mexico}
+\centerline{Albuquerque, New Mexico}
+\vskip1.0truein
+\centerline{Terry Jones}
+\centerline{Santa Fe Institute}
+\centerline{Santa Fe, New Mexico}
+\end{slide}
+
+%
+% SLIDE 2
+%
+\begin{slide}{}
+\centerline{\bf Project Plan}
+\begin{itemize}
+\itemsep 0pt
+\parsep  0pt
+\parskip 0pt
+\item Learn what Echo is.
+\vskip 6pt
+\item Implement Echo in C with X-based graphical interface.
+\vskip 6pt
+\item Produce Echo documentation.
+\vskip 6pt
+\item Produce reasonably portable Echo distribution.
+\vskip 6pt
+\item Overview paper.
+\vskip 6pt
+\item Start model validation.
+\begin{itemize}
+\itemsep 0pt
+\parsep  0pt
+\parskip 0pt
+\item Jim Brown
+\vskip 6pt
+\item Leo Buss
+\vskip 6pt
+\item Jonathon Haas
+\vskip 6pt
+\item Tim Keitt
+\end{itemize}
+\end{itemize}
+\end{slide}
+
+%
+% SLIDE 3
+%
+\begin{slide}{}
+\centerline{\bf Echo}
+An abstract model of ecological behavior:
+\begin{itemize}
+\itemsep 0pt
+\parsep  0pt
+\parskip 0pt
+\item Large numbers of interacting agents.
+\vskip 6pt
+\item Interactions among agents:
+\vskip 6pt
+\begin{itemize}
+\item Trade
+\item Combat
+\item Mating
+\end{itemize}
+\item Agents are distributed over a geography of sites.
+\vskip 6pt
+\item Each site has renewable resources.
+\vskip 6pt
+\item Agents can migrate between sites.
+\end{itemize}
+%Relevant macro-properties for Echo:
+%\begin{itemize}
+%\item Formation of species
+%\item Efficiency
+%\item Flexibility
+%\end{itemize}
+\end{slide}
+
+%
+% SLIDE 4
+%
+\begin{slide}{}
+\centerline{\bf Echo}
+What can we hope to learn with highly abstract idealized models
+like Echo?
+\begin{itemize}
+\item General patterns of behavior.
+\item E.g., flow of resources, cooperation among agents, arms races, 
+communities.
+\item Critical regions of parameter space.
+\item E.g., Sustainability, economies.
+\end{itemize}
+\end{slide}
+
+%
+% SLIDE 5
+%
+\begin{slide}{}
+\centerline{\bf What is Echo?}
+\begin{enumerate}
+\vskip 15pt
+\itemsep 0pt
+\parsep  0pt
+\parskip 0pt
+
+\item Worlds:
+\vskip 6pt
+\begin{itemize}
+\item System-wide parameters.
+\end{itemize}
+\item Sites:
+\vskip 6pt
+\begin{itemize}
+\item Locality within a site.
+\vskip 2pt
+\item Renewable resources (A's, B's, C's, etc.).
+\vskip 2pt
+\item Migration between sites.
+\vskip 4pt
+\end{itemize}
+\item Agents:
+\vskip 6pt
+\begin{itemize}
+\item Defined entirely by genotypes.
+\vskip 2pt
+\item Genotypes specify interactions with other agents.
+\vskip 2pt
+\item Reservoirs of resources (letters).
+\vskip 2pt
+\item Agents reproduce when they have enough resources to make a complete
+copy of their genotype.
+\vskip 2pt
+\item Agents die randomly.
+\vskip 2pt
+\item Agents acquire resource by fighting and from their local site.
+\vskip 2pt
+\end{itemize}
+\end{enumerate}
+\end{slide}
+
+%
+% SLIDE 6
+%
+\begin{slide}{}
+\centerline{\bf The Ecology of Echo}
+\begin{itemize}
+\vskip 15pt
+\itemsep 0pt
+\parsep  0pt
+\parskip 0pt
+\item Stable interactions among variants (fly-ant-catepillar).
+\vskip 6pt
+\item Flows of resources.
+\vskip 6pt
+\item Trajectories of number of variants.
+\vskip 6pt
+\item Duration of variants over time.
+\vskip 6pt
+\item Cataclysmic events (e.g., meteors).
+\vskip 6pt
+\item Speciation.
+\vskip 6pt
+\item Evolution of phenotypic plasticity.
+\vskip 6pt
+\item Isolation effects.
+\vskip 6pt
+\item What happens when more resources are added to the system?
+\end{itemize}
+\end{slide}
+
+\begin{note}
+\end{note}
+
+%\begin{description,leftmargin 0.5in, indent -0.5in)
+
+%
+% SLIDE 7
+%
+\begin{slide}{}
+\centerline{\bf ``Tropical Rain Forest'' Experiment}
+Hypothesis: Diversity of genotypes will increase with resources.
+
+Experiment: Measure diversity in Echo as a function of resources:
+\begin{itemize}
+\itemsep 0pt
+\parsep  0pt
+\parskip 0pt
+\item One site.
+\vskip 6pt
+\item Initial resource in env. is 50 (of each letter).
+\vskip 6pt
+\item Each agent starts with 11 genes (but can grow or shrink).
+\vskip 6pt
+\item Initialize with 30 agents of 3 different types (10 of each type).
+\vskip 6pt
+\item No mating (mutation only - 0.0005 per gene)
+\vskip 6pt
+\item Random death - 0.0001 per indiv. per gen.
+\end{itemize}
+
+\end{slide}
+
+
+%
+% SLIDE 8
+%
+\begin{slide}{}
+\centerline{\bf Observations}
+\begin{itemize}
+\item Experiment apparently confirms the hypothesis.
+\item Linear (nearly) relation between resources and diversity.
+\item Population continues to be invadable by new agent types.
+\item Frequency of different agent types has high variance.
+\item In the real world most species that have ever existed no longer exist.
+Echo behaves similarly.
+\end{itemize}
+
+\end{slide}
+
+
+%
+% SLIDE 9
+%
+\begin{slide}{}
+\centerline{\bf The Echo Cycle}
+\begin{itemize}
+\vskip 15pt
+\itemsep 0pt
+\parsep  0pt
+\parskip 0pt
+\item Pairs of agents are selected for interaction (combat, trading, mating).
+\vskip 6pt
+\item Agents uptake resources.
+\vskip 6pt
+\item Sites charge maintenance.
+\vskip 6pt
+\item Agents self--replicate.
+\vskip 6pt
+\item Agents migrate if they have acquired nothing recently.
+\vskip 6pt
+\item Sites produce resources.
+\end{itemize}
+\end{slide}
+
+%
+% SLIDE 10
+%
+\begin{slide}{}
+\centerline{\bf Why Build Models?}
+\begin{itemize}
+\vskip 15pt
+\itemsep 0pt
+\parsep  0pt
+\parskip 0pt
+\item Something in the real world is of interest.
+\vskip 6pt
+\item A model aims to:
+\begin{itemize}
+\item Explain the past.
+\vskip 3pt
+\item Predict the future.
+\end{itemize}
+\vskip 6pt
+\item A model is always a simplification.
+\end{itemize}
+\end{slide}
+
+%
+% SLIDE 11
+%
+\begin{slide}{}
+\centerline{\bf Issues In Model Building}
+\begin{itemize}
+\vskip 15pt
+\itemsep 0pt
+\parsep  0pt
+\parskip 0pt
+\item Predictive ability of the model.
+\vskip 6pt
+\item Explanatory power of the model.
+\vskip 6pt
+\item What to discard, what to keep?
+\vskip 6pt
+\item Ease of construction.
+\vskip 6pt
+\item Confidence in programming.
+\vskip 6pt
+\item Ease of experimentation.
+\end{itemize}
+\end{slide}
+
+%
+% SLIDE 12
+%
+\begin{slide}{}
+\centerline{\bf Pessimism}
+\begin{itemize}
+\vskip 15pt
+\itemsep 0pt
+\parsep  0pt
+\parskip 0pt
+\item Explanation is hard.
+\vskip 6pt
+\item Prediction is hard.
+\vskip 6pt
+\item Verification is hard.
+\vskip 6pt
+\item Good hypotheses are many and almost always wrong.
+\end{itemize}
+\end{slide}
+
+%
+% SLIDE 13
+%
+\begin{slide}{}
+\centerline{\bf Optimism}
+\begin{itemize}
+\vskip 15pt
+\itemsep 0pt
+\parsep  0pt
+\parskip 0pt
+\item Computer allows explanation (eventually).
+\vskip 6pt
+\item Prediction can be probabilistic.
+\vskip 6pt
+\item Sensitivities and stabilities can be identified.
+\vskip 6pt
+\item Models can be kites to be shot down.
+\vskip 6pt
+\item Expectations can be changed.
+\vskip 6pt
+\item One can always learn to be humble.
+\end{itemize}
+\end{slide}
+
+%
+% SLIDE 14
+%
+\begin{slide}{}
+\centerline{\bf Outline}
+\begin{itemize}
+\vskip 15pt
+\itemsep 0pt
+\parsep  0pt
+\parskip 0pt
+\item Introduction to Echo.
+\vskip 6pt
+\item Issues in model building.
+\vskip 6pt
+\item Echo demonstration.
+\end{itemize}
+\end{slide}
+
+%
+% SLIDE 15
+%
+\begin{slide}{}
+\centerline{\bf Outline}
+\begin{itemize}
+\vskip 15pt
+\itemsep 0pt
+\parsep  0pt
+\parskip 0pt
+\item Echo project plan and progress report.
+\begin{itemize}
+\item Development.
+\vskip 6pt
+\item Verification.
+\vskip 6pt
+\item Outlook.
+\end{itemize}
+\vskip 6pt
+\item Computational Landscapes
+\begin{itemize}
+\item Search algorithms, navigation and landscapes.
+\vskip 6pt
+\item Genetic algorithms and crossover landscapes.
+\vskip 6pt
+\end{itemize}
+\end{itemize}
+\end{slide}
+
+%
+% SLIDE 16
+%
+\begin{slide}{}
+\centerline{\bf What can we hope to learn with}
+\centerline{\bf abstract models like Echo?}
+\begin{itemize}
+\item Echo as a patch of dirt
+
+\item Echo as a flight simulator
+\begin{itemize}
+\item Building intuitions
+\item The ecology of Echo
+\item Neutral models
+\item Species abundance distributions
+\end{itemize}
+
+\item A theory of complex adaptive systems
+
+\end{itemize}
+\end{slide}

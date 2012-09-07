@@ -1,0 +1,19 @@
+#!/usr/local/bin/wish -f
+
+frame .f -bg blue -height 700 -width 700
+
+canvas .f.c1 -width 600 -height 600 -bg red
+canvas .f.c2 -width 500 -height 500 -bg green
+canvas .f.c3 -width 400 -height 400 -bg yellow
+canvas .f.c4 -width 300 -height 300 -bg black
+canvas .f.c5 -width 200 -height 200 -bg violet
+
+
+pack .f    -in .
+pack .f.c1 -in .f
+pack .f.c2 -in .f.c1
+#pack .f.c3 -in .f.c2
+#pack .f.c4 -in .f.c3
+#pack .f.c5 -in .f.c4
+
+bind all q {destroy .}

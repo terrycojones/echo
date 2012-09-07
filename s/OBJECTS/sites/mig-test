@@ -1,0 +1,10 @@
+Name : mig-test
+Mutation_Probability : 0.02
+Crossover_Probability : 0.7
+Random_Death_Probability : 0.0001
+Production_Function : 20 20 20 20
+Initial_Resource_Levels : 10 10 10 10
+Maximums : 100 100 100 100
+Maintenance : 1 1 1 1
+Agents : 
+mig-test

@@ -1,0 +1,37 @@
+#!/usr/bin/perl
+
+$start = 1;
+
+while (<>){
+    chop;
+    
+    $agent = $_;
+    $_ =~ tr/a-z0-9/x/s;
+    $l = length();
+    $agent =~ tr/|> _-//d;
+	
+    if ($l != $last_length) {
+	if ($start) {
+	    $start = 0;
+	    $agents = $agent;
+	}
+	else {
+	    #printf "length changed from %d to %d\n", $last_length, $l;
+	    $count++;
+	    $last_length = $l;
+	    #printf "found '%s'\n", $agent;
+	    printf "%d %s\n", $count, $agents;
+	    $agents = $agent;
+	}
+    }
+    else {
+	#printf "same length\n";
+	$agents .= " " . $agent;
+    }
+}
+
+printf "%d %s\n", ++$count, $agents;
+ 
+# Local Variables:
+# mode:perl
+# End:

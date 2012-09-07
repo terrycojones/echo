@@ -1,0 +1,539 @@
+#!/usr/local/bin/wish -f
+
+set initialized 0
+
+#
+# Canvas display variables.
+#
+set site_height             25
+set site_width              25
+set x_gap                    5
+set y_gap                    5
+
+#
+# Time variables.
+#
+set displayed_generation     0
+set ngenerations            -1
+set time_delay               0
+set stop_button              0
+
+#
+# Color variables.
+#
+set level_width             20
+set level_height            10
+set nlevels                  9
+set color_scale_factor       0
+set color_scale_multiplier   2.0
+set levels_scale_exponent    1.0
+set levels_scale_multiplier  1.2
+
+#
+# Controls whether the generation scale updates when playing.
+#
+set update_slider            1
+
+#
+# Convenient names for widgets.
+#
+set canvas  .f.canvas
+set scale   .f.scale
+
+
+#
+# Variables concerned with where water is to be found.
+#
+set nwater_sites             0
+set water_sites_x(0)         0
+set water_sites_y(0)         0
+set water_width              7
+set water_height             7
+
+
+if {$argc == 0} {
+  puts "Reading from stdin..."
+  set f stdin
+} else {
+  set filename [lindex $argv 0]
+  set f [open $filename r]
+}
+
+
+proc initialize {} {
+
+  set menu    .f.menu
+  set play    .f.play
+  set info    .f.info0
+  set info1   .f.info1
+
+  global f canvas canvas_height canvas_width stop_button \
+    displayed_generation ngenerations scale pop nsites \
+    level_width level_height nlevels site_width
+
+  wm title . "Echo Migration Viewer"
+  wm minsize . 1 1
+  wm iconbitmap . @bitmaps/jhh_smaller.bm
+  wm iconname . "Ants, flies and caterpillars!"
+
+
+  frame .f
+  pack .f -expand 1
+  
+  # .f.view holds the canvas and play buttons.
+  frame .f.view
+
+  canvas $canvas -height $canvas_height -width $canvas_width -relief raised
+
+  bind all r  {plot_generation 0 1}
+  bind all ,  {backward_generation}
+  bind all s  {set stop_button 1}
+  bind all .  {forward_generation}
+  bind all p  {play_generations $displayed_generation [expr $ngenerations - 1]}
+  bind all f  {plot_generation [expr $ngenerations - 1] 1}
+  bind all q  {destroy .}
+
+  frame .f.levels -relief groove -borderwidth 2
+
+  frame .f.levels.b1
+  frame .f.levels.b2
+
+  button .f.levels.b11 -bitmap @bitmaps/rplay.bm   -command {narrow_color_range} -fg grey
+  button .f.levels.b21 -bitmap @bitmaps/play.bm -command {widen_color_range}  -fg grey
+
+  pack .f.levels.b11 -padx 12 -in .f.levels.b1
+  pack .f.levels.b21 -padx 12 -in .f.levels.b2
+
+  pack .f.levels.b1 -in .f.levels -side left -pady 10
+
+  for {set i 0} {$i < $nlevels} {incr i} {
+    frame  .f.levels.$i
+    label  .f.levels.$i.label  -width 2 -text $i
+    canvas .f.levels.$i.canvas -width $level_width -height $level_height -bg grey
+
+    pack   .f.levels.$i.label  -in .f.levels.$i -fill y
+    pack   .f.levels.$i.canvas -in .f.levels.$i -fill y
+    pack   .f.levels.$i        -in .f.levels    -side left -fill x
+  }
+
+  pack .f.levels.b2 -in .f.levels -side left -pady 10
+
+  frame $info -relief raised -borderwidth 1
+  frame $info.left
+  frame $info.right
+
+  label $info.left.1 -text "Generation Number"
+  label $info.left.2 -text "Generations Recorded"
+
+  label $info.right.1 -textvariable displayed_generation -width 5 -relief sunken
+  label $info.right.2 -textvariable ngenerations         -width 5 -relief sunken
+
+  pack $info.left.1  $info.left.2 -side top -in $info.left  -anchor w
+  pack $info.right.1 $info.right.2 -side top -in $info.right -anchor e
+
+  pack $info.left  -side left -in $info -fill x
+  pack $info.right -side left -in $info
+
+  frame $play -relief groove -borderwidth 2
+
+  button $play.rewind -bitmap @bitmaps/rewind.bm       -padx 10 -fg grey \
+    -command {plot_generation 0 1}
+  button $play.rplay  -bitmap @bitmaps/rplay.bm        -padx 10 -fg grey \
+    -command {play_generations $displayed_generation 0}
+  button $play.rplay1 -bitmap @bitmaps/rplay1.bm       -padx 10 -fg grey \
+    -command {backward_generation}
+  button $play.stop   -bitmap @bitmaps/stop.bm         -padx 10 -fg grey \
+    -command {set stop_button 1}
+  button $play.play1  -bitmap @bitmaps/play1.bm        -padx 10 -fg grey \
+    -command {forward_generation}
+  button $play.play   -bitmap @bitmaps/play.bm         -padx 10 -fg grey \
+    -command {play_generations $displayed_generation [expr $ngenerations - 1]}
+  button $play.ffwd   -bitmap @bitmaps/fast_forward.bm -padx 10 -fg grey \
+    -command {plot_generation [expr $ngenerations - 1] 1}
+
+  set play_buttons "$play.rewind $play.rplay $play.rplay1 $play.stop $play.play1 $play.play $play.ffwd"
+
+  eval pack $play_buttons -side left -pady 10 -in $play
+
+  scale $scale -orient horizontal -relief raised -command "goto_generation" -from 0 -to 100 \
+    -label "Generation Selector" -showvalue 1
+
+  scale .f.sidescale -orient horizontal -relief raised -command "destroy_sites" -from 1 -to 50 \
+    -label "Site Size" -showvalue 1
+  .f.sidescale set $site_width
+
+  # button .f.dismiss -bg seagreen -fg white -text "Dismiss" -command {destroy .} -relief raised
+  
+  frame $menu -relief raised -borderwidth 1
+
+  #
+  # The Files menu.
+  #
+  menubutton .f.menu.files -text Files -menu .f.menu.files.m -underline 0
+  menu .f.menu.files.m
+
+  if {$f != "stdin"} {
+    .f.menu.files.m add command -label "Re-read" -command {read_input} -underline 0
+  }
+  .f.menu.files.m add command -label "Open" -command {puts "read file"} -underline 0
+  .f.menu.files.m add command -label "Print Canvas..." -command {print_canvas} -underline 0
+  .f.menu.files.m add command -label "Quit" -command {destroy .} -underline 0
+  
+  #
+  # The Time menu.
+  #
+  menubutton .f.menu.time -text Time -menu .f.menu.time.m -underline 0
+  menu .f.menu.time.m
+  .f.menu.time.m add command -label "Jump To Generation..." -command {puts "Jump"} -underline 0
+  .f.menu.time.m add separator
+  .f.menu.time.m add radio -label "Slow" -variable time_delay -value 800
+  .f.menu.time.m add radio -label "Medium" -variable time_delay -value 400
+  .f.menu.time.m add radio -label "Fast" -variable time_delay -value 0
+  
+  pack .f.menu.files .f.menu.time -side left
+
+  pack $menu        -side top  -fill x -in .f
+  pack $info        -side top  -fill x -in .f.view
+  pack $scale       -side top  -fill x -in .f.view
+  pack .f.sidescale -side top  -fill x -in .f.view
+  pack $canvas -in .f.view
+  pack $play -in .f.view
+  pack .f.levels -in .f.view
+  pack .f.view -in .f
+  
+
+  set a -1
+  set pop($a) [list -1]
+  for {set i 0} {$i < $nsites} {incr i} {
+    lappend $pop(-1) -1
+  }
+}
+
+
+proc redraw_generation {} {
+  global displayed_generation
+
+  # this forces a redraw of the current generation.
+  set x $displayed_generation
+  set displayed_generation -1
+  plot_generation $x 0
+}
+
+
+proc draw_sites {} {
+  global canvas rows cols site_height site_width x_gap y_gap
+
+  for {set row 0} {$row < $rows} {incr row} {
+    for {set col 0} {$col < $cols} {incr col} {
+
+      set x1 [expr $x_gap + $col * ($x_gap + $site_width)]
+      set y1 [expr $y_gap + $row * ($y_gap + $site_height)]
+      set x2 [expr $x1 + $site_width]
+      set y2 [expr $y1 + $site_height]
+      set tag s.[expr $row * $cols + $col]
+
+      $canvas create rectangle $x1 $y1 $x2 $y2 -fill grey -outline black -tags $tag
+    }
+  }
+}
+
+proc destroy_sites {size} {
+  global canvas canvas_width canvas_height site_height site_width displayed_generation initialized
+
+  if {$initialized == 0} {
+    return
+  }
+  
+  $canvas delete all
+
+  set_canvas_dimensions $size
+  
+  $canvas configure -width $canvas_width -height $canvas_height
+
+  draw_sites
+  draw_water_sites
+  redraw_generation
+}
+
+
+proc name_and_color_levels {} {
+
+  global nlevels .f levels_scale_exponent displayed_generation
+
+  # set inc [expr $max_population / $nlevels]
+
+  for {set i 0} {$i < $nlevels} {incr i} {
+    set level [expr int(pow($i, $levels_scale_exponent))]
+    .f.levels.$i.canvas configure -bg [get_color $level]
+    .f.levels.$i.label  configure -text $level
+  }
+
+  redraw_generation
+}
+
+proc narrow_color_range {} {
+  global color_scale_factor color_scale_multiplier
+
+  adjust_cscale [expr int($color_scale_factor * $color_scale_multiplier)]
+}
+
+proc widen_color_range {} {
+  global color_scale_factor color_scale_multiplier
+
+  adjust_cscale [expr int($color_scale_factor / $color_scale_multiplier)]
+}
+
+proc adjust_cscale {setting} {
+
+  global color_scale_factor displayed_generation
+
+  set color_scale_factor $setting
+
+  name_and_color_levels
+  redraw_generation
+}
+
+
+proc read_rows_cols {} {
+
+  global f nsites canvas_height canvas_width rows cols x_gap y_gap site_height site_width
+
+  if {[gets $f rows] < 0} {
+    puts stderr "Could not read number of rows!"
+    exit
+  }
+
+  if {[gets $f cols] < 0} {
+    puts stderr "Could not read number of cols!"
+    exit
+  }
+
+  set nsites [expr $rows * $cols]
+
+  set_canvas_dimensions $site_width
+}
+
+proc set_canvas_dimensions {side} {
+
+  global canvas_height canvas_width rows cols x_gap y_gap site_height site_width
+
+  set site_height $side
+  set site_width $side
+  
+  set canvas_height [expr $y_gap * ($rows + 1) + $site_height * $rows]
+  set canvas_width [expr $x_gap * ($cols + 1) + $site_width * $cols]
+}
+
+
+proc read_water_sites {} {
+
+  global f nwater_sites water_sites_x water_sites_y
+  
+  while {[gets $f line] > 0} {
+    # read the sites that have water available. these are terminated by a blank line.
+
+    set tmp [split $line { }]
+
+    if {[llength $tmp] != 2} {
+      puts "Found water site line with [llength $tmp] fields instead of 2."
+      break
+    }
+
+    
+    set water_sites_x($nwater_sites) [lindex $tmp 0]
+    set water_sites_y($nwater_sites) [lindex $tmp 1]
+    
+    incr nwater_sites
+  }
+}
+
+proc draw_water_sites {} {
+
+  global f canvas nwater_sites water_sites_x water_sites_y water_width water_height \
+    x_gap y_gap site_width site_height cols
+
+  if {$site_width < 5} {
+    set bwidth 1
+  } elseif {$site_width < 10} {
+    set bwidth 2
+  } elseif {$site_width < 20} {
+    set bwidth 3
+  } else {
+    set bwidth 4
+  }
+  
+  for {set i 0} {$i < $nwater_sites} {incr i} {
+    
+    set row $water_sites_x($i)
+    set col $water_sites_y($i)
+    set tag s.[expr $row * $cols + $col]
+    
+    $canvas itemconfigure $tag -width $bwidth -outline blue
+  }
+}
+
+
+proc read_input {} {
+
+  global f ngenerations nsites pop color_scale_factor scale
+
+  while {[gets $f line] >= 0} {
+    
+    incr ngenerations
+
+    set pop($ngenerations) [split $line { }]
+
+    if {[llength $pop($ngenerations)] != $nsites + 1} {
+      puts "Found line with [llength $pop($ngenerations)] site populations instead of $nsites"
+      break
+    }
+
+    update
+  }
+
+  set color_scale_factor 5000
+  name_and_color_levels
+  $scale configure -to $ngenerations
+}
+
+proc get_color {pop_level} {
+  global color_scale_factor
+
+  if {$pop_level == 0} {
+    return "#ffffffffffff"
+  }
+
+  # set level [expr 4294967295 - $pop_level * $color_scale_factor]
+  set level [expr 65535 - $pop_level * $color_scale_factor]
+
+  #puts "pop_level is $pop_level\nlevel is $level\ncolor scale factor is $color_scale_factor"
+
+  if {$level < 0} {
+    set level 0
+  } else {
+    if {$level > 65535} {
+      set level 65535
+    }
+  }
+
+  # this gives yellow to navy blue, level 0..65535
+  # return [format "#%04x%04x%04x" [expr 65535 - $level] [expr 65535 - $level] $level]
+
+  # this gives cyan to red, level 0..65535 - looks like shit.
+  # return [format "#%04x%04x%04x" $level [expr 65535 - $level] [expr 65535 - $level]]
+
+  #puts "level is $level"
+
+  #if {$level < 65536} {
+  #puts "1st format gives [format "#%04x0000ffff" $level]"
+  #puts "pop level $pop_level, level $level, [format "#%04x0000ffff" $level]"
+  #return [format "#%04x0000ffff" $level]
+  #} else {
+  #puts "2nd format gives [format "#ffff0000%04x" [expr 65535 - ($level >> 16)]]
+  #puts "pop level $pop_level, level $level, [format "#ffff0000%04x" [expr 65535 - ($level >> 16)]]"
+  #return [format "#ffff0000%04x" [expr 65535 - ($level >> 16)]]
+  #}
+
+# the next gives from white to red, with level = 0..65535.
+  return [format "#ffff%04x%04x" $level $level]
+
+# the next line gives a range from yellow to red, with level = 0..65535.
+# return [format "#ffff%04x0000" $level]
+}
+
+
+proc plot_generation {generation lazy} {
+
+  global displayed_generation pop rows cols canvas scale update_slider nsites
+
+  for {set i 0} {$i < $nsites} {incr i} {
+    if {$lazy == 1} {
+      if {[lindex $pop($displayed_generation) $i] != [lindex $pop($generation) $i]} {
+	$canvas itemconfigure s.$i -fill [get_color [lindex $pop($generation) $i]]
+      }
+    } else {
+      $canvas itemconfigure s.$i -fill [get_color [lindex $pop($generation) $i]]
+    }
+  }
+
+  set displayed_generation $generation
+
+  if {$update_slider == 1} {
+    $scale set $generation
+  }
+
+  update
+}
+
+
+proc goto_generation {gen} {
+  plot_generation $gen 0
+}
+
+proc backward_generation {} {
+  global displayed_generation
+
+  if {$displayed_generation != 0} {
+    plot_generation [expr $displayed_generation - 1] 1
+  }
+}
+
+proc forward_generation {} {
+  global displayed_generation ngenerations
+
+  if {$displayed_generation != [expr $ngenerations - 1]} {
+    plot_generation [expr $displayed_generation + 1] 1
+  }
+}
+
+
+proc play_generations {from to} {
+  global displayed_generation stop_button ngenerations time_delay scale update_slider
+
+  set stop_button 0
+  set update_slider 0
+
+  if {$displayed_generation != $from} {
+    plot_generation $from 1
+  }
+
+  if {$from < $to} {
+    set inc 1
+  } else {
+    set inc -1
+  }
+
+  while {$displayed_generation != $to && $stop_button == 0} {
+    plot_generation [expr $displayed_generation + $inc] 1
+    after $time_delay
+  }
+
+  $scale set $displayed_generation
+  set update_slider 1
+  set stop_button 0
+}
+
+proc print_canvas {} {
+  global canvas
+
+  $canvas postscript -colormode gray -file mutation-canvas.ps -pageheight 7i -pagewidth 7i
+}
+  
+
+
+read_rows_cols
+read_water_sites
+initialize
+draw_sites
+update
+set displayed_generation 0
+read_input
+set initialized 1
+set displayed_generation -1
+plot_generation 0 0
+draw_water_sites
+update
+
+# Local Variables:
+# mode:tcl
+# End: ***

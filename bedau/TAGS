@@ -1,0 +1,624 @@
+
+agents.c,564
+create_agent(25,511
+new_agent_edit(88,2293
+can_self_replicate(114,2828
+calculate_makeup(151,3877
+can_pay_maintenance(205,5202
+mutate_agent(238,5911
+migrate_agent(300,7892
+#define BUF_SZ 399,10222
+read_agent_from_file(402,10251
+read_agent_edit_from_file(464,11991
+write_agent_to_file(646,16119
+write_agent_edit_to_file(757,18616
+agent_self_replicate(859,20980
+print_agent(895,22142
+make_agent_genome(951,23792
+agent_instance(999,25272
+#define swap_ints_if_gt(1022,25816
+my_strncat(1026,25904
+agent_crossover(1037,26060
+agent_distance(1453,39733
+
+agents.h,54
+#define copy_agent(33,968
+#define new_agent(34,1036
+
+chromosomes.c,275
+#define DEF_CHROMOSOME_LEN 16,343
+#define DEF_CHROMOSOME_GROWTH_INC 17,380
+create_chromosome(20,431
+grow_chromosome(60,1692
+mutate_chromosome(107,2913
+set_chromosome(173,5024
+swap_chromosomes(204,5710
+chromosome_distance(220,6126
+chromosome_string_distance(253,6993
+
+chromosomes.h,63
+#define copy_chromosome(14,467
+#define new_chromosome(15,545
+
+defaults.h,726
+#define DEFAULT_TRADE_FRACTION 1,0
+#define DEFAULT_NEIGHBORHOOD 2,42
+#define DEF_SITE_GROWTH_INC 3,85
+#define DEF_SITE_NAGENTS 4,126
+#define DEFAULT_MUTATION_P 5,167
+#define DEFAULT_CROSSOVER_P 6,211
+#define DEFAULT_RANDOM_DEATH_P 7,253
+#define DEFAULT_C 8,297
+#define DEFAULT_SELFREP_FRACTION 9,339
+#define DEFAULT_SELFREP_THRESHOLD 10,381
+#define DEFAULT_MAINTENANCE 11,423
+#define DEFAULT_GENOME_HASH_SIZE 12,465
+#define DEF_OUTPUT_FILENAME 13,507
+#define DEF_SITE_NAGENTS_MULTIPLIER 14,557
+#define DEF_OBJECTS_DIRECTORY 15,597
+#define DEF_GRAPHICS 18,666
+#define DEF_GRAPHICS 20,715
+#define DEF_SEX 24,782
+#define DEF_SEX 26,831
+#define DEF_SELF_REPLICATION 30,911
+#define DEF_SELF_REPLICATION 32,960
+
+defs.h,0
+
+error.c,14
+error(20,457
+
+free.c,161
+free_agent(24,729
+free_agent_edit(52,1195
+free_site(76,1604
+free_site_edit(104,2046
+free_world(128,2568
+free_world_edit(166,3262
+free_chromosome(199,4052
+
+free.h,0
+
+globals.h,30
+#define popup_message 27,670
+
+graphics.c,1546
+initialize_graphics(235,5728
+read_and_display_agent_edit(325,8046
+read_and_display_site_edit(379,9575
+read_and_display_world_edit(427,11132
+create_agent_edit_widgets(503,13821
+create_site_edit_widgets(547,16330
+create_world_edit_widgets(609,20282
+create_control_menu_widgets(701,26241
+show_seed(776,29610
+create_edit_menu_widgets(784,29694
+create_running_menu_widgets(945,38594
+create_graph_widgets(1056,45404
+create_schema_widgets(1119,48907
+create_canvas_widgets(1188,52197
+destroy_canvas_widgets(1239,53953
+create_message_widgets(1269,54691
+popup_message(1288,55284
+save_agent_edit(1307,55675
+save_site_edit(1432,59185
+save_world_edit(1532,62414
+call_set_halt_generation(1715,68504
+popup_stack_selector(1732,68815
+select_stack_for_editing(1754,69281
+set_seed(1795,70189
+set_verbosity(1821,70619
+popup_generation_selector(1840,70910
+popup_seed_selector(1852,71174
+popup_verbose_selector(1864,71411
+plot_population_level(1876,71660
+plot_variant_levels(1884,71828
+plot_schema_level(1895,72122
+plot_resource_levels(1908,72431
+plot_species_levels(1921,72709
+create_species_graph_line(1934,72990
+initialize_population_graph(1947,73231
+initialize_schema_graph(1954,73320
+initialize_variant_graph(1961,73401
+set_new_schema(1968,73491
+initialize_species_graph(2017,74490
+initialize_resource_graph(2032,74782
+popup_stack(2064,75494
+popdown_stack(2090,76162
+resume_from_stack(2102,76372
+process_graphics_events(2129,77067
+await_graphic_event(2146,77379
+rerun_world(2163,77806
+update_all_plotters(2177,78032
+
+graphics.h,0
+
+hash.c,312
+#define HASH_NULL 15,301
+#define NODE_NULL 16,338
+#define GENERIC_NULL 17,374
+#define HASH_SZ 19,406
+hash_create(34,677
+list_find(69,1234
+hash(89,1484
+hash_destroy(112,1878
+hash_search(175,3199
+assign_key(219,4074
+hash_traverse(243,4473
+hash_purge(277,5037
+#define min(301,5443
+hash_stats(309,5581
+
+hash.h,118
+#define HASH_SZ 2,109
+typedef struct _node _node4,129
+} HASH_NODE;HASH_NODE8,208
+} HASH_TABLE;HASH_TABLE13,278
+
+interaction.c,126
+will_attack(19,389
+will_trade(57,1073
+will_mate(93,1772
+combat_payoff(177,3924
+combat_payoff(217,4765
+interact(268,5899
+
+interaction.h,44
+#define SMALLEST_LENGTH_RATIO_DENOM 10,389
+
+main.c,151
+BOOLEAN 37,774
+BOOLEAN 38,797
+STRING 39,846
+char 45,1034
+main(64,1393
+set_name(172,4120
+version(182,4256
+dump(189,4336
+STRING strdup(201,4525
+
+main.h,0
+
+main_options.c,30
+#define VERBOSE_USAGE25,1003
+
+misc_graphics.c,712
+quit(35,738
+popdown_widget(51,967
+popup_widget(61,1124
+clear_text_widget(71,1283
+clear_dialog_widget(81,1458
+left_justify_dialog_label(92,1632
+set_dialog_value(109,1927
+call_instantiate_world(123,2084
+call_pause_world(136,2308
+call_continue_world(146,2432
+call_run_for_x_generations(156,2562
+call_run_world_indefinitely(166,2702
+set_x_axis(176,2847
+toggle_verbose(194,3121
+remove_underscores(203,3305
+create_label_and_text(231,3595
+set_text_widget_text(262,4723
+get_text_widget_text(275,4896
+create_command_button(288,5069
+genome_difference(310,5788
+living_genome_difference(357,6680
+cluster_for_agent(411,7691
+cluster_for_living_agent(422,7990
+cluster(435,8357
+call_pop_viewer(463,8849
+
+misc_graphics.h,0
+
+options.c,504
+} REAL_OPTION;REAL_OPTION30,646
+process_options(38,791
+get_options(68,1362
+check_options(181,4475
+find_option_match(198,4834
+find_exact_longname_match(225,5393
+find_exact_abbreviated_match(241,5698
+find_partial_longname_match(257,6049
+find_partial_abbreviated_match(307,7233
+process_option(350,8347
+check_next_argument(476,11971
+check_option_range(496,12487
+check_required_options(573,14290
+#define BUF_SZ 595,14758
+read_opts_from_file(598,14785
+usage(660,16116
+print_options(677,16610
+
+options.h,112
+#define VADDR(3,113
+#define NO_LIMITS(5,149
+#define ULIMIT(6,212
+#define LLIMIT(7,275
+#define LIMITS(8,338
+
+plotter.c,336
+#define DEF_PLOTTER_LINES 28,628
+#define DEF_PLOTTER_LINES_INC 33,742
+create_plotter(36,786
+clear_plotter(149,4704
+clear_plotter_line(180,5512
+add_line_to_plotter(189,5644
+remove_all_lines_from_plotter(240,7020
+remove_line_from_plotter(251,7192
+extend_plotter_line(273,7563
+update_plotter(318,8374
+name_plotter_line(353,9240
+
+plotter.h,61
+} PLOTTER_LINE;PLOTTER_LINE8,129
+} PLOTTER;PLOTTER30,547
+
+random.c,338
+#define MBIG 92,4165
+#define MSEED 93,4190
+#define FAC 94,4214
+knuth_random(101,4312
+seed_random(124,4563
+dump_random_state(181,5424
+#define readline 199,5696
+restore_random_state(202,5792
+drand48(230,6249
+srand48(237,6387
+rand(243,6481
+srand(250,6611
+random(257,6747
+srandom(264,6879
+initstate(270,6976
+setstate(280,7181
+
+random.h,111
+#define NO_SEED 3,112
+#define uniform(16,314
+#define biased_coin_flip(21,465
+#define random_boolean(26,578
+
+regexp.c,1004
+#define	END	80,3337
+#define	BOL	81,3376
+#define	EOL	82,3430
+#define	ANY	83,3478
+#define	ANYOF	84,3526
+#define	ANYBUT	85,3588
+#define	BRANCH	86,3655
+#define	BACK	87,3722
+#define	EXACTLY	88,3784
+#define	NOTHING	89,3831
+#define	STAR	90,3878
+#define	PLUS	91,3948
+#define	OPEN	92,4018
+#define	CLOSE	94,4118
+#define	OP(128,5532
+#define	NEXT(129,5553
+#define	OPERAND(130,5610
+#define	UCHARAT(141,5760
+#define	UCHARAT(143,5814
+#define	FAIL(146,5862
+#define	ISMULT(147,5914
+#define	META	148,5973
+#define	HASWIDTH	153,6044
+#define	SIMPLE	154,6104
+#define	SPSTART	155,6168
+#define	WORST	156,6214
+#define	STATIC	171,6584
+regcomp(203,7678
+reg(293,9884
+regbranch(365,11420
+regpiece(404,12399
+regatom(468,14106
+regnode(577,16191
+regc(602,16519
+reginsert(617,16729
+regtail(646,17176
+regoptail(678,17658
+regexec(717,18379
+regtry(779,19670
+regmatch(816,20556
+regrepeat(1004,24222
+regnext(1050,24968
+regdump(1076,25304
+regprop(1120,26225
+strcspn(1212,27718
+re_match(1234,28034
+
+regexp.h,83
+#define NSUBEXP 8,269
+typedef struct regexp regexp9,289
+} regexp;regexp17,586
+
+regmagic.h,21
+#define	MAGIC	6,247
+
+regsub.c,66
+#define	UCHARAT(38,1088
+#define	UCHARAT(40,1142
+regsub(47,1257
+
+resources.c,182
+add_resources(11,219
+sub_resources(31,632
+zero_resources(52,1134
+set_resources(68,1470
+total_resources(85,1847
+print_resource_list(103,2219
+print_terse_resource_list(125,2841
+
+resources.h,34
+#define IS_VALID_RESOURCE(10,348
+
+running.c,441
+set_halt_generation(21,412
+free_genome_hash(45,946
+free_species_name_hash(60,1180
+zero_genome_name_counts(72,1389
+mark_genome_as_dead(83,1616
+print_genome_hash(93,1771
+count_variants(124,2537
+print_species_name_hash_count(140,2808
+increment_species_count(154,3172
+assign_species_levels(164,3299
+run_world(178,3530
+pause_world(495,12213
+continue_world(509,12488
+run_for_x_generations(523,12712
+run_world_indefinitely(537,12980
+
+running.h,0
+
+schema.c,19
+legal_schema(4,28
+
+schema.h,0
+
+sites.c,903
+#define BUF_SZ 29,610
+new_site(32,638
+new_site_edit(84,2229
+grow_site(106,2690
+site_produce(158,4029
+site_charge_maintenance(186,4594
+site_distribute_resources(245,6434
+site_kill_agents_without_cause(388,11330
+read_site_from_file(433,12532
+str_to_resource_list(642,18245
+count_agents(681,18987
+read_site_edit_from_file(745,20344
+write_site_to_file(980,25649
+write_site_edit_to_file(1071,27555
+site_perform_interactions(1180,30323
+site_add_agent(1273,32724
+site_delete_agent(1292,33202
+site_make_newborns_old(1348,34824
+site_mutate_agents(1364,35135
+site_self_replicate_agents(1388,35817
+site_migrate_agents(1453,37727
+print_site(1485,38657
+site_resource_levels(1531,40126
+site_move_agents_together(1556,40889
+site_hash_genomes(1592,41570
+site_assign_species_hash_names(1663,43970
+site_list_agents(1687,44691
+site_read_stack_from_file(1724,45693
+site_count_schema(1927,50124
+
+sites.h,0
+
+syscalls.c,206
+#define WHY 28,551
+Malloc(31,629
+Fopen(46,788
+Fflush(60,992
+Unlink(71,1113
+Fclose(82,1230
+Rename(93,1351
+Getwd(106,1531
+Chdir(117,1687
+Fseek(128,1829
+Stat(141,1992
+Ftell(153,2153
+Free(166,2294
+
+syscalls.h,0
+
+types.h,6456
+#define MAX_RESOURCES 7,152
+#define NAME_STR 10,237
+#define FILENAME_STR 11,277
+#define UPTAKE_MASK_STR 14,344
+#define TRADING_RESOURCE_STR 15,391
+#define RESERVOIR_STR 16,443
+#define MUTATION_PROB_STR 19,516
+#define CROSSOVER_PROB_STR 20,572
+#define RANDOM_DEATH_PROB_STR 21,629
+#define PRODUCTION_FUNCTION_STR 22,689
+#define SITE_RESOURCES_STR 23,744
+#define MAXIMUMS_STR 24,803
+#define MAINTENANCE_STR 25,847
+#define AGENTS_STR 26,894
+#define NRESOURCES_STR 29,958
+#define SITES_STR 30,1013
+#define ROWS_STR 31,1054
+#define COLS_STR 32,1094
+#define COMBAT_STR 33,1137
+#define TRADE_STR 34,1186
+#define SELFREP_FRACTION_STR 35,1238
+#define SELFREP_THRESHOLD_STR 36,1299
+#define C_STR 37,1361
+#define M_STR 38,1417
+#define NEIGHBORHOOD_STR 39,1476
+typedef char *                   STRING;STRING41,1525
+typedef char                     RESOURCE;RESOURCE42,1566
+typedef int                      RESOURCE_SIZE;RESOURCE_SIZE43,1609
+typedef RESOURCE_SIZE *          RESOURCE_LIST;RESOURCE_LIST44,1657
+typedef int                      NRESOURCES;NRESOURCES45,1705
+typedef int                      CHROMOSOME_LENGTH;CHROMOSOME_LENGTH46,1750
+typedef int                      AGENT_POPULATION_SIZE;AGENT_POPULATION_SIZE47,1802
+typedef int                      COORD;COORD48,1858
+typedef double                   FRACTION;FRACTION49,1898
+typedef double                   PROBABILITY;PROBABILITY50,1941
+typedef unsigned long            COUNT;COUNT51,1987
+typedef unsigned long            GENERATION;GENERATION52,2027
+#define MAX_POSSIBLE_GENERATION 57,2165
+} BOOLEAN;BOOLEAN72,2443
+} NEIGHBORHOOD;NEIGHBORHOOD79,2526
+} OPTION_TYPE;OPTION_TYPE92,2700
+} OPTION;OPTION105,2965
+} SITE_COORD;SITE_COORD110,3023
+} CHROMOSOME;CHROMOSOME117,3169
+} GENOME_HASH_DATA;GENOME_HASH_DATA127,3385
+} SPECIES_NAME_HASH_DATA;SPECIES_NAME_HASH_DATA134,3564
+#define OFFENSE_TAG_INDEX 136,3591
+#define DEFENSE_TAG_INDEX 137,3620
+#define MATING_TAG_INDEX 138,3649
+#define COMBAT_COND_INDEX 139,3678
+#define TRADE_COND_INDEX 140,3707
+#define MATING_COND_INDEX 141,3736
+#define NCHROMOSOMES 143,3766
+} AGENT;AGENT162,4223
+} AGENT_EDIT;AGENT_EDIT172,4394
+} SITE;SITE191,4837
+} SITE_EDIT;SITE_EDIT206,5080
+} WORLD;WORLD231,5558
+} WORLD_EDIT;WORLD_EDIT248,5853
+#define CHROMOSOME_LEN(250,5868
+#define CHROMOSOME_MAX_LEN(251,5941
+#define CHROMOSOME_STR(252,6010
+#define CHROMOSOME_USAGE(253,6079
+#define AGENT_NAME(255,6144
+#define AGENT_GENOME(256,6207
+#define AGENT_GENOME_LEN(257,6272
+#define AGENT_MAX_GENOME_LEN(258,6344
+#define AGENT_CHROMOSOMES(259,6420
+#define AGENT_CHROMOSOME(260,6490
+#define AGENT_OFFENSE_TAG(261,6574
+#define AGENT_OFFENSE_TAG_LEN(262,6678
+#define AGENT_OFFENSE_TAG_MAX_LEN(263,6786
+#define AGENT_DEFENSE_TAG(264,6890
+#define AGENT_DEFENSE_TAG_LEN(265,6994
+#define AGENT_DEFENSE_TAG_MAX_LEN(266,7102
+#define AGENT_MATING_TAG(267,7206
+#define AGENT_MATING_TAG_LEN(268,7309
+#define AGENT_MATING_TAG_MAX_LEN(269,7416
+#define AGENT_COMBAT_COND(270,7519
+#define AGENT_COMBAT_COND_LEN(271,7623
+#define AGENT_COMBAT_COND_MAX_LEN(272,7731
+#define AGENT_TRADE_COND(273,7835
+#define AGENT_TRADE_COND_LEN(274,7938
+#define AGENT_TRADE_COND_MAX_LEN(275,8045
+#define AGENT_MATING_COND(276,8148
+#define AGENT_MATING_COND_LEN(277,8252
+#define AGENT_MATING_COND_MAX_LEN(278,8360
+#define AGENT_MAKEUP(279,8464
+#define AGENT_MAKEUP_LIST(280,8542
+#define AGENT_RESERVE(281,8607
+#define AGENT_RESERVE_LIST(282,8688
+#define AGENT_TRADING_RESOURCE(283,8756
+#define AGENT_UPTAKE_MASK(284,8831
+#define AGENT_UPTAKE(285,8910
+#define AGENT_NEWBORN(286,9002
+#define AGENT_GAINED(287,9068
+#define AGENT_CAN_SELF_REPLICATE(289,9182
+#define AGENT_EXCESS(292,9267
+#define AGENT_EDIT_NAME(295,9424
+#define AGENT_EDIT_CHROMOSOMES(296,9487
+#define AGENT_EDIT_CHROMOSOME(297,9557
+#define AGENT_EDIT_RESERVE(298,9646
+#define AGENT_EDIT_RESERVE_LIST(299,9727
+#define AGENT_EDIT_TRADING_RESOURCE(300,9795
+#define AGENT_EDIT_UPTAKE_MASK(301,9870
+#define AGENT_EDIT_UPTAKE(302,9949
+#define SITE_NAME(304,10042
+#define SITE_ROW(305,10104
+#define SITE_COL(306,10174
+#define SITE_AGENTS(307,10244
+#define SITE_AGENT(308,10308
+#define SITE_NAGENTS(309,10386
+#define SITE_MAX_AGENTS(310,10451
+#define SITE_INTERACTIONS(311,10519
+#define SITE_P_MUTATION(312,10589
+#define SITE_P_CROSSOVER(313,10657
+#define SITE_P_RANDOM_DEATH(314,10726
+#define SITE_PRODUCES(315,10805
+#define SITE_PRODUCE_LIST(316,10884
+#define SITE_MAXIMUM(317,10950
+#define SITE_MAXIMUM_LIST(318,11029
+#define SITE_RESOURCE(319,11095
+#define SITE_RESOURCE_LIST(320,11181
+#define SITE_MAINTENANCE(321,11254
+#define SITE_MAINTENANCE_LIST(322,11336
+#define SITE_EDIT_NAME(324,11406
+#define SITE_EDIT_AGENTS(325,11468
+#define SITE_EDIT_P_MUTATION(326,11532
+#define SITE_EDIT_P_CROSSOVER(327,11600
+#define SITE_EDIT_P_RANDOM_DEATH(328,11669
+#define SITE_EDIT_PRODUCES(329,11748
+#define SITE_EDIT_PRODUCE_LIST(330,11827
+#define SITE_EDIT_MAXIMUM(331,11893
+#define SITE_EDIT_MAXIMUM_LIST(332,11972
+#define SITE_EDIT_RESOURCE(333,12038
+#define SITE_EDIT_RESOURCE_LIST(334,12124
+#define SITE_EDIT_MAINTENANCE(335,12197
+#define SITE_EDIT_MAINTENANCE_LIST(336,12279
+#define WORLD_NAME(338,12349
+#define WORLD_RUNNING(339,12412
+#define WORLD_NRESOURCES(340,12478
+#define WORLD_SITES(341,12547
+#define WORLD_SITE(342,12611
+#define WORLD_ROW(343,12699
+#define WORLD_ROWS(344,12775
+#define WORLD_COLS(345,12838
+#define WORLD_COMBAT(346,12901
+#define WORLD_COMBAT_XY(347,12973
+#define WORLD_GENERATION(348,13065
+#define WORLD_HALT_GENERATION(349,13134
+#define WORLD_MUTATIONS(350,13208
+#define WORLD_TRADE_FRACTION(351,13276
+#define WORLD_C(352,13349
+#define WORLD_SELFREP_FRACTION(353,13409
+#define WORLD_SELFREP_THRESHOLD(354,13484
+#define WORLD_P_MAINTENANCE(355,13560
+#define WORLD_NEIGHBORHOOD(356,13632
+#define WORLD_EDIT_NAME(358,13704
+#define WORLD_EDIT_NRESOURCES(359,13767
+#define WORLD_EDIT_SITES(360,13836
+#define WORLD_EDIT_ROWS(361,13900
+#define WORLD_EDIT_COLS(362,13963
+#define WORLD_EDIT_COMBAT(363,14026
+#define WORLD_EDIT_TRADE_FRACTION(364,14098
+#define WORLD_EDIT_C(365,14171
+#define WORLD_EDIT_SELFREP_FRACTION(366,14231
+#define WORLD_EDIT_SELFREP_THRESHOLD(367,14306
+#define WORLD_EDIT_P_MAINTENANCE(368,14382
+#define WORLD_EDIT_NEIGHBORHOOD(369,14454
+#define skip_white(371,14526
+#define skip_to_white(372,14615
+#define DEBUG(374,14721
+
+worlds.c,359
+new_world(26,543
+new_world_edit(84,2255
+#define BUF_SZ 108,2884
+read_world_from_file(111,2913
+read_world_edit_from_file(267,7195
+write_world_to_file(547,13984
+write_world_edit_to_file(636,15800
+instantiate_world(757,18992
+world_population_size(827,20481
+world_resource_levels(844,20851
+variable_has_no_value(874,21675
+world_count_schema(888,21974
+
+worlds.h,194
+#define NORTH 17,670
+#define SOUTH 18,691
+#define EAST 19,712
+#define WEST 20,733
+#define NORTH_EAST 21,754
+#define SOUTH_EAST 22,775
+#define NORTH_WEST 23,796
+#define SOUTH_WEST 24,817

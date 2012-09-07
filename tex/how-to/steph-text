@@ -1,0 +1,85 @@
+\section{Ecosystems and evolutionary dynamics}
+
+Another major area for GAs in artificial life research is in modeling
+ecosystem behavior and the evolutionary dynamics of populations.
+(Ackley and Littman's work described above could fit into this category
+as well.)  Here we describe two such models: Holland's Echo system, meant to
+allow a large range of ecological interactions to be modeled, and 
+Bedau and Packard's ``Strategic Bugs'' system, for which a measure of
+``evolutionary activity'' is defined and studied.  
+
+\subsection{Echo}
+
+Echo is a model of ecological systems formulated by Holland
+\cite{Holland92a,Holland93a}. 
+Echo models ecologies in the same sense that the GA models population
+genetics \cite{Holland93a}.  It abstracts away virtually all of the physical
+details of real ecological systems and concentrates on a small set of
+primitive agent-agent and agent-environment interactions.  The extent
+to which Echo captures the essence of real ecological systems is still
+largely undetermined, yet it is significant because of the generality
+of the model and its ambitious scope.  The goal of Echo is to study how
+simple interactions among simple agents lead to emergent high-level
+phenomena such as the flow of resources in a system or cooperation and
+competition in networks of agents (e.g., communities, trading
+networks, or arms races).  Echo extends the GA in several important
+ways: resources are modeled explicitly in the system, individuals
+(called agents) have geographic location which affects
+their fitness, interactions between agents is built into the system,
+and fitness is endogenous.
+
+Like Ackley and Littman's ERL model, Echo consists of a population of
+agents distributed on a lattice.  Many agents can cohabit the same
+site, and there is a measure of locality within each site.  Also
+distributed on the lattice are different types of renewable resources;
+each type of resource is encoded by a letter (e.g., ``a,'' ``b,''
+``c,'' ``d'').  Different types of agents use different types of
+resources and can store these resources (the letters) internally.
+
+Agents interact by mating, trading, or fighting.  Trading and fighting
+result in the exchange of internal resources between agents, and
+mating results in an offspring whose genome is a combination of those
+of the parents. Each agent has a particular set of rules
+which determine its interactions with other agents (e.g., which
+letters it is willing to trade, the conditions under which it will
+fight, how much of its internal resources it will devote to the
+interaction, etc.).  ``External appearance'' can also be coded in
+these rules as a string ``tag'' visible to other agents.  This
+allows the possibility of the evolution of social rules and
+potentially of ``mimicry,'' a phenomenon frequently observed in
+natural ecosystems.  The interaction rules rely only on string
+matching, and are easily represented as a linear genome.
+
+Each agent's genotype encodes the rules by which it interacts and the
+types of resources it requires.  As in many other artificial-life
+models (e.g., ERL and the Strategic Bugs model described below), Echo
+has no explicit fitness function guiding selection and reproduction.
+Instead, an agent reproduces (sometimes by mating with another agent)
+when it accumulates sufficient resources to make an exact copy of its
+genome.  For example, if an agent's genome consists of 25 a's, 13 b's,
+and 50 c's, then it would have to accumulate in its internal storage
+at least 25 a's, 13 b's, and 50 c's before cloning itself.  As usual,
+cloning is subject to a low rate of mutation.
+
+In preliminary simulations, the Echo system has demonstrated
+surprisingly complex behavior (including something resembling a
+biological ``arms race'' in which two competing species develop
+progressively more complex offensive and defensive combat strategies),
+ecological dependencies among different species (e.g., a symbiotic
+``ant-caterpillar-fly'' triangle), and sensitivity (in terms of the
+number of different phenotypes) to differing levels of renewable
+resources \cite{Holland92a}.  
+
+Some possible directions for future work on Echo include: (1) studying
+the evolution of external tags as mechanisms for social communication;
+(2) extending the model to allow the evolution of
+``metazoans''---connected communities of agents that have internal
+boundaries and reproduce as a unit; this capacity will allow for the
+study of individual agent specialization and the evolution of
+multi-cellularity; (3) studying the evolutionary dynamics of schemata
+in the population; and (4) using the results from (3) to formulate a
+generalization of the schema theorem based on endogenous fitness
+\cite{Holland93a}.
+The last is a particularly important goal, since there has been
+very little mathematical analysis of artificial-life simulations in which
+fitness is endogenous. 

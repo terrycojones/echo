@@ -1,0 +1,10 @@
+Name : few_a
+Mutation_Probability : 0.001
+Crossover_Probability : 0.7
+Random_Death_Probability : 0.001
+Production_Function : 200 200 200 200
+Initial_Resource_Levels : 500 500 500 500
+Maximums : 10000 10000 10000 10000
+Maintenance : 1 1 1 1
+Agents : 
+few_a  100

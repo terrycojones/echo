@@ -1,0 +1,26 @@
+#!/bin/sh
+
+d=/net/user/terry/r/echo/standalone
+dir=$d/haas
+
+ECHO_LOCATION=$dir/OBJECTS
+export ECHO_LOCATION
+
+ECHO_WORLD=haas-10x10
+ECHO_SITE=50p
+ECHO_AGENT=haas-10x10
+
+export ECHO_WORLD
+export ECHO_SITE
+export ECHO_AGENT
+
+PATH=$dir/../bin:$PATH
+export PATH
+
+TK_LIBRARY=$d/lib/tk
+TCL_LIBRARY=$d/lib/tcl
+
+export TK_LIBRARY TCL_LIBRARY
+
+xterm -title 'Haas Echo Status' -fn 9x15 -sl 1000 -sb -geometry 85x24+355+53 \
+      -bg DodgerBlue1 -fg white -e $dir/Echo &

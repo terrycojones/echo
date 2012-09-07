@@ -1,0 +1,10 @@
+Name : few_a
+Initial_Reserves : 0 10 15 20 
+Trading_Resource : b
+Uptake_Mask : 1111
+Offense_Tag : b
+Defense_Tag : cc
+Mating_Tag : ddd
+Combat_Condition : ddd
+Trade_Condition : cc
+Mating_Condition : b

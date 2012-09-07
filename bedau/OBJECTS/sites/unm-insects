@@ -1,0 +1,39 @@
+Name : unm-insects
+Mutation_Probability : 0.0005
+Crossover_Probability : 0.7
+Random_Death_Probability : 0.00
+Production_Function : 20 20 20 20
+Initial_Resource_Levels : 50 50 50 50
+Maximums : 100 100 100 100
+Maintenance : 1 1 1 1
+Agents : 
+unm-cat 1
+unm-fly 1
+unm-ant 1
+unm-cat 1
+unm-fly 1
+unm-ant 1
+unm-cat 1
+unm-fly 1
+unm-ant 1
+unm-cat 1
+unm-fly 1
+unm-ant 1
+unm-cat 1
+unm-fly 1
+unm-ant 1
+unm-cat 1
+unm-fly 1
+unm-ant 1
+unm-cat 1
+unm-fly 1
+unm-ant 1
+unm-cat 1
+unm-fly 1
+unm-ant 1
+unm-cat 1
+unm-fly 1
+unm-ant 1
+unm-cat 1
+unm-fly 1
+unm-ant 1

@@ -1,0 +1,10 @@
+#!/usr/local/bin/wish -f
+
+scale .s -command "show_value" -from 1 -to 10
+pack .s
+
+proc show_value {n} {
+	puts "value is $n"
+}
+
+show_value 10

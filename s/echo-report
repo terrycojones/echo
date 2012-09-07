@@ -1,0 +1,355 @@
+
+Hi John (and Steph). I am now back in the U.S. after almost a month of
+idleness in Australia. Before I left I told Steph that I would write
+up a summary of our meetings with Jim Brown. That, together with
+various bits and pieces about what I have been doing/thinking/planning
+etc are below.
+
+We have had three meetings with Jim so far. I expect there will be
+another in the next month or so, though nothing definite is planned
+yet. I am going out for a drink with the grad student of his that
+seems the most switched on and likely to get involved. A couple of
+Steph's students will probably come to that, so there is interaction
+at the lower levels too.
+
+In the first Jim meeting, I did a presentation on Echo and then gave
+them a demo which was extremely well-received. Steph and I saw you
+after that meeting and told you some of the details etc, so I wont
+describe it here.
+
+In the second meeting, we had a good discussion about what sorts of
+things they thought could be addressed with Echo and what sort of
+things would need to be done to it to make such experiments possible.
+
+Jim started the discussion by saying that he thought there were 2
+directions we could move in. 
+
+The first was to try and model some specific ecological phenomena by
+making some specific changes to Echo. For example, Jim talked of
+situations where there is some limited supply of some resource (which
+need not correspond to an Echo resource). For instance, plants on hard
+surfaces where there is a shortage of space. Or some system with a
+primary resource like sunlight or soil nutrient. These examples, now
+that I come to type them in, don't sound like they'd need too much
+modification to Echo, but I think that the kind of details Jim
+envisioned being able to model did.
+
+In the second, Echo could be run, virtually as is, to see how it
+behaved as we varied some aspect of the runs and to see if that
+behavior was similar to that found in the real world. An example of
+this that you're familiar with is the tropical rainforest experiment.
+Briefly, what happens to the number of variants alive and extinct over
+time as you increase the richness of the world?
+
+Steph and I were both pleased that they thought that Echo already
+captured enough of the real world for us to embark on this sort of
+thing without needing to enhance it.
+
+In both directions we would look at Echo as a model of some aspect of
+the real world. To me the second is more appealing as it seems that
+the emphasis in the first is more on modeling while the second
+emphasizes both Echo as it stands and its (suspected) inherent ability
+to do such modeling. In addition, the second approach doesn't require
+specializing Echo - or at least it doesn't require the addition of
+things that will not be of general use to future Echo users. At this
+early stage I think it would be a mistake to start adding that sort of
+functionality. It's not really clear what Echo "is", but that seems to
+be a move in the wrong direction.
+
+Steph agrees that the second approach is the right thing to do too,
+though the above may not correspond to her reasoning. But it's
+something like that I am sure.
+
+Others who were present then mentioned ideas that they had had about
+things we could do. I'll mention these briefly.
+
+One question that was raised was: If you have more than one site (say
+two), migration, and you start the sites with the same populations (I
+just made that last bit up), could you evolve to the point where you
+had an agent surviving at one site that could not survive at the
+other? 
+
+My feeling is that this sort of thing could and would happen in Echo
+as it stands. I don't think it's terribly interesting (in the sense of
+not knowing if it would happen), though I would be happy if someone
+demonstrated it. It would require that the conditions leading to
+migration were not too easily satisfied. Looking at the question more
+closely, it is not clear what exactly you are looking for. It's more
+of a probabilistic thing. Could an agent evolve that would probably
+survive for a long time at one site and probably be driven to
+extinction (or thereabouts) at the other in a short time?  There are
+lots of details that would need to be addressed. In any case, this is
+something that Echo is pretty much ready to look at, and falls into
+the second category above.
+
+The same person (Alan) suggested something that would be interesting
+to him and his research. This falls into the first category. He'd like
+to see some measure of "life history" in Echo's agents. He does things
+with trees and is interested in there being a distinction between
+juveniles and adults. He's interested in the evolution of the life
+history pattern - whatever that is. He talked about the developmental
+pattern that exists on the genome, and so on. I wont say more, I don't
+think I could do his ideas any justice.
+
+Tim (Keitt), the grad student I mentioned before, wondered whether an
+Echo ecosystem could reach a non-invadible (-able? -sable? -sible?)
+point. I don't think he meant truly non-invadible. At least in Echo
+for a given world in a given state, I don't think it would be hard to
+design a new agent that could invade successfully. More realistic
+would be to look at some measure of invadibility and see if that, in
+general, decreased over time. Stu Kauffmann and I once had a
+discussion in which he told me of ecosystems (on sand dunes I think)
+that became increasingly hard to invade.
+
+Tim also mentioned looking at patterns of resource flow and
+distribution in Echo runs.  This gave me the idea of radioactive
+resources - have some "isotope" of a resource (say A) and call it A'.
+It can do all the things A can, but you can watch where it is in the
+world - see what sites it is at, what sorts of agents it is in.
+Perhaps mark all the A's in the initial population that are in flies,
+or something like that. I think this direction is fairly interesting,
+but again it requires some fairly specialized changes to the basic
+Echo. I can think of a couple of ways it might be solved without too
+much change, but I wont go into them here. I didn't mention this
+"radioactive resource" idea in the meeting. Toxic resources too have
+been mentioned at some point.
+
+Jim then brought up the tropical rainforest question again. There was
+some discussion about what a species was in Echo. As far as I was
+concerned, this was not really a problem. Jim seems to tend toward the
+"every different genome is a different species" point of view - I'm
+not sure why. Mine is the biological version of speciation - a subset
+of the population that can (and does) interbreed successfully. This
+requires that sex exist of course. As far as I remember, we talked
+about this the last time you were at SFI, and this was the way you saw
+it too.
+
+Regardless of the way you define a species, you can still look at the
+number of genomes that have ever existed and the number that currently
+exist and how the ratios and so on differ as the richness of the world
+changes. More on this later, as this topic was addressed in the third
+meeting.
+
+Jim also mentioned doing some experiments in which we did some control
+runs and then looked how Echo changed when one simple (at least
+conceptually) thing was altered, say the enabling of migration, a
+change in tag matching specificity, or even what happens when half the
+population is destroyed at some point.
+
+Another suggestion he made was to alter the supply of resources at a
+site during a run. The simplest way I could think of to do this
+(without just using the debugger :-)) was to have each site have a
+vector of [0.0, 1.0] reals that was used to multiply the site's
+production function at the end of each generation. Thus if you wanted
+the supply of resource A to die out at a site, its production function
+multiplier vector could look like (0.9, 1.0, 1.0, ...). That would be
+a fairly simple modification, and, importantly, one that had a special
+case that left Echo undisturbed.
+
+
+I tried to summarize what I had heard and told them that as far as I
+was concerned I'd rather look at something that didn't require too
+many (or any if possible) modifications to what I see as being the
+essence of Echo. Of the above questions, I listed the ones that I saw
+as being in this class:
+
+  * Existence of agents at sites that could exist elsewhere.
+  * A site reaching a less invadable state.
+  * The "tropical rainforest" question.
+  * Looking at the effect of a single simple change.
+  * Changing the symbol supply in some simple way.
+
+The fourth of these is very general, and perhaps should not have been
+listed.
+
+Then I asked told them that it would probably be useful to try and
+think of the sorts of things they'd like to be able to look at after
+or during an Echo run. If we could identify some things common to all
+of the above, then I could work on them and the work would definitely
+be useful.
+
+Things that they thought should be done included:
+
+  * Keeping track of the number of variants (genomes) and where
+    they came from.
+
+  * Keeping track of the number of copies per genome.
+
+  * Keeping some measure of the age of the agents.
+
+(All of the above are currently done to some extent - it's just a
+matter of how you want the information etc and presentation).
+
+  * Having some adjustable measure of relevance. By this we meant
+    that a genome (or species or whatever) should not be
+    relevant until it crossed some threshold - say age or numbers.
+    So in graphing the currently living population, for example,
+    genomes that had fewer than, say, 5 agents would not be shown.
+
+  * Jim was interested in keeping track of rare genotypes. (This 
+    is really just a special case of the above which keeps track of
+    common ones).
+  
+  * Graphs showing the various webs (trading, mating and combat)
+    that existed. For example, you could have a scatter diagram
+    that plotted a dot for each agent with the scales representing
+    the number of existing agents that would attack this agent and
+    the number it would attack.
+
+  * I suggested doing cluster analysis on the genomes. This is 
+    interesting for the speciation question that we talked about.
+    
+  * Jim suggested doing cluster analysis on the behavior of the
+    agents. Then you would expect to see, at least initially, clusters
+    that corresponded to the genome clusters. Later, in the third
+    meeting, we observed a fly that was genetically closer to the ants
+    than to other flies. How did this fly behave? Would it at some
+    point begin to cluster behaviorally with ants too? Would the 
+    separations happen at the same time? I think this sort of
+    question is very interesting - both in general and from a
+    speciation point of view.
+
+
+This was about the end of the second meeting. I told them I'd get
+working on some of the above and we decided to try and meet again
+before the end of the year.
+
+The third was also attended by Mike Simmons. I am not sure if he drove
+down especially to hear it, but it wouldn't surprise me. He seems very
+interested in all things Echo, which is great. I think he asked Steph
+at some point to be kept up to date about what meetings we were having
+etc. He and Bruce (Abell) and Ed aren't shy about bringing visitors to
+SFI to my office for a talk and a demo.
+
+The clustering on behavioral characteristics was suggested at this
+meeting. Also, I outlined my thinking about the speciation question -
+which has gotten more and more specific (more on that below if I have
+time, Ana wants me to go to sleep I think). Jim seemed to think it was
+a good question and that it was worth looking at and PhDable. We told
+them that it was now possible to look at the number of genomes alive
+versus the number that had ever existed and immediately everyone
+wanted to just go and play. Various people made predictions about what
+would happen if you doubled the resource inputs. Most of them were
+partly wrong and partly right. Steph wrote down all of the exact
+results, which I will send you later. In summary, the relationship
+between the number of living species and the amount of resource input
+did not seem linear. People had different opinions about why this was
+so. Tim predicted it and I intend to extract more of his intuition
+from him soon.
+
+The interest level was again very high. Echo had had a very
+significant facelift and looked great (even Steph thought so!). Apart
+from the tracking of genomes alive versus genomes ever, there was also
+stack editing and schema tracing (which Jim hadn't seen) and cluster
+analysis on genomes, which proved interesting - especially when the
+ant crossed the floor (genetically speaking) and clustered with the
+flies. We were able to look at the mutation which had caused it and so
+on. I would like to be able to look at the behavioral clustering to
+see how it goes before and after the genetic departure. This is not
+too hard to add. My Echo becomes bigger and slower still... Anyway we
+again had about ten people engrossed in the progress of runs,
+explaining them (or trying to), making predictions, asking what-if
+questions and so on. Jim, again, didn't stop smiling all day.
+
+
+Steph and I had one more meeting before I went away. There we both
+agreed that I should work on the sorts of things that would serve both
+the sorts of questions that were being asked by Jim and his group and
+also the PhD. These include various things to examine populations. I
+think that clustering is going to be very important to the speciation
+effort.
+
+As far as the speciation question goes, it is clearer to me now, and I
+think I have quite a few details of exactly what to look for and
+exactly how to look for it ironed out. Probably many of these were
+already clear to you when we last talked in Steph's office. I didn't
+really see a specific question until reading Mayr. In Towards A New
+Philosophy of Biology (p 359) he talks of the three main controversies
+that speciation still faces to some extent. (This all ties in with
+your last mail to me about your differences with him, but I wont go
+into that in this mail).
+
+The second question was about how isolating methods evolve. He says a
+bit later that until recently he didn't really know how it could
+happen and then mentions "sexual selection" (p 362). I think this is
+probably not a good term to use - it got me into some trouble with Jim,
+I don't know exactly what the biologists use it for nowadays, but it
+has something to do with competition amongst sperm for the egg.
+Anyway, it was suddenly clear what to do with Echo. See if mating tags
+could drive speciation. This, of course, was just what you'd told me
+to do :-) Could this happen without the need for geographical
+separation? Or would some geographical separation be needed, and for
+how long? 
+
+[As an aside, I have a viewpoint on allopatric speciation that I have
+not encountered elsewhere (yet). It seems improbable that geological
+events such as uplifting of mountain ranges, lava flows etc etc would
+account for geographic separation too often. Much more likely, it
+seems to me, is that the geography was fairly stable and that the
+population was not, it was in migration. As a large population slowly
+migrates or spreads over a long range, it will encounter geographic
+obstacles and will, in many circumstances, divide. Whether it reforms
+or not and after how long etc will be important when considering
+speciation. The separation may only have to be long enough for mating
+preferences to change slightly for prezygotic isolating mechanisms to
+arise.]
+
+Mayr says that this would not affect postzygotic isolation, but I
+don't see why not. Once the prezygotic (based on selective mating) are
+in place, genetic drift could eventually produce postzygotic ones too.
+
+In summary, I think I see a question that can be addressed. Can
+speciation be driven by isolation that comes about through selective
+mating? If not, does a little bit of a geographical nudge help?
+
+To study this in Echo I will probably do some or all of the following:
+
+  * Turn off self-reproduction.
+  * Have one site.
+  * Have all mating tags empty (one initial species).
+  * Design the initial agent so that it doesn't self-combat or self-trade.
+  
+Most of these you already suggested. In my notes I have also suggested
+turning off combat, but I am now not sure that that's a good idea. I
+think not. Also I had written "Introduce death due to aging" for some
+reason. I later realized that one could think of the random "death
+without cause" that you already have as being exactly that. Sooner or
+later, probably later, you'll die from it. I don't know if you
+intended it that way, but it seems like a nice way to interpret an
+aspect of Echo, if you know what I mean.
+
+
+That's about all I intended to say. My current plan is to finish a
+paper for ICGA (on evolving Turing Machines, not Echo) in the rest of
+this month. That will be fairly intensive. Steph suggested that I
+should start writing papers about aspects of Echo, but I wasn't sure
+that I was comfortable doing that. How do you feel about that? Of
+course, any paper you wanted to be involved in you'd be welcome "on".
+I think there are various places that would accept papers on it, but I
+am not too sure how to go about it - how much could be assumed about what
+people knew and so on? Also I don't feel that there are any results
+there yet that are worth making a paper out of. This will probably
+change soon enough.
+
+I will also do some runs to keep the people at UNM interested. We have
+some simple "rainforest" experiments that should prove interesting -
+and maybe paper-able. This will be before the next meeting with them,
+whenever that is.
+
+Then I plan to get my thesis proposal done and experiments started on
+speciation. Hopefully this will begin in mid February.
+
+If you are still interested in being co-chair, then I'd like that very
+much. I will work on speciation, I will get my degree, I wont talk in
+class, I will do my homework. Doug (Hofstadter) who is on the
+committee is going on sabbatical (to Italy) in September, so he wont
+be around for the defense (but he will for the proposal stage). So
+I'll need to get someone else from IU - maybe you have a suggestion,
+preferably someone whose career depends on you... I have Greg Rawlins,
+Bob Port and Mike Gasser already.
+
+That's enough for now. There will be more to come very soon. I have to
+get the ICGA thing out of the way, but soon after that things will
+start to happen. 
+
+Terry.

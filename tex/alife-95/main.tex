@@ -1,0 +1,137 @@
+\newif\iflatextwoe
+\newif\ifepsf
+\newif\ifpsfiginstalled
+
+%
+% The following should be set according to whether you have 
+%
+%    1) latex2e or latex 2.09,
+%    2) epsfig,
+%    3) psfig installed in your latex.
+%
+% Peter needs:  true,   true,   irrelevant
+% Steph needs:  false,  false,  false
+% Terry needs:  false,  false,  true
+%
+% Therefore...
+%
+% I have things this way:
+%
+\latextwoefalse
+\epsffalse
+\psfiginstalledtrue
+%
+% Peter, you should have the following 2 lines uncommented:
+%
+%    \latextwoetrue
+%    \epsftrue
+%
+% Steph, you should have the following 3 lines uncommented:
+%
+%\latextwoefalse
+%\epsffalse
+%\psfiginstalledfalse
+%
+
+
+%
+% Nothing below here should need to be changed for others to get
+% their latex to work on this file.
+%
+
+%
+% If you add text that depends on latex2e or psfig/epsfig, you can use 
+% conditionals to make sure your changes will work for everyone. E.g.,
+%
+%    \ifepsf
+%    \epsfysize=5.5in
+%    \epsfbox{figures/preston-curves.ps}
+%    \else
+%    \psfig{figure=figures/preston-curves.ps}
+%    \fi
+%
+% Specifies a figure in such a way that we can all run latex with 
+% no problem.
+%
+% Of course one way might look better than another and we can decide on
+% which to use for the final version later. But for now I just want to
+% make it so we can all hack on the text without having to reconfigure a
+% bunch of little things every time we get the file.
+%
+% Terry.
+%
+
+
+\ifepsf
+\documentstyle[12pt,epsfig]{article}
+\else
+\ifpsfiginstalled
+\documentstyle[12pt,psfig]{article}
+\else
+\documentstyle[12pt]{article}
+%\input{epsfig.sty}
+\input{psfig.tex}
+\fi
+\fi
+
+\iflatextwoe\else
+\newcommand{\emph}{\em}
+\fi
+
+\oddsidemargin=0.0751in
+\evensidemargin=0.075in
+\textwidth=6.5in
+
+\begin{document}
+\title{\bf The Ecology of Echo}
+
+\vspace{0.25in}
+
+\author
+{
+{\bf Terry Jones} \\
+Santa Fe Institute \\
+1399 Hyde Park Road \\
+Santa Fe NM 87501 \\
+terry@santafe.edu \\
+\and
+{\bf Peter T. Hraber} \\
+Dept.\ of Biology \\
+University of New Mexico \\
+Albuquerque NM 87131 \\
+pth@santafe.edu \\
+\and 
+{\bf Stephanie Forrest} \\
+Dept.\ of Computer Science \\
+University of New Mexico \\
+Albuquerque NM 87131 \\
+forrest@cs.unm.edu \\
+%\and
+%{\bf John H. Holland} \\
+%Dept.\ of Psychology \\
+%University of Michigan \\
+%Ann Arbor MI 48103
+}
+
+\maketitle
+
+\input{abstract}           \newpage
+\input{intro}
+\input{echo-overview}
+\input{echo-cycle}
+\input{echo-structure}
+\input{echo-interactions}  % \newpage ??
+\input{species-abundance}  % \newpage ??
+\input{results}            % \newpage ??
+\input{discussion}
+\input{conclusions}
+\input{acknowledgments}
+
+\bibliographystyle{plain}
+\bibliography{references}
+
+\end{document}
+
+% Local Variables:
+% TeX-master:"main"
+% End:

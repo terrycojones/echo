@@ -1,0 +1,13 @@
+Here are the commands that produced the figures used in the paper:
+
+bin/make-graph x echo-output/300.population ->
+figures/ranked-genome-frequencies.ps
+
+bin/make-preston-graph x echo-output/300.population ->
+figures/ungrouped-prestonized.ps
+
+bin/make-preston-graph x echo-output/distance10/300.genome-by-species ->
+figures/preston.300.10.ps
+
+bin/make-preston-graph x echo-output/distance20/300.genome-by-species ->
+figures/preston.300.20.ps

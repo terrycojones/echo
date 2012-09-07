@@ -1,0 +1,18 @@
+#!/usr/bin/perl
+
+srand();
+
+die "I need a probability argument!\n" unless @ARGV;
+
+$p = shift @ARGV;
+
+while (<>){
+    if (rand() < $p) {
+	print;
+    }
+}
+
+ 
+# Local Variables:
+# mode:perl
+# End:

@@ -1,0 +1,78 @@
+\section{The Echo Cycle}
+\label{echo-cycle}
+
+%
+% STEPH suggests saying
+% ``The previous section described the structral elements of Echo...''
+% but I have resisted that because it seems a bit of a lazy way
+% to get an extra sentence in before the itemized list. I know what
+% sort of thing you want though. I'd just like something that looks less
+% like filler.
+%
+In this section, we describe the sequence of events that takes place in
+a single Echo cycle:
+\begin{enumerate}
+\item Interactions between agents are performed at each site.  These
+  include trade, mating, and combat.  For each interaction, one agent
+  is selected.  A second agent is then selected in the vicinity of the
+  first.  The first agent is moved adjacent to the second in the
+  one-dimensional array of agents at the site.  If the first agent
+  would attack the second, the second may run away by moving a small
+  distance away in the array.  In both cases, distances are likely to
+  be small, as the probability of large distances decreases
+  exponentially.
+
+  [TERRY: this last sentence is unclear.  What are you
+  trying to say here?---Please give the forumla]
+
+\item Agents collect resources from the site if any are available.
+  The site produces resources according to its ``site'' parameters,
+  and these are distributed as equally as possible among the agents at
+  the site that are genetically able to collect them.
+
+\item Each agent at each site is taxed (probabilistically).  Each site
+  exacts a resource tax from each agent with a given (worldwide)
+  probability.  If an agent does not possess the resources to pay the
+  tax, it is deleted (killed) and its resources are returned to the
+  environment.  Tax in Echo can be thought of as economic taxation, or
+  as the cost required to live at the site.  Biologically, this can be
+  thought of as metabolic cost.
+
+\item Agents are killed at random with some small probability.  This
+  can be interpreted either as bad luck or as a mechanism that
+  prevents agents from living indefinitely.  Agents that are not
+  killed some other way (through combat or taxation), will eventually
+  be randomly killed.  When an agent at a site dies, for whatever
+  reason, its resources are returned to the environment, thereby
+  becoming available to other agents at that site.
+
+\item The sites produce resources. Different sites may produce
+  different amounts of each resource.  For example, one site might
+  produce ten {\em a}'s and ten {\em b}'s on each time step, whereas
+  another might produce five {\em b}'s and twenty {\em c}'s.  The
+  idea is that agents will replicate frequently if they are located
+  at sites whose resources match their genomes, if the site is not too
+  crowded.  When an agent at a site dies, its resources are returned
+  to the environment and become immediately available to other agents
+  at that site.
+
+\item Agents that do not acquire any resources during an Echo cycle
+  (either through picking them up or through combat or trade) migrate
+  to a neighboring site. The neighboring site is selected at random
+  from among those permitted by the geography of the world.  This is
+  not the same as the local movement within a site that occurs as the
+  result of the agent-agent interactions that are described in
+  Section~\ref{agent-agent}.
+
+\item Agents that can replicate do so (asexual reproduction).  An
+  agent may replicate when it acquires sufficient resources.  In
+  replication, an agent makes a copy of its genome using the resources
+  it has stored in its reservoir.  A parameter controls how many
+  resources are required to be stored beyond those needed to make an
+  exact copy.  The replication process is noisy: random mutations may
+  result in genetic differences between parent and child.
+
+\end{enumerate}
+This cycle is iterated many times during the course of a run.
+
+

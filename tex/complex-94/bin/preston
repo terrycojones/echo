@@ -1,0 +1,58 @@
+#!/usr/bin/perl
+
+$log2 = log(2);
+$max_octave = 20;
+$max_octave_found = 0;
+
+for ($i = 0; $i < $max_octave; $i++){
+    $octave_count[$i] = 0;
+}
+
+while (<>){
+    @numbers = grep(/\d+/, split(' '));
+    $n = @numbers;
+
+    for ($i = 0; $i < $n; $i++){
+
+	$octave = log($numbers[$i]) / $log2;
+	$octave_int = int($octave);
+
+	#printf "Number %d Octave %f Int %d\n", $numbers[$i], $octave, $octave_int;
+
+	if ($octave == $octave_int){
+	    # We hit a boundary.
+	    $octave_count[$octave_int] += 0.5;
+	    $octave_count[$octave_int + 1] += 0.5;
+
+	    if ($octave_int + 1> $max_octave_found){
+		$max_octave_found = $octave_int + 1;
+	    }
+	}
+	else {
+	    $octave_count[$octave_int]++;
+
+	    if ($octave_int > $max_octave_found){
+		$max_octave_found = $octave_int;
+	    }
+	}
+    }
+}
+
+if ($verbose){
+    printf "Octave Range Count\n";
+
+    printf "     0 0-1 %6.1f\n", $octave_count[0];
+
+    for ($i = 1; $i <= $max_octave_found; $i++){
+	printf "%6d %d-%d %6.1f\n", $i, 1<<($i - 1), 1<<$i, $octave_count[$i];
+    }
+}
+else {
+    for ($i = 0; $i <= $max_octave_found; $i++){
+	printf "%d %f\n", $i, $octave_count[$i];
+    }
+}
+
+# Local Variables:
+# mode:perl
+# End:

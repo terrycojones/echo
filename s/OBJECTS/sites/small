@@ -1,0 +1,11 @@
+Name : small
+Mutation_Probability : 0.0001
+Crossover_Probability : 0.7
+Random_Death_Probability : 0.0003
+Production_Function : 10 20 30 40
+Initial_Resource_Levels : 21 22 23 24
+Maximums : 100 100 100 100
+Maintenance : 2 1 4 1
+Agents : 
+small 4
+

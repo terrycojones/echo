@@ -1,0 +1,74 @@
+#!/bin/sh
+
+PATH=$HOME/r/echo/tex/oz-complexity-paper/bin:$PATH
+
+#
+# This takes two arguments, the seed from an Echo run
+# and the distance to pass to the cluster summarizer
+#
+# from these it makes the name of the cluster file
+# which it uses to make the species file (by calling
+# the cluster-to-species script).
+#
+
+case $# in
+	2) seed=$1; distance=$2;;
+	*) echo usage: `basename $0` seed distance; exit 1;;
+esac
+
+cluster-to-species $seed $distance
+
+population=$seed.population
+species=$seed.species
+genome_abundance=$seed.genome-abundance
+genome_by_species=$seed.genome-by-species
+
+if [ ! -f $population ]
+then
+	echo Could not find population file $population
+	exit 1
+fi
+
+if [ -f $genome_abundance ]
+then
+	echo $genome_abundance already exists!
+	exit 1
+fi
+
+echo -n "Making genome abundance file $genome_abundance..."
+
+awk '{print $1}' $population | sort | uniq -c | 
+sort -n -r | awk '{printf "%d %d\n", NR, $1}' > $genome_abundance
+
+echo Done.
+
+
+if [ -f $genome_by_species ]
+then
+	echo $genome_by_species already exists!
+	exit 1
+fi
+
+# check that cluster-to-species actually made us something.
+
+if [ ! -f $species ]
+then
+	echo Could not find species file $species
+	exit 1
+fi
+
+#
+# now use the population and species files
+# to look up every agent in the population
+# file, find its species number and write it to the
+# genome-by-species file.
+#
+
+echo -n "Making by-species file $genome_by_species (be patient)..."
+
+for i in `cut -f1 -d' ' < $population`
+do
+	grep $i $species
+done | cut -f1 -d' ' > $genome_by_species
+
+echo Done.

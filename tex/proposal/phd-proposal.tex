@@ -1,0 +1,283 @@
+\documentstyle [12pt] {article}
+
+%
+% relevant pages from first notebook: 99, 101.
+%
+
+\begin{document}
+% \pagestyle{empty}
+
+\title {{\bf Ph.D. Thesis Proposal}}
+
+\author
+{Terry Jones}
+
+\maketitle
+
+\section{Introduction}
+
+The thesis will concern itself with a family of models of complex
+adaptive systems (CAS) called the Echo models. These models
+originated with John Holland, who also invented Genetic Algorithms
+(GA) and Classifier Systems (CS). In what follows I shall often
+refer to ``Echo'' as though it were singular. This is somewhat due to
+laziness and somewhat a result of the fact that I have developed a
+single Echo model from the family described by Holland. Where the
+distinction is important, I shall make it.
+
+There is no real definition of a complex adaptive system, but
+everything that deserves the name has at least the following
+characteristics:
+
+\begin{itemize}
+
+\item
+The system can be thought of as a ``world'' with an ever--changing
+environment. The world might be, for example, an economic market, the
+body or a computer network. The world has some geography and the
+environment will, in general, be different at different locations in
+the world.
+
+\item
+The system is never in equilibrium. Of course, when viewed from a
+great enough distance, every system will appear dead and when viewed
+from close enough will appear completely chaotic. This objection should
+not be taken too seriously. The intent of the first sentence is that
+the system be viewed from a natural distance, something at about the
+agent level. Thus, for example, in an ecosystem, agents might be
+particular fauna and one could examine the system at the level of
+species or at the level of individual agents. At these levels, complex
+adaptive systems are always in flux.
+
+\item
+A large number (usually at least in the hundreds) of agents. The
+agents are at once independent and interdependent. That is to say they
+make individual decisions about how to act, but that these decisions
+may be influenced by what other agents are doing or have done and the
+state of the environment.
+
+An agent might be, corresponding to the example worlds above, a
+stock--broking firm or an operator on the trading floor, an antibody in
+the body's immune system or a virus loose on the internet. Agents will
+typically come in many shapes and sizes and will adapt to the
+conditions in which they find themselves. They may ``reproduce'' in
+some fashion -- perhaps through mere duplication or some form of
+sexual reproduction.
+
+\item 
+Holland (Holland 93) mentions a further and ``less obvious'' feature
+of such systems, that agents ``employ internal models to direct their
+behavior''. The reason this is to be considered less obvious is that,
+in looking at a simple agent, it is often not clear what an internal
+model for that agent could possibly be. For instance, what internal
+model does a given antibody in the body's immune system possess?
+
+I shall not address this question in any detail here, or in the rest
+of this proposal. Briefly, I think the answer is that at this level
+one must look at the ways that such an agent behaves. The kinds of
+things it does can be thought of as actions that are triggered by
+conditions in the world. In this sense an agent has a model of the
+world, although it is not explicit. To me this requirement (the agents
+in a CAS have an internal models) is not necessary, as it is difficult
+to attribute an internal model to such simple agents, and so we should
+not try to impose it. Of course if it feels ``right'' to attribute
+internal models to an agent, there is no reason not to do so and it
+certainly would tend to increase the complexity of the system.
+
+\end{itemize}
+
+Echo is an attempt to capture these commonalities in a general model.
+Ideally, this will allow the modeling of a diverse range of such
+systems without the need for a specialized model for each to be
+developed. Typically, the people who know the most about any
+particular real--world complex system are not the people who can also
+develop sophisticated models that can be used as tools to increase
+understanding. The hope is that Echo will ameliorate this situation.
+
+An Echo world consists of some number of sites, arranged in some
+geography. Simple geographies include lines, rings and
+two--dimensional arrays. The simplest possible world, which is used
+exclusively in this thesis, contains a single site. One may well ask
+why this decision was taken. The answer is that even the complexity
+arising within a single Echo site will take an entire thesis to
+describe. There is little point in examining the behavior of a
+collection of interacting objects when we have enough trouble
+describing the behavior of even one of these objects.
+
+Any number of agents can exist at a single Echo site. The number will
+depend on many factors, such as the richness of the site, the behaviors
+of the agents at the site, site ``taxes'', and various probabilities
+that are associated with the world and with the site.
+
+Agents are composed of ``resources''. The world has a fixed number of
+resource types. These are usually denoted by lower case letters
+beginning with {\em a}. To say that agents are composed of resources
+means that their genomes consist of strings of the resources. One
+should feel free to draw analogies with DNA.
+
+Sites produce resources, agents collect resources, fight for
+resources, trade resources and return resources to the world when they
+die (unless they are killed in combat, in which case the loser's
+resources are taken by the winner). All interactions in the world
+involve flows of resources.
+
+There are three basic interactions in Echo worlds.
+
+\begin{itemize}
+
+\item Combat
+
+\item Trade
+
+\item Reproduction
+
+\end{itemize}
+
+\section{Speciation and Echo}
+
+\section{Thesis Outline}
+
+The thesis will contain seven chapters, the main one being the fourth,
+on ``Hypothesis and Results''. Below is an outline of the contents of
+each. 
+
+\begin{enumerate}
+
+\item Introduction
+
+The introduction will discuss the connection between computer science
+and biology -- how they interact and the benefits that they derive
+from each other. The Echo model will be briefly introduced. The major
+contribution of the thesis will be outlined. The purpose of this sort
+of modeling will be explained and grounded firmly in the real world.
+There will be some discussion of complex systems in general -- what
+they are, how we try to understand them, etc. I will describe some
+other approaches to understanding complex systems, including through
+modeling.
+
+\item Echo Models
+
+This section will describe the Echo model in detail. Currently there
+are only a few written descriptions of Echo (Holland 92a, 92b, 93),
+and of these, only one could be considered widely available (Holland
+92).
+
+Echo actually refers to a family of models. Here I will make clear
+what the model of Echo used in the thesis was and how it differs from
+the models Holland has used. All differences and similarities will be
+presented, and should enable future researchers to implement an Echo
+model that closely matches the one for which the results are
+described.
+
+\item Species and Speciation
+
+This chapter will present some discussion on real world speciation. It
+will outline current problems and theories. The concept of speciation
+needs to be defined, and needs to be defined with respect to Echo
+models as well. The various theories about how speciation occurs in
+the real world will be described.
+
+\item Hypothesis and Results
+
+The basic hypothesis that I wish to test in Echo is the following:
+
+{\em That preferential mate selection based on evolving phenotypic and
+genotypic traits can lead to pre--zygotic isolation between
+sub--populations, and hence to species.}
+
+A rough explanation of this is as follows. Suppose that mate selection
+for sexual reproduction is based upon something observable about the
+opposite sex. This, of course, is not a wild supposition. If there is
+both variety in preference and in the characteristic, then it is
+highly likely that two individuals of the same sex will feel attracted
+to members of the opposite sex in differing amounts. If the
+characteristics that determine both appearance and the strength of
+attractions are allowed to evolve, one can imagine reaching a
+situation in which the population is divided into sub--populations, or
+equivalence classes, which are defined by mating choices. Under the
+standard biological definition of species, each of these
+sub--populations is a species.
+
+Pre--zygotic refers to the fact that the species boundary is something
+that is imposed {\em before} sperm meets egg. In this case, no sperm
+never reaches an egg as the individuals do not choose to have sex. On
+the other hand, post--zygotic isolation between species occurs when
+sex occurs but offspring either do not result or are sterile. The
+best known example of post--zygotic isolation is that of the donkey.
+
+The questions that I am addressing in my research with Echo is the
+following. Can this sort of speciation occur? If it happens, will the
+isolation persist (as it does in the real world)? If not, what is
+required to make speciation occur? This is also a very important
+problem. The most widely accepted theories of speciation postulate
+that some geographical isolation between sub--populations is needed
+for speciation to occur. This is known as {\em Allopatric Speciation},
+and there are two main variants of it. {\em Dichopatric Speciation} --
+in which two large populations somehow become separated (this is also
+known as the {\em dumbell} model), and {\em Peripatric Speciation} --
+in which a small founder population is established outside the range
+of the original population (Mayr 1992).
+
+If speciation due to sexual preferences and the evolution of ``mating
+tags'' does not occur in Echo, does it occur when sub--populations
+experience geographical separation? How long does the separation need
+to last? If the sub--populations are reunited, will the species
+boundary persist?
+
+\item Connection With Traditional Genetic Algorithms
+
+Recently there has been quite a bit of interest in speciation within the
+genetic algorithm (GA) community. Most of this work is not explicitly
+concerned with speciation. The aim of this sort of thing is not to
+model the real world (and hence the term ``speciation'' is not often
+encountered), but to make GAs perform better by increasing the
+diversity of the solutions they discover.
+
+Some people have done this explicitly (Todd et. al. 1991)
+
+\item Related Work
+
+\item Conclusion
+
+\end{enumerate}
+
+\section{Time Frame}
+
+I have been developing an Echo model since July 1992. John Holland has
+provided a lot of input and it is expected that he will serve on my
+committee in some capacity, probably as an external co--chairman.
+
+As far as code development goes, there is not a lot left to do. Some
+specialized tools need to be written to help with the analysis of
+species, but the biggest hurdle has been safely cleared. I plan to
+complete the thesis by the end of August 1993. The immediate goal is
+to begin experimentation on the species formation question and to
+continue broad reading on the subject.
+
+\subsubsection*{References}
+
+Holland,~John~H. (1992a). \\
+{\em The Echo Model},
+in ``Proposal for a Research Program in Adaptive Computation''.
+Santa Fe Institute, July 1992. \\
+
+Holland,~John~H. (1992b). \\
+{\em Adaptation in Natural and Artificial Systems}, 2nd Ed.,
+MIT Press, 1992. \\
+
+Holland,~John~H. (1993). \\
+{\em ECHOING EMERGENCE : Objectives, Rough Definitions, and
+Speculations for Echo-class Models},
+To appear in ``Integrative Themes'', George Cowan, David Pines and
+David Melzner Eds. Santa Fe Institute Studies in the Sciences of
+Complexity, Proc. Vol XIX. Reading, MA: Addison--Wesley 1993. \\
+
+Mayr,~E. (1992). \\
+{\em Towards a New Philosophy of Biology}. \\
+
+Todd,~Peter~M. and Miller,~Geoffrey~F (1991). \\
+{\em On the Sympatric Origin of Species: Mercurial Mating in the
+Quicksilver Model} in ``Proceedings of an International Conference on
+Genetic Algorithms'', Morgan--Kaufmann.
+
+\end{document}

@@ -1,0 +1,10 @@
+Name : simplest1
+Mutation_Probability : 0.0005
+Crossover_Probability : 0.7
+Random_Death_Probability : 0.0001
+Production_Function : 10 10 10 10
+Initial_Resource_Levels : 0 0 0 0
+Maximums : 100 100 100 100
+Maintenance : 1 1 1 1
+Agents : 
+simplest1

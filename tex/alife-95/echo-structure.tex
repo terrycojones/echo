@@ -1,0 +1,281 @@
+\section{Echo Structure}
+\label{echo-structure}
+
+[EVERYONE: this section is pretty boring---how hard to break out the
+``structure part'' and include some details about the implementation?]
+
+This section describes the details of the structural hierarchy of
+Echo.  Each run of Echo involves a {\em world\/} that contains a fixed
+number of {\em sites}.  Each site may contain an arbitrary number of
+{\em agents}, including zero.  These components are designed by the
+user, typically as an abstraction of some aspect of a real-world
+CAS\@.  In the Echo world used in this paper, there are four
+resources.  The use of Echo requires decisions about the structure of
+all these objects and the ways they will behave when the result is set
+in motion.
+
+\subsection{Echo Worlds}
+The design of an Echo world requires the choice of a geography of
+sites. In the current implementation, this geography must form a
+rectangular array, although the general class of Echo models makes no
+such restriction. Various properties of these sites must be
+specified by the user, including the following:
+
+\begin{itemize}
+\item The number of resource types that will exist in the world.
+
+\item The {\em interaction fraction\/} determines the number of
+  agent-agent interactions that will occur at a site in each Echo
+  cycle. This is determined by multiplying the interaction fraction by the
+  population at a site. 
+
+\item The {\em trading fraction\/} determines what proportion of an
+  agent's excess trading resource it will exchange in a trading
+  interaction with another agent. Trade is described in
+  section~\ref{dynamics:trade}. 
+
+\item The {\em taxation probability\/} is the probability that an
+  agent is taxed in an Echo cycle (see Section~\ref{dynamics:taxation}
+  for details). 
+
+\item The {\em neighborhood\/} determines the possible directions of
+  migration between sites. The three possibilities, given a
+  rectangular array of sites, are none (i.e., no migration), the four
+  compass points (used in the results described in this paper) or the
+  compass points plus the diagonals.
+\end{itemize}
+
+An Echo world also requires the definition of a {\em combat matrix}
+(see Section~\ref{dynamics:combat} for an overview and
+\cite{Holland92} for the detailed description).  This matrix is used
+in the calculation of combat outcome probabilities.  
+Table~\ref{tab:simulation-parameters} shows typical values for
+these paramters.
+
+\subsection{Echo Sites}
+
+An Echo site initially contains an arbitrary number of agents.
+These are arranged in a one-dimensional array. The probability that a
+pair of agents will be chosen to interact falls off exponentially with
+increasing distance between agents in this array. The user must decide
+which agents initially reside at each site, and in what order they
+should appear in the array.  There are three parameters that must
+be specified for each site:
+\begin{itemize}
+\item The {\em mutation probability\/} determines the
+probability that the genome of
+an agent is mutated during self-reproduction.  This is a per-gene
+probability (see Section \ref{agents}).  Mutation is
+handled slightly differently for different genes (see Section
+\ref{self-reproduction}).
+  
+\item The {\em crossover probability\/} is used similarly to a genetic
+algorithm.  It determines the probability that two agents that mate
+will be subject to crossover.  If crossover is not performed, the
+agents are unchanged.
+
+\item At the end of an Echo cycle, there is a (typically small)
+probability of each agent being killed.  This is called the {\em
+random death probability}.
+\end{itemize}
+
+In addition to these parameters, every site must specify four
+resource-level vectors. Each of these consists of a vector of
+non-negative integers whose length is the same as the number of
+resource types in the world.  These vectors are used as follows:
+\begin{itemize}
+\item The {\em production\/} vector contains the number of resources
+  of each resource type that will be produced by the site in each Echo
+  cycle.
+
+\item The {\em initial\/} vector contains the number of resources of
+  each resource type that will be present at the site when it is first
+  created.
+
+\item The {\em maximum\/} vector contains the maximum level of each
+  resource type that can accumulate at the site.
+
+\item The {\em maintenance\/} vector contains the number of each
+  resource type that will be charged to an agent when it is taxed, as
+  described in section~\ref{dynamics:taxation}.
+\end{itemize}
+
+\subsubsection{Taxation}
+\label{dynamics:taxation}
+
+In each cycle, sites exact a resource tax from their agents with a
+given (worldwide) probability. This can be thought of as economic
+taxation, or as the cost required to live at the site.  Biologically,
+taxation can be thought of as metabolic cost. Agents that are unable
+to pay the tax from their current store of resources in the reservoir
+are killed, and their resources are returned to the environment.
+
+\subsection{Echo Agents}
+\label{agents}
+
+\begin{figure}[htbp]
+\begin{center}
+\leavevmode
+\psfig{figure=figures/example-agent.ps}
+\caption{The structure of an Echo agent. Tags are visible to the
+outside world. Conditions and other properties are not.
+\label{fig:example-agent}}
+\end{center}
+\end{figure}
+
+Agents have a genome that is roughly analogous to a single chromosome
+in a haploid species, as shown in Figure~\ref{fig:example-agent}. The
+chromosome has $r + 7$ genes, where $r$ is the number of resources in
+the world.  Six of these, the {\em tags\/} and {\em conditions\/} are
+composed of variable-length strings of resources (i.e., of the
+lower-case letters that represent resources).
+
+Tags are genes that produce some externally visible feature of the
+phenotype, e.g., color.  Conditions are genes that cannot be directly
+observed by other agents.  They encode internal preferences,
+behavioral rules, etc.  Thus, one agent will interact with another on
+the basis of its own internal conditions (rules for interaction) and
+the other's external tags (appearance).  This allows the possibility
+of quite complex interactions between agents, including mimicry,
+bluffing, other forms of deception, and some intransitivities.  For
+example, in mimicry, an agent can appear dangerous but actually be
+unwilling to fight.  An example of intransitive combat relationships
+would be the following: an agent $A$ might always attack an agent $B$,
+and $B$ always attack $C$, but it does not follow that $A$ will attack
+$C$. This has obvious parallels in real-world systems (e.g., in food
+webs).  See \cite{Holland92,Holland93b,Holland95a} for discussions of
+the significance of these kinds of interactions.
+
+The six (external) tag and (internal) condition genes possessed by
+every agent are the {\em offense tag}, {\em defense tag}, {\em mating
+tag}, {\em combat condition}, {\em trade condition\/} and {\em mating
+condition}.  These genes are used to determine what sort of
+interaction will take place between a pair of agents, and what the
+outcome will be.  The use of these genes is described below. It should
+be noted that the current implementation conforms largely to the early
+description in~\cite{Holland92}, but not to those
+in~\cite{Holland94,Holland95a}.
+
+The $r$ genes correspond to the agent's {\em uptake mask}, which
+determines its ability to collect each resource type directly from the
+environment. If an agent does not have a ``1'' allele for the uptake
+gene corresponding to a certain resource, it will not be able to
+collect that resource directly from the environment.  Consequently, if
+the agent requires this resource (because the site at which it is
+located charges a tax that includes it, or because the agent needs it
+to replicate), it will either have to fight or trade for it. The
+designer of an Echo world can create trading webs among agents by
+requiring them to trade in various ways to ensure survival.  These
+webs, often unstable, may be quickly altered through mutation,
+crossover and migration.
+
+The final gene is the {\em trading resource\/} which is the resource
+type that the agent will provide to another agent if trading takes
+place.  An agent may trade with another agent even if it does not
+possess any of its trading resource to exchange. In this case, the
+other agent in the interaction receives nothing.  Agents also have a
+{\em reservoir\/} in which to store resources.  Resources from the
+reservoir are used to pay taxes, to produce offspring, and for trade.
+
+%Agents at a site are arranged in a one-dimensional array.  The
+%probability that a pair of agents will be chosen to interact falls off
+%exponentially with increasing distance between agents in this array.
+%The user must decide which agents initially reside at each site, and
+%in what order they should appear in the array.
+
+\subsubsection{Replicating Agents}
+\label{self-reproduction}
+
+An agent is replicated when it acquires sufficient resources.  The
+agent's genome is copied using the resources it has stored in its
+reservoir to construct the daughter agent.  There are two
+parameters that control the replication process:
+
+\begin{itemize}
+
+\item The {\em self-reproduction threshold\/} is used to determine
+when enough resources have been collected.  As an example, if the
+genome contains three {\em a}s and the self-reproduction threshold is
+two, then the reservoir must contain at least six {\em a}s before
+self-reproduction can take place. A similar requirement must be
+satisfied for each resource type.
+
+\item The {\em self-reproduction fraction\/} determines the division
+  of excess resources between the original agent and the daughter
+  agent after replication.  The fraction indicates how the proportion
+  of extra resources (i.e., those not needed to make the clone) should
+  be divided between the two.  A setting of one will result in
+  offspring with no internal reserve of resources.  At the other
+  extreme, a setting of zero allocates all extra resources to the
+  offspring, leaving the original vulnerable.
+\end{itemize}
+
+During replication, there may be spontaneous mutations; their
+frequency is controlled by the {\em mutation probability}.  Mutations
+in different parts of the genome are treated differently:
+\begin{itemize}
+\item If a mutation occurs in the trading-resource gene, the agent's
+  trading resource is set to a randomly selected resource (including
+  the current resource).
+
+\item Mutation in an uptake mask bit (see Section~\ref{agents}), simply
+  flips the bit from one to zero or vice-versa.
+
+\item If a mutation occurs in one of the tags or conditions, it occurs
+  in the following way.  If there are $r$ resource types and the gene
+  is of length $n$, a number is selected uniformly at random from the
+  interval $[1..n+1]$. If this number lies in the interval $[1..n-1]$
+  the corresponding gene position is set to a randomly chosen value
+  (resource type).  This case is analogous to point mutation in
+  conventional genetic algorithms.  If the number is $n+1$, a symbol
+  is added to the end of the gene and assigned a random value
+  (an insertion).  Finally, if the number is $n$, a number is selected
+  uniformly at random from the interval $[1..r+1]$.  If this second
+  number is $r+1$, the last symbol is deleted from the gene.
+  Otherwise, the last symbol in the gene is set to the corresponding
+  resource (a point mutation).
+                                % Steph - you put the following
+                                % cryptic comment here. What did you
+                                % mean?
+                                % [TERRY: ??].
+  Consequently, gene length can change through additions or deletions
+  at the last position in the gene.  These possibilities are
+  illustrated in Figure~\ref{fig:agent-evolution}.
+\end{itemize}
+[EVERYONE: do we get the overall proababilities we want?  Couldn't this
+be simplified?]
+
+%\subsubsection{Agent Movement}
+
+%There are two forms of agent movement in Echo: within a single site
+%and between sites. Intra-site movement is the result of an agent-agent
+%interaction.  In each of these, one agent is first selected.  A second
+%agent is then selected in the vicinity of the first. The first agent
+%is moved next to the second in the one-dimensional array of agents at
+%the site. If the first agent would attack the second, the second may
+%run away by moving a small distance away in the array. In both cases,
+%distances are likely to be small, as the probability of large
+%distances decreases exponentially.
+
+%Inter-site movement occurs if an agent does not acquire any resources
+%during an Echo cycle (either through picking them up, combat or
+%trade). In this case it will migrate to a neighboring site, selected
+%at random from among those permitted by the geography of the world.
+
+%\subsubsection{Agent Death}
+
+%In each cycle, a (typically) very small number of agents are killed
+%randomly. This can be interpreted either as bad luck or as a mechanism
+%that prevents agents from living indefinitely.  Agents that are not
+%killed some other way (through combat or taxation), will eventually be
+%randomly killed.  When an agent at a site dies, for whatever reason,
+%its resources are returned to the environment, thereby becoming
+%available to other agents at that site.
+
+%\section{Resources}
+
+%In every cycle, all the agents at a site compete for all the resources
+%their uptake masks allow them to collect. The site produces resources
+%according to its production vector, and these are distributed as
+%equally as possible amongst the agents at the site that are
+%genetically able to collect them.

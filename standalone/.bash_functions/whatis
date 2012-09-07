@@ -1,0 +1,38 @@
+whatis ()
+{
+  local fail=0
+
+  if [ $# -eq 0 ] ; then
+    echo 'usage: whatis arg [arg...]'
+    return 1
+  fi
+
+  for arg; do
+    case $(builtin type -type $arg 2>/dev/null) in
+      "alias")
+        builtin alias "$arg"
+        ;;
+      "function")
+        builtin type "$arg" | sed 1d
+        ;;
+      "builtin")
+        echo builtin "$arg"
+        ;;
+      "file")
+        builtin type -path "$arg"
+        ;;
+      *)
+        # OK, we could have a variable, or we could have nada.
+        if [ "$(eval echo \${$arg+set})" = "set" ] ; then
+          # It is a variable, and it is set.
+          echo -n "$arg="
+          eval echo '\"'\$$arg'\"'
+        else
+          echo whatis: $arg: not found
+          fail=1
+        fi
+        ;;
+      esac
+    done
+  return $fail
+}

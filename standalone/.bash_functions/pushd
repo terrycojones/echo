@@ -1,0 +1,1 @@
+pushd()	{ builtin pushd $*; xtitle $PWD; }

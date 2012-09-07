@@ -1,0 +1,455 @@
+
+agents.c,476
+agent_crossover(972,24941
+agent_distance(979,25012
+agent_instance(959,24634
+agent_self_replicate(827,20160
+calculate_makeup(136,3316
+can_pay_maintenance(189,4618
+can_self_replicate(111,2768
+create_agent(24,498
+make_agent_genome(920,22966
+migrate_agent(279,7219
+mutate_agent(220,5296
+new_agent_edit(85,2260
+print_agent(864,21316
+read_agent_edit_from_file(437,11248
+read_agent_from_file(380,9561
+write_agent_edit_to_file(728,17850
+write_agent_to_file(619,15376
+
+agents.h,53
+#define copy_agent(20,764
+#define new_agent(21,832
+
+chromosomes.c,198
+chromosome_distance(207,5709
+chromosome_string_distance(240,6576
+create_chromosome(18,398
+grow_chromosome(54,1555
+mutate_chromosome(101,2750
+set_chromosome(163,4774
+swap_chromosomes(192,5399
+
+chromosomes.h,63
+#define copy_chromosome(12,440
+#define new_chromosome(13,518
+
+defaults.h,0
+
+defs.h,0
+
+error.c,14
+error(20,457
+
+free.c,160
+free_agent(23,710
+free_agent_edit(44,1018
+free_chromosome(186,3730
+free_site(68,1427
+free_site_edit(91,1724
+free_world(115,2246
+free_world_edit(153,2940
+
+free.h,0
+
+globals.h,0
+
+graphics.c,1422
+await_graphic_event(2399,91739
+call_set_halt_generation(1924,79640
+create_agent_edit_widgets(528,14028
+create_canvas_widgets(1419,64237
+create_control_menu_widgets(722,26078
+create_edit_menu_widgets(792,29124
+create_graph_widgets(1040,43319
+create_message_widgets(1500,66731
+create_running_menu_widgets(935,36874
+create_schema_widgets(1356,61199
+create_site_edit_widgets(571,16473
+create_species_graph_line(2123,84153
+create_world_edit_widgets(632,20361
+delete_unneeded_resource_graph_lines(2111,83959
+destroy_canvas_widgets(1470,65993
+initialize_graphics(280,6377
+initialize_population_graph(2141,84628
+initialize_resource_graph(2281,88670
+initialize_schema_graph(2152,84959
+initialize_species_graph(2242,87516
+initialize_variant_graph(2164,85296
+plot_population_level(2022,81411
+plot_resource_levels(2069,82832
+plot_schema_level(2049,82337
+plot_species_levels(2089,83366
+plot_variant_levels(2033,81724
+popup_generation_selector(1986,80661
+popup_message(1519,67324
+popup_seed_selector(1998,80925
+popup_stack(2324,89941
+popup_verbose_selector(2010,81162
+process_graphics_events(2382,91427
+read_and_display_agent_edit(351,8362
+read_and_display_site_edit(405,9891
+read_and_display_world_edit(453,11448
+resume_from_stack(2356,90771
+save_agent_edit(1538,67715
+save_site_edit(1663,71225
+save_world_edit(1763,74454
+set_new_schema(2178,85938
+set_seed(1941,79951
+set_verbosity(1967,80370
+
+graphics.h,0
+
+hash.c,207
+assign_key(217,4057
+hash(87,1467
+hash_create(34,677
+hash_destroy(110,1861
+hash_purge(275,5020
+hash_search(173,3182
+hash_stats(307,5564
+hash_traverse(241,4456
+list_find(67,1217
+#define min(299,5426
+
+hash.h,0
+
+interaction.c,102
+combat_payoff(120,2378
+interact(158,3210
+will_attack(18,377
+will_mate(86,1697
+will_trade(52,1020
+
+interaction.h,0
+
+main.c,90
+main(55,1235
+set_name(99,2166
+static 49,1113
+STRING strdup(117,2415
+version(109,2302
+
+main.h,0
+
+main_options.c,0
+
+misc_graphics.c,686
+call_continue_world(147,2388
+call_instantiate_world(124,2058
+call_pause_world(137,2264
+call_run_for_x_generations(157,2518
+call_run_world_indefinitely(167,2658
+clear_dialog_widget(82,1432
+clear_text_widget(72,1257
+cluster(436,8313
+cluster_for_agent(412,7647
+cluster_for_living_agent(423,7946
+create_command_button(289,5025
+create_label_and_text(232,3551
+genome_difference(311,5744
+get_text_widget_text(276,4852
+left_justify_dialog_label(93,1606
+living_genome_difference(358,6636
+popdown_widget(52,941
+popup_widget(62,1098
+quit(41,780
+remove_underscores(204,3261
+set_dialog_value(110,1901
+set_text_widget_text(263,4679
+set_x_axis(177,2803
+toggle_verbose(195,3077
+
+misc_graphics.h,0
+
+options.c,444
+check_next_argument(475,11931
+check_option_range(495,12447
+check_options(180,4435
+check_required_options(572,14250
+find_exact_abbreviated_match(240,5658
+find_exact_longname_match(224,5353
+find_option_match(197,4794
+find_partial_abbreviated_match(306,7193
+find_partial_longname_match(256,6009
+get_options(67,1326
+print_options(676,16570
+process_option(349,8307
+process_options(39,774
+read_opts_from_file(597,14745
+usage(659,16076
+
+options.h,112
+#define LIMITS(8,338
+#define LLIMIT(7,275
+#define NO_LIMITS(5,149
+#define ULIMIT(6,212
+#define VADDR(3,113
+
+random.c,245
+drand48(228,6227
+dump_random_state(179,5402
+initstate(268,6954
+knuth_random(101,4307
+rand(241,6459
+random(255,6725
+restore_random_state(200,5770
+seed_random(124,4558
+setstate(278,7159
+srand(248,6589
+srand48(235,6365
+srandom(262,6857
+
+random.h,88
+#define biased_coin_flip(24,557
+#define random_boolean(29,670
+#define uniform(19,406
+
+regexp.c,538
+#define	FAIL(146,5862
+#define	ISMULT(147,5906
+#define	NEXT(129,5553
+#define	OP(128,5532
+#define	OPERAND(130,5610
+#define	UCHARAT(141,5760
+#define	UCHARAT(143,5814
+re_match(1232,27961
+reg(291,9859
+regatom(466,14081
+regbranch(363,11395
+regc(600,16494
+regcomp(203,7670
+regdump(1074,25239
+regexec(715,18354
+reginsert(615,16704
+regmatch(814,20515
+regnext(1048,24903
+regnode(575,16166
+regoptail(676,17633
+regpiece(402,12374
+regprop(1118,26160
+regrepeat(1002,24165
+regtail(644,17151
+regtry(777,19629
+strcspn(1210,27645
+
+regexp.h,0
+
+regmagic.h,0
+
+regsub.c,66
+#define	UCHARAT(37,1066
+#define	UCHARAT(39,1120
+regsub(46,1235
+
+resources.c,182
+add_resources(11,219
+print_resource_list(101,2202
+print_terse_resource_list(123,2824
+set_resources(66,1453
+sub_resources(29,615
+total_resources(83,1830
+zero_resources(50,1117
+
+resources.h,34
+#define IS_VALID_RESOURCE(10,348
+
+running.c,440
+assign_species_levels(152,3064
+continue_world(393,10122
+count_variants(112,2302
+free_genome_hash(42,923
+free_species_name_hash(56,1141
+increment_species_count(142,2937
+mark_genome_as_dead(77,1529
+pause_world(379,9847
+print_genome_hash(87,1684
+print_species_name_hash_count(128,2573
+run_for_x_generations(407,10346
+run_world(164,3293
+run_world_indefinitely(421,10614
+set_halt_generation(20,415
+zero_genome_name_counts(66,1302
+
+running.h,0
+
+schema.c,19
+legal_schema(4,28
+
+schema.h,0
+
+sites.c,904
+choose_site(1633,43763
+count_agents(655,18587
+grow_site(103,2660
+new_site(31,625
+new_site_edit(81,2199
+print_site(1398,36829
+read_site_edit_from_file(719,19934
+read_site_from_file(408,12150
+site_add_agent(1250,32845
+site_assign_species_hash_names(1573,42042
+site_charge_maintenance(183,4564
+site_count_schema(1831,47908
+site_delete_agent(1269,33323
+site_distribute_resources(234,6235
+site_hash_genomes(1505,39742
+site_kill_agents_without_cause(367,11057
+site_list_agents(1597,42763
+site_make_newborns_old(1306,34392
+site_migrate_agents(1367,35906
+site_move_agents_together(1469,39061
+site_mutate_agents(1322,34684
+site_perform_interactions(1150,29867
+site_produce(155,3999
+site_read_stack_from_file(1643,43912
+site_resource_levels(1444,38298
+site_self_replicate_agents(1344,35331
+str_to_resource_list(616,17845
+write_site_edit_to_file(1043,27122
+write_site_to_file(954,25239
+
+sites.h,0
+
+syscalls.c,186
+Chdir(115,1674
+Fclose(80,1217
+Fflush(58,979
+Fopen(44,775
+Free(164,2281
+Fseek(126,1816
+Ftell(151,2140
+Getwd(104,1518
+Malloc(31,629
+Rename(91,1338
+Stat(139,1979
+Unlink(69,1100
+
+syscalls.h,0
+
+types.h,3967
+#define AGENT_CHROMOSOME(239,6007
+#define AGENT_CHROMOSOMES(238,5941
+#define AGENT_COMBAT_COND(249,6996
+#define AGENT_COMBAT_COND_LEN(250,7096
+#define AGENT_COMBAT_COND_MAX_LEN(251,7200
+#define AGENT_DEFENSE_TAG(243,6391
+#define AGENT_DEFENSE_TAG_LEN(244,6491
+#define AGENT_DEFENSE_TAG_MAX_LEN(245,6595
+#define AGENT_EDIT_CHROMOSOME(273,8842
+#define AGENT_EDIT_CHROMOSOMES(272,8776
+#define AGENT_EDIT_NAME(271,8717
+#define AGENT_EDIT_RESERVE(274,8927
+#define AGENT_EDIT_RESERVE_LIST(275,9004
+#define AGENT_EDIT_TRADING_RESOURCE(276,9068
+#define AGENT_EDIT_UPTAKE(278,9214
+#define AGENT_EDIT_UPTAKE_MASK(277,9139
+#define AGENT_EXCESS(268,8560
+#define AGENT_GAINED(266,8477
+#define AGENT_GENOME(235,5740
+#define AGENT_GENOME_LEN(236,5801
+#define AGENT_MAKEUP(258,7905
+#define AGENT_MAKEUP_LIST(259,7979
+#define AGENT_MATING_COND(255,7601
+#define AGENT_MATING_COND_LEN(256,7701
+#define AGENT_MATING_COND_MAX_LEN(257,7805
+#define AGENT_MATING_TAG(246,6695
+#define AGENT_MATING_TAG_LEN(247,6794
+#define AGENT_MATING_TAG_MAX_LEN(248,6897
+#define AGENT_MAX_GENOME_LEN(237,5869
+#define AGENT_NAME(234,5681
+#define AGENT_NEWBORN(265,8415
+#define AGENT_OFFENSE_TAG(240,6087
+#define AGENT_OFFENSE_TAG_LEN(241,6187
+#define AGENT_OFFENSE_TAG_MAX_LEN(242,6291
+#define AGENT_RESERVE(260,8040
+#define AGENT_RESERVE_LIST(261,8117
+#define AGENT_TRADE_COND(252,7300
+#define AGENT_TRADE_COND_LEN(253,7399
+#define AGENT_TRADE_COND_MAX_LEN(254,7502
+#define AGENT_TRADING_RESOURCE(262,8181
+#define AGENT_UPTAKE(264,8327
+#define AGENT_UPTAKE_MASK(263,8252
+#define CHROMOSOME_LEN(230,5481
+#define CHROMOSOME_MAX_LEN(231,5550
+#define CHROMOSOME_STR(232,5615
+#define DEBUG(348,13578
+#define SITE_AGENT(284,9553
+#define SITE_AGENTS(283,9493
+#define SITE_COL(282,9427
+#define SITE_EDIT_AGENTS(301,10649
+#define SITE_EDIT_MAINTENANCE(311,11338
+#define SITE_EDIT_MAINTENANCE_LIST(312,11416
+#define SITE_EDIT_MAXIMUM(307,11050
+#define SITE_EDIT_MAXIMUM_LIST(308,11125
+#define SITE_EDIT_NAME(300,10591
+#define SITE_EDIT_PRODUCES(305,10913
+#define SITE_EDIT_PRODUCE_LIST(306,10988
+#define SITE_EDIT_P_CROSSOVER(303,10773
+#define SITE_EDIT_P_MUTATION(302,10709
+#define SITE_EDIT_P_RANDOM_DEATH(304,10838
+#define SITE_EDIT_RESOURCE(309,11187
+#define SITE_EDIT_RESOURCE_LIST(310,11269
+#define SITE_INTERACTIONS(287,9752
+#define SITE_MAINTENANCE(297,10447
+#define SITE_MAINTENANCE_LIST(298,10525
+#define SITE_MAXIMUM(293,10159
+#define SITE_MAXIMUM_LIST(294,10234
+#define SITE_MAX_AGENTS(286,9688
+#define SITE_NAGENTS(285,9627
+#define SITE_NAME(280,9303
+#define SITE_PRODUCES(291,10022
+#define SITE_PRODUCE_LIST(292,10097
+#define SITE_P_CROSSOVER(289,9882
+#define SITE_P_MUTATION(288,9818
+#define SITE_P_RANDOM_DEATH(290,9947
+#define SITE_RESOURCE(295,10296
+#define SITE_RESOURCE_LIST(296,10378
+#define SITE_ROW(281,9361
+#define WORLD_C(328,12426
+#define WORLD_COLS(321,11943
+#define WORLD_COMBAT(322,12002
+#define WORLD_COMBAT_XY(323,12070
+#define WORLD_EDIT_C(340,13128
+#define WORLD_EDIT_COLS(337,12932
+#define WORLD_EDIT_COMBAT(338,12991
+#define WORLD_EDIT_NAME(333,12689
+#define WORLD_EDIT_NEIGHBORHOOD(343,13323
+#define WORLD_EDIT_NRESOURCES(334,12748
+#define WORLD_EDIT_P_MAINTENANCE(342,13255
+#define WORLD_EDIT_ROWS(336,12873
+#define WORLD_EDIT_SELFREP_FRACTION(341,13184
+#define WORLD_EDIT_SITES(335,12813
+#define WORLD_EDIT_TRADE_FRACTION(339,13059
+#define WORLD_GENERATION(324,12158
+#define WORLD_HALT_GENERATION(325,12223
+#define WORLD_MUTATIONS(326,12293
+#define WORLD_NAME(314,11482
+#define WORLD_NEIGHBORHOOD(331,12621
+#define WORLD_NRESOURCES(316,11603
+#define WORLD_P_MAINTENANCE(330,12553
+#define WORLD_ROW(319,11812
+#define WORLD_ROWS(320,11884
+#define WORLD_RUNNING(315,11541
+#define WORLD_SELFREP_FRACTION(329,12482
+#define WORLD_SITE(318,11728
+#define WORLD_SITES(317,11668
+#define WORLD_TRADE_FRACTION(327,12357
+#define skip_to_white(346,13476
+#define skip_white(345,13391
+
+worlds.c,334
+instantiate_world(730,18232
+new_world(25,523
+new_world_edit(78,2127
+read_world_edit_from_file(259,6939
+read_world_from_file(104,2739
+variable_has_no_value(811,20184
+world_count_schema(825,20483
+world_population_size(764,18990
+world_resource_levels(781,19360
+write_world_edit_to_file(612,15157
+write_world_to_file(525,13364
+
+worlds.h,0

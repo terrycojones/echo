@@ -1,0 +1,1 @@
+~/s/me/bedau/bedau_stats -nb 180 -bs 10.0 < $1 | sed -e 's/[1-9][0-9]*/1/g' | tr -d ' '

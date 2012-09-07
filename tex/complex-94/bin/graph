@@ -1,0 +1,242 @@
+#!/usr/local/bin/blt_wish -f
+
+if {$argc < 7} {
+  puts stderr "Usage: $argv0 title x-title y-title x-log graph-name \[algorithm data\]..."
+  exit 1
+}
+
+set home         $env(HOME)
+set expts        $home/r/phd/experiments
+
+set auto_path    [linsert $auto_path 0 $expts/tcl]
+
+set bitmaps      $expts/tcl/bitmaps
+set graph_dir    $expts/ch/graphs
+set grconf       $expts/tcl/grconf.tcl
+
+set font         -adobe-times-medium-r-normal--14-140-75-75-p-74-iso8859-1
+
+set steps        6
+
+set max_lines 7
+
+set symbol(0) circle
+set symbol(1) plus
+set symbol(2) square
+set symbol(3) cross
+set symbol(4) diamond
+set symbol(5) splus
+set symbol(6) scross
+
+
+set scale(0) 0.7
+set scale(1) 1.0
+set scale(2) 0.9
+set scale(3) 1.0
+set scale(4) 1.0
+set scale(5) 1.0
+set scale(6) 1.0
+
+set color(0) red
+set color(1) skyblue
+set color(2) forestgreen
+set color(3) blue
+set color(4) aquamarine3
+set color(5) purple
+set color(6) navyblue
+
+set xmin         1000000000
+set xmax         0
+set ymin         1000000000
+set ymax         0
+
+set title        [lindex $argv 0]
+set xtitle       [lindex $argv 1]
+set ytitle       [lindex $argv 2]
+set xlog         [lindex $argv 3]
+set graph        [lindex $argv 4]
+
+set argc_base    5
+set nlines       0
+set linewidth    1
+
+. configure -background white
+
+proc read_file_data {file xdata ydata do_limits} {
+
+  global xmin xmax ymin ymax
+
+  upvar $xdata xarray
+  upvar $ydata yarray
+
+  set f [open $file r]
+  set line_num 0
+
+  while {[gets $f line] >= 0} {
+
+    incr line_num
+    
+    if {[scan $line "%f %f" x y] != 2} {
+      puts stderr "Line $line_num of file $file does not contain two numbers!\n"
+      exit 1
+    }
+
+    # puts [format "read %d %.6f\n" $x $y]
+
+    if {$do_limits && $x < $xmin} {set xmin $x}
+    if {$do_limits && $x > $xmax} {set xmax $x}
+    if {$do_limits && $y < $ymin} {set ymin $y}
+    if {$do_limits && $y > $ymax} {set ymax $y}
+
+    lappend xarray $x
+    lappend yarray $y
+  }
+}
+
+proc print_graph {file} {
+
+  global ps
+  
+  #.b psconfigure -colormode gray
+  .b psconfigure -colormode color
+  .b postscript $file -pagewidth 6i -pageheight 3i
+}
+
+proc toggle_x_log {} {
+
+  global xlog
+
+  if {$xlog} { set xlog 0 } else {set xlog 1}
+
+  .b xaxis configure -logscale $xlog
+}
+
+proc set_x_min {} {
+
+  set cancel 123456789
+  set limit [get_number 0 0 0 $cancel "Minimum X axis value."]
+
+  if {$limit == $cancel} { return }
+
+  .b xaxis configure -min $limit
+}
+
+proc set_x_max {} {
+
+  set cancel 123456789
+  set limit [get_number 0 0 0 $cancel "Maximum X axis value."]
+
+  if {$limit == $cancel} { return }
+
+  .b xaxis configure -max $limit
+}
+
+proc toggle_lines {} {
+
+  global linewidth legend_names nlines
+
+  if {$linewidth} {
+    set linewidth 0
+  } else {
+    set linewidth 2
+  }
+
+  for {set i 0} {$i < $nlines} {incr i} {
+    .b element configure $legend_names($i) -linewidth $linewidth
+  }
+}  
+
+# Read in all the data files.
+
+while {$argc_base < $argc} {
+  
+  if {$argc < $argc_base + 2} {
+    puts "Did not find a (name,data) pair of arguments on the command line.\n"
+    puts "The first of what should have been a pair was '$argv($argc_base)'\n"
+    exit 1
+  }
+
+  set legend_names($nlines) [lindex $argv $argc_base]
+  incr argc_base
+  set x_data_$nlines {}
+  set y_data_$nlines {}
+  read_file_data [lindex $argv $argc_base] x_data_$nlines y_data_$nlines 1
+
+  incr argc_base
+  incr nlines
+}
+
+# puts "xmin is $xmin xmax is $xmax ymin is $ymin ymax is $ymax"
+
+blt_graph .b -background white -plotbackground white -width 400
+.b configure -font $font
+.b configure -title $title
+.b legend configure -background white -relief groove -mapped no
+
+if {$xmax <= $steps} {
+  set stepsize 1
+} else {
+  set stepsize [expr ceil(($xmax - $xmin) / $steps)]
+}
+
+.b configure -plotrelief flat
+
+#.b xaxis configure -min [expr $xmin - 0.5] -max [expr $xmax + 0.5] -stepsize $stepsize \
+#    -subticks 0 -title $xtitle -font $font -logscale $xlog
+#.b xaxis configure -min $xmin -max $xmax -stepsize $stepsize \
+#    -subticks 0 -title $xtitle -font $font -logscale $xlog
+.b xaxis configure -stepsize $stepsize \
+    -subticks 0 -title $xtitle -font $font -logscale $xlog
+
+.b yaxis configure -title $ytitle -font $font
+
+# Create all the lines.
+for {set i 0} {$i < $nlines} {incr i} {
+  set index [expr $i % $max_lines]
+  eval .b element create \"$legend_names($i)\" -xdata \$x_data_$i -ydata \$y_data_$i \
+    -scale $scale($index) \
+    -fg $color($index) \
+    -linewidth $linewidth -borderwidth 0 \
+    -symbol $symbol($index)
+}
+
+
+set ps [format "%s.ps" $graph]
+
+frame .top -relief groove -bg white
+
+button .config -text "Configure" -relief groove -bg aquamarine3 -fg white -command \
+  "exec [list /usr/local/bin/blt_wish -f $grconf [winfo name .] .b &]"
+button .log -text "Toggle X log" -relief groove -bg aquamarine3 -fg white -command toggle_x_log
+button .p -text "Write $graph.ps" -relief groove -bg aquamarine3 -fg white -command \
+  {print_graph $ps} -width [expr [string length $graph.ps] + 5]
+button .lines -text "Toggle lines" -relief groove -bg aquamarine3 -fg white -command toggle_lines
+button .d -text Dismiss -relief groove -bg aquamarine3 -fg white -command {destroy .}
+
+pack .config .log .lines .p .d -pady 5 -ipadx 5 -side left -in .top
+pack .top -fill x
+pack .b -expand 1 -fill both
+
+
+SetZoom .b
+
+wm min . 0 0
+
+set graph .b
+
+bind $graph <B3-ButtonRelease> { %W crosshairs toggle }
+        
+proc TurnOnHairs { graph } {
+    bind $graph <Any-Motion> {%W crosshairs configure -position @%x,%y}
+}
+proc TurnOffHairs { graph } {
+    bind $graph <Any-Motion> {%W crosshairs configure -position @%x,%y}
+}
+
+bind $graph <Enter> { TurnOnHairs %W }
+bind $graph <Leave> { TurnOffHairs %W }
+
+
+# Local Variables:
+# mode:tcl
+# End:

@@ -1,0 +1,70 @@
+Here is an
+introductory quote from the beginning of \cite{holland-92a}:
+
+\begin{quote}
+\index{Holland, J. H.}
+
+Echo provides for the study of populations of evolving, reproducing
+agents distributed over a geography with different inputs of renewable
+resources at various sites. Each agent has simple capabilities ---
+offense, defense, trading, and mate selection --- defined by a set of
+``chromosomes''. Although these capabilities are simple and simply
+defined, they provide for a rich set of variations that can get at the
+essence of the central questions of complex adaptive systems described
+above. The basic interactions---``combat'', ``trading'', and
+``mating'' --- are meant to be idealized versions of more complex
+interactions in real--world complex systems. Collections of agents can
+exhibit analogues of a diverse range of phenomena resulting from these
+basic interactions, including ecological phenomena (e.g., mimicry and
+biological arms races), immune system responses (e.g., interactions
+conditioned on identification), evolution of ``metazoans'' (e.g.,
+emergent hierarchical organization), and economic phenomena (e.g.,
+trading complexes and the evolution of ``money''). Thus, although the
+system is couched in terms of the language of biological ecologies, it
+is meant to be general enough to model phenomena in a number of areas.
+This generality can help shed light on commonalities among phenomena
+in these diverse areas.
+
+\end{quote}
+
+
+
+\index{Sites}
+An Echo world consists of some number of sites, arranged in some
+geography. Simple geographies include lines, rings and
+two--dimensional arrays. The simplest possible world contains a single
+site.
+
+Any number of agents can exist at a single Echo site. The number will
+depend on many factors, such as the richness of the site, the behaviors
+of the agents at the site, site ``taxes'', and various probabilities
+that are associated with the world and with the site.
+
+\index{Resources}
+Agents are composed of ``resources''. The world has a fixed number of
+resource types. These are usually denoted by lower case letters
+beginning with {\em a}. To say that agents are composed of resources
+means that their genomes consist of strings of the resources. One
+should feel free to draw analogies with DNA.
+
+Sites produce resources, agents collect resources, fight for
+resources, trade resources and return resources to the world when they
+die (unless they are killed in combat, in which case the loser's
+resources are taken by the winner). All interactions in the world
+involve flows of resources.
+
+There are three basic interactions in Echo worlds.
+
+\begin{itemize}
+
+\item Combat
+\index{Combat}
+
+\item Trade
+\index{Trade}
+
+\item Reproduction
+\index{Reproduction}
+
+\end{itemize}
+

@@ -1,0 +1,10 @@
+Name : haas-10x10
+Initial_Reserves : 50 1
+Trading_Resource : a
+Uptake_Mask : 11
+Offense_Tag : a
+Defense_Tag : a
+Mating_Tag : a
+Combat_Condition : a
+Trade_Condition : a
+Mating_Condition : a

@@ -1,0 +1,1014 @@
+%!PS-Adobe-3.0 EPSF-3.0
+%%Pages: 1
+%%Title: (interactions.ps)
+%%DocumentNeededResources: font Helvetica Courier
+%%BoundingBox:  71 2 538 721
+%%Creator: Blt_graph (Tk version 3.6)
+%%CreationDate: Thu Jun 16 06:09:55 1994
+%%EndComments
+
+
+200 dict begin
+
+/BgColorProc 0 def	% Background color procedure (for symbols)
+/BorderProc 0 def	% Border outline procedure (for symbols)
+/StippleProc 0 def	% Stipple procedure (for bar segments)
+/DashesProc 0 def	% Dashes procedure (for line segments)
+
+
+/encoding {ISOLatin1Encoding} def
+systemdict /encodefont known {
+    /realsetfont /setfont load def
+    /setfont { encoding encodefont realsetfont } def
+} if
+
+/Stroke { gsave stroke grestore } def
+
+/Fill { gsave fill grestore } def
+
+/SetFont { 	% Stack: pointSize fontName
+    findfont exch scalefont setfont
+} def
+
+/SetDashes {		% Stack: numDashes
+    dup 0 eq { pop [] 0 setdash } { 1 array astore 0 setdash } ifelse
+} def
+
+/Box {			% Stack: x y width height
+    newpath
+        exch 4 2 roll moveto
+        dup 0 rlineto
+        exch 0 exch rlineto
+        neg 0 rlineto
+    closepath
+} def
+
+/SetFgColor {		% Stack: red green blue
+    CL 0 eq { pop pop pop 0 0 0 } if
+    setrgbcolor
+    CL 1 eq { currentgray setgray } if
+} def
+
+/SetBgColor {		% Stack: red green blue
+    CL 0 eq { pop pop pop 1 1 1 } if
+    setrgbcolor
+    CL 1 eq { currentgray setgray } if
+} def
+
+% The next two definitions are taken from "$tk_library/prolog.ps"
+
+% desiredSize EvenPixels closestSize
+%
+% The procedure below is used for stippling.  Given the optimal size
+% of a dot in a stipple pattern in the current user coordinate system,
+% compute the closest size that is an exact multiple of the device's
+% pixel size.  This allows stipple patterns to be displayed without
+% aliasing effects.
+
+/EvenPixels {
+    % Compute exact number of device pixels per stipple dot.
+    dup 0 matrix currentmatrix dtransform
+    dup mul exch dup mul add sqrt
+
+    % Round to an integer, make sure the number is at least 1, and compute
+    % user coord distance corresponding to this.
+    dup round dup 1 lt {pop 1} if
+    exch div mul
+} bind def
+
+% width height string filled StippleFill --
+%
+% Given a path and other graphics information already set up, this
+% procedure will fill the current path in a stippled fashion.  "String"
+% contains a proper image description of the stipple pattern and
+% "width" and "height" give its dimensions.  If "filled" is true then
+% it means that the area to be stippled is gotten by filling the
+% current path (e.g. the interior of a polygon); if it's false, the
+% area is gotten by stroking the current path (e.g. a wide line).
+% Each stipple dot is assumed to be about one unit across in the
+% current user coordinate system.
+
+/StippleFill {
+    % Turn the path into a clip region that we can then cover with
+    % lots of images corresponding to the stipple pattern.  Warning:
+    % some Postscript interpreters get errors during strokepath for
+    % dashed lines.  If this happens, turn off dashes and try again.
+
+    gsave
+    {eoclip}
+    {{strokepath} stopped {grestore gsave [] 0 setdash strokepath} if clip}
+    ifelse
+
+    % Change the scaling so that one user unit in user coordinates
+    % corresponds to the size of one stipple dot.
+    1 EvenPixels dup scale
+
+    % Compute the bounding box occupied by the path (which is now
+    % the clipping region), and round the lower coordinates down
+    % to the nearest starting point for the stipple pattern.
+
+    pathbbox
+    4 2 roll
+    5 index div cvi 5 index mul 4 1 roll
+    6 index div cvi 6 index mul 3 2 roll
+
+    % Stack now: width height string y1 y2 x1 x2
+    % Below is a doubly-nested for loop to iterate across this area
+    % in units of the stipple pattern size, going up columns then
+    % across rows, blasting out a stipple-pattern-sized rectangle at
+    % each position
+
+    6 index exch {
+	2 index 5 index 3 index {
+	    % Stack now: width height string y1 y2 x y
+
+	    gsave
+	    1 index exch translate
+	    5 index 5 index true matrix {3 index} imagemask
+	    grestore
+	} for
+	pop
+    } for
+    pop pop pop pop pop
+    grestore
+    newpath
+} bind def
+
+/DrawSegment {	% Stack: x1 y1 x2 y2
+    newpath 4 2 roll moveto lineto stroke
+} def
+
+/DrawText {		% Stack: ?bgColorProc? boolean centerX centerY
+			% 	 strWidth strHeight baseline theta str
+    gsave
+	7 -2 roll translate	% Translate to center of bounding box
+	exch neg rotate		% Rotate by theta
+	exch 4 2 roll
+	2 copy 2 copy 2 copy
+
+	% If needed, draw the background area, setting the bg color
+
+	-0.5 mul exch -0.5 mul exch 4 -2 roll Box
+        7 -1 roll { gsave 7 -1 roll exec fill grestore } if
+
+	% Move to the text string starting position
+
+	-.5  mul 5 -1 roll add exch -.5 mul exch moveto
+	pop exch dup dup 4 2 roll
+
+        % Adjust character widths to get desired overall string width
+        % adjust X = (desired width - real width) / #chars
+
+ 	stringwidth pop sub exch length div 0 3 -1 roll
+
+	% Flip back the scale so that the string is not drawn in reverse
+
+	1 -1 scale
+	ashow
+    grestore
+} def
+
+/DrawBitmap {		% Stack: ?bgColorProc? boolean centerX centerY
+			%	 width height theta imageStr
+    gsave
+	6 -2 roll translate	% Translate to center of bounding box
+	4 1 roll neg rotate	% Rotate by theta
+
+	% Find upperleft corner of bounding box
+
+	2 copy -.5 mul exch -.5 mul exch translate
+	2 copy scale		% Make pixel unit scale
+        newpath
+            0 0 moveto 0 1 lineto 1 1 lineto 1 0 lineto
+        closepath
+
+	% Fill rectangle with background color
+
+	4 -1 roll { gsave 4 -1 roll exec fill grestore } if
+
+	% Paint the image string into the unit rectangle
+
+	2 copy true 3 -1 roll 0 0 5 -1 roll 0 0 6 array astore 5 -1 roll
+        imagemask
+    grestore
+}def
+
+% Symbols:
+
+% Skinny-cross
+/Sc {			% Stack: x y symbolSize
+    gsave
+	3 -2 roll translate 45 rotate
+	0 0 3 -1 roll Sp
+    grestore
+} def
+
+% Skinny-plus
+/Sp {			% Stack: x y symbolSize
+    gsave
+	3 -2 roll translate
+	2 idiv  	% Stack: radius
+	dup 2 copy	% Stack: radius radius radius radius
+	newpath neg 0 moveto 0 lineto
+	gsave BgColorProc fill grestore stroke
+	newpath neg 0 exch moveto 0 exch lineto
+	gsave BgColorProc fill grestore stroke
+    grestore
+} def
+
+% Cross
+/Cr {			% Stack: x y symbolSize
+    gsave
+	3 -2 roll translate 45 rotate
+	0 0 3 -1 roll Pl
+    grestore
+} def
+
+% Plus
+/Pl {			% Stack: x y symbolSize
+    gsave
+	3 -2 roll translate
+	dup 2 idiv  	% Stack: size radius
+	exch 6 idiv 	% Stack: radius delta
+
+	%
+	%          2   3	The plus/cross symbol is a
+	%			closed polygon of 12 points.
+	%      0   1   4    5	The diagram to the left
+	%           x,y		represents the positions of
+	%     11  10   7    6	the points which are computed
+	%			below.
+	%          9   8
+	%
+
+	newpath
+	    2 copy exch neg exch neg moveto dup neg dup lineto
+	    2 copy neg exch neg lineto 2 copy exch neg lineto
+	    dup dup neg lineto 2 copy neg lineto 2 copy lineto
+	    dup dup lineto 2 copy exch lineto 2 copy neg exch lineto
+	    dup dup neg exch lineto exch neg exch lineto
+	closepath
+	Fill BorderProc
+    grestore
+} def
+
+% Circle
+/Ci {			% Stack: x y symbolSize
+    3 copy pop
+    moveto newpath
+        2 div 0 360 arc
+    closepath Fill BorderProc
+} def
+
+% Square
+/Sq {			% Stack: x y symbolSize
+    dup dup 2 div dup
+    6 -1 roll exch sub exch
+    5 -1 roll exch sub 4 -2 roll Box
+    Fill BorderProc
+} def
+
+% Line
+/Li {			% Stack: x y symbolSize
+    3 1 roll exch 3 -1 roll 2 div 3 copy
+    newpath
+        sub exch moveto add exch lineto
+    stroke
+} def
+
+% Diamond
+/Di {			% Stack: x y symbolSize
+    gsave
+	3 1 roll translate 45 rotate 0 0 3 -1 roll Sq
+    grestore
+} def
+
+
+%%BeginSetup
+gsave			% Save the graphics state
+
+% Default line style parameters
+
+1 setlinewidth		% width
+1 setlinejoin		% join
+0 setlinecap		% cap
+0 SetDashes		% dashes
+
+% Adjust coordinate system to use X11 coordinates
+
+0 792 translate
+1 -1 scale
+
+% User defined page layout
+
+/CL 1 def
+71 790 translate
+-90 rotate
+%%EndSetup
+
+18 /Times-Roman SetFont
+0.999985 0.999985 0.999985 SetBgColor  
+9 38 686 353 Box Fill
+gsave clip
+
+
+% Element "kills"
+
+0 0 0.999985 SetFgColor  
+3 SetDashes
+/DashesProc {
+gsave
+0.999985 0.999985 0.999985 SetBgColor  
+0 SetDashes
+stroke grestore
+} def
+1 setlinewidth
+newpath 11 382 moveto
+14 380 lineto
+18 378 lineto
+21 377 lineto
+25 375 lineto
+28 374 lineto
+31 372 lineto
+35 370 lineto
+38 368 lineto
+42 367 lineto
+45 365 lineto
+49 364 lineto
+52 362 lineto
+55 362 lineto
+59 361 lineto
+62 360 lineto
+66 359 lineto
+69 358 lineto
+72 357 lineto
+76 356 lineto
+79 354 lineto
+83 353 lineto
+86 351 lineto
+89 349 lineto
+93 347 lineto
+96 345 lineto
+100 343 lineto
+103 341 lineto
+106 339 lineto
+110 338 lineto
+113 336 lineto
+117 335 lineto
+120 334 lineto
+124 333 lineto
+127 333 lineto
+130 332 lineto
+134 331 lineto
+137 330 lineto
+141 330 lineto
+144 329 lineto
+147 328 lineto
+151 326 lineto
+154 324 lineto
+158 322 lineto
+161 320 lineto
+164 318 lineto
+168 315 lineto
+171 313 lineto
+175 310 lineto
+178 307 lineto
+182 305 lineto
+185 302 lineto
+188 299 lineto
+192 296 lineto
+195 293 lineto
+199 290 lineto
+202 287 lineto
+205 284 lineto
+209 281 lineto
+212 278 lineto
+216 275 lineto
+219 273 lineto
+222 271 lineto
+226 269 lineto
+229 267 lineto
+233 266 lineto
+236 264 lineto
+239 264 lineto
+243 263 lineto
+246 263 lineto
+250 262 lineto
+253 260 lineto
+257 259 lineto
+260 258 lineto
+263 256 lineto
+267 255 lineto
+270 253 lineto
+274 252 lineto
+277 251 lineto
+280 249 lineto
+284 247 lineto
+287 245 lineto
+291 243 lineto
+294 241 lineto
+297 238 lineto
+301 236 lineto
+304 233 lineto
+308 231 lineto
+311 228 lineto
+314 225 lineto
+318 222 lineto
+321 219 lineto
+325 216 lineto
+328 213 lineto
+332 210 lineto
+335 207 lineto
+338 204 lineto
+342 201 lineto
+345 198 lineto
+349 195 lineto
+352 193 lineto
+355 190 lineto
+359 188 lineto
+362 185 lineto
+366 183 lineto
+369 180 lineto
+372 177 lineto
+376 175 lineto
+379 172 lineto
+383 170 lineto
+386 168 lineto
+390 166 lineto
+393 164 lineto
+396 162 lineto
+400 160 lineto
+403 158 lineto
+407 156 lineto
+410 155 lineto
+413 154 lineto
+417 152 lineto
+420 151 lineto
+424 151 lineto
+427 149 lineto
+430 149 lineto
+434 148 lineto
+437 147 lineto
+441 147 lineto
+444 146 lineto
+447 145 lineto
+451 145 lineto
+454 144 lineto
+458 144 lineto
+461 143 lineto
+465 143 lineto
+468 142 lineto
+471 142 lineto
+475 141 lineto
+478 141 lineto
+482 140 lineto
+485 139 lineto
+488 138 lineto
+492 137 lineto
+495 136 lineto
+499 135 lineto
+502 133 lineto
+505 132 lineto
+509 131 lineto
+512 130 lineto
+516 129 lineto
+519 128 lineto
+523 127 lineto
+526 126 lineto
+529 124 lineto
+533 123 lineto
+536 122 lineto
+540 120 lineto
+543 119 lineto
+546 118 lineto
+550 117 lineto
+553 116 lineto
+557 115 lineto
+560 114 lineto
+563 113 lineto
+567 112 lineto
+570 110 lineto
+574 109 lineto
+577 108 lineto
+580 106 lineto
+584 105 lineto
+587 104 lineto
+591 103 lineto
+594 101 lineto
+598 100 lineto
+601 99 lineto
+604 97 lineto
+608 96 lineto
+611 94 lineto
+615 93 lineto
+618 91 lineto
+621 90 lineto
+625 88 lineto
+628 87 lineto
+632 85 lineto
+635 83 lineto
+638 81 lineto
+642 78 lineto
+645 76 lineto
+649 74 lineto
+652 71 lineto
+655 68 lineto
+659 66 lineto
+662 63 lineto
+666 61 lineto
+669 59 lineto
+673 57 lineto
+676 55 lineto
+679 53 lineto
+683 51 lineto
+686 49 lineto
+690 47 lineto
+DashesProc stroke
+
+% Element "mates"
+
+0 0 0.999985 SetFgColor  
+/DashesProc {} def
+1 setlinewidth
+newpath 11 382 moveto
+14 382 lineto
+18 382 lineto
+21 382 lineto
+25 382 lineto
+28 382 lineto
+31 382 lineto
+35 382 lineto
+38 382 lineto
+42 382 lineto
+45 382 lineto
+49 382 lineto
+52 382 lineto
+55 382 lineto
+59 382 lineto
+62 382 lineto
+66 382 lineto
+69 382 lineto
+72 382 lineto
+76 382 lineto
+79 382 lineto
+83 382 lineto
+86 382 lineto
+89 382 lineto
+93 382 lineto
+96 382 lineto
+100 382 lineto
+103 382 lineto
+106 382 lineto
+110 382 lineto
+113 382 lineto
+117 382 lineto
+120 382 lineto
+124 382 lineto
+127 382 lineto
+130 382 lineto
+134 382 lineto
+137 382 lineto
+141 382 lineto
+144 382 lineto
+147 382 lineto
+151 382 lineto
+154 382 lineto
+158 382 lineto
+161 382 lineto
+164 382 lineto
+168 382 lineto
+171 382 lineto
+175 382 lineto
+178 381 lineto
+182 381 lineto
+185 381 lineto
+188 381 lineto
+192 381 lineto
+195 381 lineto
+199 381 lineto
+202 381 lineto
+205 381 lineto
+209 381 lineto
+212 381 lineto
+216 381 lineto
+219 381 lineto
+222 381 lineto
+226 381 lineto
+229 381 lineto
+233 380 lineto
+236 380 lineto
+239 380 lineto
+243 380 lineto
+246 380 lineto
+250 380 lineto
+253 380 lineto
+257 380 lineto
+260 380 lineto
+263 380 lineto
+267 380 lineto
+270 380 lineto
+274 380 lineto
+277 380 lineto
+280 380 lineto
+284 380 lineto
+287 379 lineto
+291 379 lineto
+294 379 lineto
+297 379 lineto
+301 379 lineto
+304 379 lineto
+308 379 lineto
+311 379 lineto
+314 379 lineto
+318 379 lineto
+321 379 lineto
+325 379 lineto
+328 379 lineto
+332 379 lineto
+335 379 lineto
+338 379 lineto
+342 379 lineto
+345 379 lineto
+349 379 lineto
+352 379 lineto
+355 379 lineto
+359 379 lineto
+362 379 lineto
+366 379 lineto
+369 379 lineto
+372 379 lineto
+376 378 lineto
+379 378 lineto
+383 378 lineto
+386 378 lineto
+390 378 lineto
+393 377 lineto
+396 377 lineto
+400 377 lineto
+403 376 lineto
+407 376 lineto
+410 375 lineto
+413 374 lineto
+417 373 lineto
+420 373 lineto
+424 372 lineto
+427 371 lineto
+430 371 lineto
+434 370 lineto
+437 369 lineto
+441 369 lineto
+444 368 lineto
+447 368 lineto
+451 367 lineto
+454 367 lineto
+458 367 lineto
+461 366 lineto
+465 366 lineto
+468 365 lineto
+471 365 lineto
+475 365 lineto
+478 364 lineto
+482 364 lineto
+485 364 lineto
+488 364 lineto
+492 363 lineto
+495 363 lineto
+499 363 lineto
+502 363 lineto
+505 362 lineto
+509 362 lineto
+512 362 lineto
+516 361 lineto
+519 361 lineto
+523 361 lineto
+526 360 lineto
+529 360 lineto
+533 360 lineto
+536 360 lineto
+540 359 lineto
+543 359 lineto
+546 359 lineto
+550 359 lineto
+553 359 lineto
+557 359 lineto
+560 358 lineto
+563 358 lineto
+567 358 lineto
+570 358 lineto
+574 358 lineto
+577 358 lineto
+580 358 lineto
+584 358 lineto
+587 357 lineto
+591 357 lineto
+594 357 lineto
+598 357 lineto
+601 357 lineto
+604 357 lineto
+608 357 lineto
+611 357 lineto
+615 357 lineto
+618 357 lineto
+621 357 lineto
+625 357 lineto
+628 357 lineto
+632 357 lineto
+635 357 lineto
+638 357 lineto
+642 357 lineto
+645 357 lineto
+649 356 lineto
+652 356 lineto
+655 356 lineto
+659 356 lineto
+662 356 lineto
+666 356 lineto
+669 356 lineto
+673 356 lineto
+676 356 lineto
+679 356 lineto
+683 356 lineto
+686 356 lineto
+690 356 lineto
+DashesProc stroke
+
+% Element "trades"
+
+0 0 0.999985 SetFgColor  
+5 SetDashes
+/DashesProc {
+gsave
+0.999985 0.999985 0.999985 SetBgColor  
+0 SetDashes
+stroke grestore
+} def
+1 setlinewidth
+newpath 11 382 moveto
+14 381 lineto
+18 381 lineto
+21 380 lineto
+25 380 lineto
+28 380 lineto
+31 379 lineto
+35 379 lineto
+38 379 lineto
+42 379 lineto
+45 379 lineto
+49 379 lineto
+52 379 lineto
+55 379 lineto
+59 379 lineto
+62 378 lineto
+66 378 lineto
+69 378 lineto
+72 378 lineto
+76 378 lineto
+79 378 lineto
+83 378 lineto
+86 378 lineto
+89 378 lineto
+93 378 lineto
+96 378 lineto
+100 378 lineto
+103 378 lineto
+106 378 lineto
+110 378 lineto
+113 377 lineto
+117 377 lineto
+120 377 lineto
+124 377 lineto
+127 377 lineto
+130 377 lineto
+134 377 lineto
+137 377 lineto
+141 377 lineto
+144 377 lineto
+147 377 lineto
+151 377 lineto
+154 377 lineto
+158 377 lineto
+161 377 lineto
+164 377 lineto
+168 377 lineto
+171 377 lineto
+175 377 lineto
+178 377 lineto
+182 377 lineto
+185 377 lineto
+188 377 lineto
+192 377 lineto
+195 377 lineto
+199 377 lineto
+202 377 lineto
+205 377 lineto
+209 377 lineto
+212 377 lineto
+216 377 lineto
+219 377 lineto
+222 377 lineto
+226 377 lineto
+229 377 lineto
+233 377 lineto
+236 377 lineto
+239 377 lineto
+243 377 lineto
+246 377 lineto
+250 376 lineto
+253 376 lineto
+257 376 lineto
+260 376 lineto
+263 376 lineto
+267 376 lineto
+270 376 lineto
+274 376 lineto
+277 375 lineto
+280 375 lineto
+284 375 lineto
+287 375 lineto
+291 374 lineto
+294 374 lineto
+297 373 lineto
+301 373 lineto
+304 373 lineto
+308 373 lineto
+311 373 lineto
+314 373 lineto
+318 373 lineto
+321 373 lineto
+325 373 lineto
+328 373 lineto
+332 373 lineto
+335 372 lineto
+338 372 lineto
+342 372 lineto
+345 372 lineto
+349 372 lineto
+352 371 lineto
+355 371 lineto
+359 371 lineto
+362 371 lineto
+366 371 lineto
+369 371 lineto
+372 371 lineto
+376 371 lineto
+379 370 lineto
+383 370 lineto
+386 370 lineto
+390 370 lineto
+393 370 lineto
+396 370 lineto
+400 370 lineto
+403 370 lineto
+407 370 lineto
+410 370 lineto
+413 370 lineto
+417 370 lineto
+420 370 lineto
+424 369 lineto
+427 369 lineto
+430 369 lineto
+434 369 lineto
+437 369 lineto
+441 369 lineto
+444 369 lineto
+447 368 lineto
+451 368 lineto
+454 368 lineto
+458 368 lineto
+461 368 lineto
+465 368 lineto
+468 368 lineto
+471 368 lineto
+475 368 lineto
+478 368 lineto
+482 368 lineto
+485 368 lineto
+488 368 lineto
+492 368 lineto
+495 368 lineto
+499 368 lineto
+502 367 lineto
+505 367 lineto
+509 367 lineto
+512 367 lineto
+516 367 lineto
+519 367 lineto
+523 367 lineto
+526 366 lineto
+529 366 lineto
+533 366 lineto
+536 366 lineto
+540 366 lineto
+543 366 lineto
+546 366 lineto
+550 366 lineto
+553 366 lineto
+557 365 lineto
+560 365 lineto
+563 365 lineto
+567 365 lineto
+570 365 lineto
+574 364 lineto
+577 364 lineto
+580 364 lineto
+584 364 lineto
+587 363 lineto
+591 363 lineto
+594 363 lineto
+598 362 lineto
+601 362 lineto
+604 361 lineto
+608 361 lineto
+611 360 lineto
+615 360 lineto
+618 359 lineto
+621 359 lineto
+625 358 lineto
+628 357 lineto
+632 357 lineto
+635 356 lineto
+638 355 lineto
+642 354 lineto
+645 353 lineto
+649 353 lineto
+652 352 lineto
+655 352 lineto
+659 351 lineto
+662 351 lineto
+666 350 lineto
+669 350 lineto
+673 350 lineto
+676 350 lineto
+679 350 lineto
+683 349 lineto
+686 349 lineto
+690 348 lineto
+DashesProc stroke
+
+% Unset clipping
+grestore
+
+0.999985 0.999985 0.999985 SetBgColor  
+0 0 719 38 Box Fill
+0 38 9 353 Box Fill
+695 38 24 353 Box Fill
+0 391 719 76 Box Fill
+18 /Times-Roman SetFont
+0 0 0 SetFgColor  
+false 352 19.5 220 19 15 0 (Cumulative Interaction Rates) DrawText
+18 /Times-Roman SetFont
+0 0 0 SetFgColor  
+false 352 448.5 86 19 15 0 (Generation) DrawText
+18 /Times-Roman SetFont
+0 0 0 SetFgColor  
+false 11 416.5 8 19 15 0 (0) DrawText
+18 /Times-Roman SetFont
+0 0 0 SetFgColor  
+false 79.5 416.5 37 19 15 0 (1000) DrawText
+18 /Times-Roman SetFont
+0 0 0 SetFgColor  
+false 147 416.5 36 19 15 0 (2000) DrawText
+18 /Times-Roman SetFont
+0 0 0 SetFgColor  
+false 216 416.5 36 19 15 0 (3000) DrawText
+18 /Times-Roman SetFont
+0 0 0 SetFgColor  
+false 284.5 416.5 35 19 15 0 (4000) DrawText
+18 /Times-Roman SetFont
+0 0 0 SetFgColor  
+false 352 416.5 36 19 15 0 (5000) DrawText
+18 /Times-Roman SetFont
+0 0 0 SetFgColor  
+false 420.5 416.5 35 19 15 0 (6000) DrawText
+18 /Times-Roman SetFont
+0 0 0 SetFgColor  
+false 488 416.5 36 19 15 0 (7000) DrawText
+18 /Times-Roman SetFont
+0 0 0 SetFgColor  
+false 557.5 416.5 35 19 15 0 (8000) DrawText
+18 /Times-Roman SetFont
+0 0 0 SetFgColor  
+false 625.5 416.5 35 19 15 0 (9000) DrawText
+18 /Times-Roman SetFont
+0 0 0 SetFgColor  
+false 693 416.5 46 19 15 0 (10000) DrawText
+0 0 0 SetFgColor  
+1 setlinewidth
+0 SetDashes
+693 394 11 394 DrawSegment
+11 394 11 403 DrawSegment
+79 394 79 403 DrawSegment
+147 394 147 403 DrawSegment
+216 394 216 403 DrawSegment
+284 394 284 403 DrawSegment
+352 394 352 403 DrawSegment
+420 394 420 403 DrawSegment
+488 394 488 403 DrawSegment
+557 394 557 403 DrawSegment
+625 394 625 403 DrawSegment
+693 394 693 403 DrawSegment
+showpage
+%Trailer
+grestore
+end
+%EOF

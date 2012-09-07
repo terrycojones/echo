@@ -1,0 +1,17 @@
+#!/bin/sh
+
+mkdir pindex.$$
+trap "rm -rf `pwd`/pindex.$$" 1 2 3 13 15
+
+sed -e 's/^% \\makeindex$/\\makeindex/' -e 's/\\input{how-to.index}//' how-to.tex > pindex.$$/fred.tex
+
+cd pindex.$$
+latex fred
+latex fred
+
+makeindex -s $HOME/tex/sty/pindex.sty -o how-to.index fred.idx
+sed -e 's/thepindex/theindex/' how-to.index > ../how-to.index
+mv fred.idx ../how-to.idx
+
+cd ..
+rm -fr pindex.$$

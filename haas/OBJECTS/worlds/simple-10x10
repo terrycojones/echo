@@ -1,0 +1,23 @@
+Name : simple-10x10
+Trading_Fraction : 0.0
+Interaction_Fraction : 0.0
+Self_Replication_Fraction : 0.0
+Self_Replication_Threshold : 2.0
+Maintenance_Probability : 0.05
+Neighborhood : NEWS
+Rows : 10
+Columns : 10
+Number_Of_Resources : 2
+Combat_Matrix : 1 1
+Combat_Matrix : 1 1
+Sites : 
+100 100 100 100 100   100 100 100 100 100
+100 100 100 100 100   100 100 100 100 100
+100 100 100 100 100   100 100 100 100 100
+100 100 100 100 100   100 100 100 100 100
+100 100 100 100 100bp 100 100 100 100 100
+100 100 100 100 100   100 100 100 100 100
+100 100 100 100 100   100 100 100 100 100
+100 100 100 100 100   100 100 100 100 100
+100 100 100 100 100   100 100 100 100 100
+100 100 100 100 100   100 100 100 100 100

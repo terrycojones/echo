@@ -1,0 +1,9 @@
+Name : 50
+Mutation_Probability : 0.001
+Crossover_Probability : 0.0
+Random_Death_Probability : 0.0
+Production_Function : 50 0
+Initial_Resource_Levels : 0 0
+Maximums : 1000 0
+Maintenance : 10 1
+Agents : 

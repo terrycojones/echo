@@ -1,0 +1,25 @@
+Name : mig-test-eight
+Trading_Fraction : 0.5
+Interaction_Fraction : 0.02
+Self_Replication_Fraction : 0.5
+Self_Replication_Threshold : 2.0
+Maintenance_Probability : 0.1
+Neighborhood : EIGHT
+Rows : 10
+Columns : 10
+Number_Of_Resources : 4
+Combat_Matrix : 1 1 1 1
+Combat_Matrix : 1 1 1 1
+Combat_Matrix : 1 1 1 1
+Combat_Matrix : 1 1 1 1
+Sites : 
+mig-test mig-test mig-test mig-test mig-test mig-test mig-test mig-test mig-test mig-test
+mig-test mig-test mig-test mig-test mig-test mig-test mig-test mig-test mig-test mig-test
+mig-test mig-test mig-test mig-test mig-test mig-test mig-test mig-test mig-test mig-test
+mig-test mig-test mig-test mig-test mig-test mig-test mig-test mig-test mig-test mig-test
+mig-test mig-test mig-test mig-test mig-test mig-test mig-test mig-test mig-test mig-test
+mig-test mig-test mig-test mig-test mig-test mig-test mig-test mig-test mig-test mig-test
+mig-test mig-test mig-test mig-test mig-test mig-test mig-test mig-test mig-test mig-test
+mig-test mig-test mig-test mig-test mig-test mig-test mig-test mig-test mig-test mig-test
+mig-test mig-test mig-test mig-test mig-test mig-test mig-test mig-test mig-test mig-test
+mig-test mig-test mig-test mig-test mig-test mig-test mig-test mig-test mig-test mig-test

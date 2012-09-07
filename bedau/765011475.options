@@ -1,0 +1,7 @@
+graphics : no
+world : insects
+generations : 10000
+update-on-testing : false
+update-on-success : true
+sum-over-genes : true
+seed : 765011475

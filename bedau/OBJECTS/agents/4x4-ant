@@ -1,0 +1,10 @@
+Name : 4x4-ant
+Initial_Reserves : 1 1 1 1
+Trading_Resource : a
+Uptake_Mask : 1111
+Offense_Tag : b
+Defense_Tag : b
+Mating_Tag : a
+Combat_Condition : a
+Trade_Condition : d
+Mating_Condition : b

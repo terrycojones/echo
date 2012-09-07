@@ -1,0 +1,9 @@
+
+* An environment variable ECHO_LOCATION is looked for when Echo tries
+  to find the location of your predfined agents, sites and worlds. The
+  directory that it gives should contain 3 directories, "agents",
+  "sites" and "worlds".
+
+* Optional are variables ECHO_WORLD, ECHO_SITE and ECHO_AGENT which can
+  be used to specify a woirld, site and agent that will appear in the
+  three editor windows when the program comes up.

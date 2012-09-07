@@ -1,0 +1,1421 @@
+\documentstyle [12pt] {article}
+% \makeindex
+
+\begin{document}
+
+\newenvironment{shell}{\begin{verse}\begin{sf}}{\end{sf}\end{verse}}
+\newcommand{\prompt}{{\bf \%}}
+
+\title {{\bf An Introduction to SFI Echo.}}
+
+\author
+{
+Terry Jones
+\thanks
+{
+Santa Fe Institute, 1660 Old Pecos Trail, Suite A.
+Santa Fe NM 87501.
+email: terry@santafe.edu
+}
+\and
+Stephanie Forrest
+\thanks
+{
+Dept. of Computer Science,
+University of New Mexico.
+Albuquerque NM  87131.
+email: forrest@cs.unm.edu
+}
+}
+
+
+\pagenumbering{empty}
+\maketitle
+\newpage
+
+% \pagenumbering{empty}
+
+\pagestyle{plain}
+\pagenumbering{roman}
+\tableofcontents
+\newpage
+\pagestyle{headings}
+\pagenumbering{arabic}
+
+\section{Introduction}
+
+This report is concerned with an implementation of a family of models
+of complex adaptive systems called Echo models. In what follows, you
+will find:
+
+\begin{itemize}
+
+\item
+An introduction to Echo.
+
+\item
+Information on how to obtain, install and run the Echo system.
+
+\item
+A description of Echo's graphical interface.
+
+\item
+Information on running Echo.
+
+\end{itemize}
+
+\subsection{Echo}
+
+Echo is a model of complex adaptive systems formulated by John Holland
+\cite{holland-92a,holland-92b,holland-93}. 
+It abstracts away virtually all of the physical details of real
+systems and concentrates on a small set of primitive agent--agent and
+agent--environment interactions.  The extent to which Echo captures
+the essence of real systems is still largely undetermined.  The goal
+of Echo is to study how simple interactions among simple agents lead
+to emergent high--level phenomena such as the flow of resources in a
+system or cooperation and competition in networks of agents (e.g.,
+communities, trading networks, or arms races).
+
+An Echo world consists of a lattice of sites. Each is populated by
+some number of agents, and there is a measure of locality within each
+site.  Sites produce different types of renewable resources; each type
+of resource is encoded by a letter (e.g., ``a,'' ``b,'' ``c,'' ``d'').
+Different types of agents use different types of resources and can
+store these resources internally. Sites charge agents a maintenance
+fee or tax. This tax can also be thought of as metabolic cost.
+
+Agents fight, trade and reproduce. Fighting and trading
+result in the exchange of resources between agents. There is sexual
+and non--sexual reproduction, sexual reproduction
+results in offspring whose genomes are a combination of those
+of the parents. Each agent's genome encodes various genes
+which determine how it will interact with other agents (e.g., which
+resource it is willing to trade, what sort of other agents it will
+fight or trade with, etc.).  Some of these genes determine phenotypic
+traits, or ``tags'' that are visible to other agents.  This
+allows the possibility of the evolution of social rules and
+potentially of mimicry, a phenomenon frequently observed in
+natural ecosystems. The interaction rules rely only on string
+matching.
+
+Echo has no explicit fitness function guiding selection and
+reproduction.  An agent self--reproduces when it accumulates a
+sufficient quantity of each resource to make an exact copy of its
+genome.  This cloning is subject to a low rate of mutation.
+
+In preliminary simulations, the Echo system has demonstrated
+surprisingly complex behavior (including something resembling a
+biological ``arms race'' in which two competing agent types develop
+progressively more complex offensive and defensive combat strategies),
+ecological dependencies among different species, and sensitivity (in
+terms of the number of different phenotypes) to differing levels of
+renewable resources.
+
+Ideally, Echo will allow the modeling of a diverse range of complex
+adaptive systems without the need for a specialized model for each to
+be developed. Typically, the people who know the most about any
+particular real--world complex adaptive system are not the people who
+can also develop sophisticated models that can be used as tools to
+increase understanding. Echo aims to provide a useful modeling tool or
+a starting point for the development of a model.
+
+As a cautionary note, one must be a little careful when using the term
+``Echo.''  Properly, Echo refers to a large family of models. As
+described here, Echo will refer to the implementation developed at the
+Santa Fe Institute.
+
+Several versions of the system have been developed by Holland, and
+there are significant differences between these. Echo has been
+described in
+\cite{holland-92a,holland-92b,holland-93}. These descriptions
+represent snapshots of ongoing thought about Echo models. The version
+implemented here is closest to that described in \cite{holland-92a}.
+For further details, refer to the above sources.
+
+\section{Getting Started}
+
+\subsection{A Note On Fonts}
+\index{Fonts}
+
+The following conventions are used consistently throughout this
+report:
+
+\begin{itemize}
+
+\item
+\index{UNIX Commands}
+File names and UNIX commands appear in {\bf bold face}. These will
+normally be references to files and commands that you might need or
+use, not things you will be expected to enter immediately.
+
+\item
+\index{UNIX Environment Variables}
+Environment variables are shown in {\sc small caps} and are always
+completely {\sc uppercase}.
+
+\item
+Commands you are expected to type or put in a file are shown in {\sf
+sans serif}. This is true even if what you are asked to type is a file
+name or an environment variable.
+
+\item
+Anything printed by the system appears in a {\sl slanted} font.
+
+\item
+Things you will see in the Echo interface are typeset in a {\sl
+slanted} font, as for other system output, but, additionally, are
+enclosed in ``{\sl double quotes}''. The text so enclosed is exactly
+what you can expect to see in Echo's interface. For example, this font
+will be used when discussing the various options you'll see in Echo's
+popup menus.\index{Pop--up Menus}
+
+\item
+\index{UNIX Shell Prompt}
+The UNIX shell prompt is a bold percent sign (\prompt) at the start
+of a line.
+
+\end{itemize}
+
+
+\subsection{System Requirements}
+\index{System Requirements}
+
+Echo was developed on a SUN SPARC architecture running SUNOS 4.1.3. In
+theory it will run on other BSD--based versions of UNIX, but may
+require slight modification in some cases. The X Windows \index{X
+Windows} system from MIT is required. Development was under X11R5, but
+Echo should run without modification under X11R4. If you are using a
+SPARC machine, no special widget sets \index{Widgets} are required,
+the distribution file contains these. If not, you will need to {\bf
+ftp} widgets from several locations -- this is discussed in appendix
+\ref{echo-widgets} \index{Echo Widgets}.
+
+\subsection{Porting Echo}
+\index{Porting}
+
+Unless a joint research agreement with the Santa Fe Institute exists,
+there is currently no guaranteed way to get help porting Echo to a new
+architecture. A possible source of help is through electronic mail to
+{\bf echo@santafe.edu}. Assistance will probably be contingent on the
+project being supported at SFI.
+
+\subsection{Getting Echo Through Anonymous FTP}
+\index{Using Ftp}
+
+Echo is available via anonymous ftp from {\bf ftp.santafe.edu} in the
+file
+
+\begin{verse}
+{\bf /pub/Users/terry/echo/Echo-1.0.tar.Z}
+\end{verse}
+
+The entire distribution occupies just over two megabytes of disk
+space when uncompressed. You should transfer Echo, uncompress
+\index{Uncompress} it and
+extract the files using tar\index{Tar}.  If you are not familiar with
+the workings of ftp, uncompress or tar, consult appendix
+\ref{using-ftp}.
+
+
+\subsection{Compiling Echo}
+
+Once you have received and unpacked the distribution, you will need to
+compile or ``make''\index{Making Echo} it. The {\bf make} command will
+take care of the compilation and linking, but first you will need to
+make some changes to the file {\bf Makefile}. These should be very
+minor, the file contains instructions to help you. You should only
+have to change two lines, to indicate where the X libraries and
+include files are on your system. If you don't know, you can try to
+find them or ask your system manager.
+
+Once you have done this, you can simply type
+
+\begin{shell}
+\prompt\ make all
+\end{shell}
+
+and make will do the rest. You should see about twenty files get
+compiled.  When the make is completed, you should have a file called
+{\bf Echo} which is the executable program. This process also creates
+you a shell script, {\bf run--echo} to make it simple to run the
+executable in the recommended way.
+
+\subsection{Preparing to Run Echo}
+
+\label{simple-setup}
+
+Two additional things need to be done before running Echo.
+
+\begin{itemize}
+
+\item
+X resources for Echo need to be installed.
+
+\item
+Shell environment variables need to be set.
+
+\end{itemize}
+
+The distribution contains programs that will do this for you if do not
+want to do it yourself, or do not know how. If you'd like it taken
+care of for you, use
+
+\begin{shell}
+\prompt\ make simple--setup
+\end{shell}
+
+This will add X resource defaults to your X startup file and set
+environment variables in your shell's startup file. If you have used
+this option, you should now log out and then log back in, as these
+changes will not affect your current login session\footnote{They will
+be automatically set for you in all future login sessions.}.
+
+If you'd prefer to do this kind of installation yourself, you should
+see the details about what needs to be done in appendix \ref{setting-up}.
+
+
+\subsection{Running Echo}
+\index{Running Echo}
+\label{running-echo}
+
+Once you have completed the above, you should be able to run Echo.
+Echo writes its textual output to the {\bf xterm} from which it was
+invoked.  The X resources \index{X Resources} you just installed
+specify the colors, sizes and locations of all the pieces of the Echo
+interface.  These pieces are designed to fit around a central {\bf
+xterm} window.
+
+There are two ways you can arrange things so that an {\bf xterm} is
+created in the right place (and the right color):
+
+\begin{itemize}
+
+\item
+The simplest way is to use the shell script {\bf run--echo} that was
+made for you when you did the original {\bf make}.  This will do all
+the work of setting up an {\bf xterm}, invoking Echo, and making sure
+the interface is configured correctly.
+
+\item
+Slightly more work, but simpler in the long run is to put Echo into a
+popup menu.\index{Pop--up Menus} This is achieved by adding a line to
+your window manager's initialization \index{Window Managers}
+file. This file's name depends on your window manager. A likely
+location is {\bf $\sim$/.twmrc}, or some other file in your home
+directory whose name starts with a period ({\bf .}) and ends in the
+string ``{\bf wmrc}''.  If you don't know where your window manager
+initialization file is or can't find it, ask your system manager. The
+file {\bf .window\_manager} in the Echo distribution contains a line
+that can probably be usefully inserted in this file\footnote{{\bf
+Warning}: it is not as simple as just adding the line to the end of
+this file. If you are unsure about what you're doing, get help.}.
+
+\end{itemize}
+
+\subsection{A Sample Echo Run}
+\index{Demo Run}
+\index{Sample Run}
+\index{Running Echo}
+
+This section walks you through a quick Echo demo, without too much
+explanation.
+
+Once you have installed the X resources and the shell environment
+variables, you are in a position to run Echo. Try it now -- either
+from your window manager or with
+
+\begin{shell}
+\prompt\ ./run--echo
+\end{shell}
+
+You should see a number of windows appear on your screen. These are
+explained in the next section. For now notice the main menu bar at the
+top of the screen and the {\bf xterm} in the middle.
+
+\begin{itemize}
+
+\item
+The first step in running a world is to choose the world you intend to
+run. To do this, click on the red menu button at the top of the screen
+that says ``{\sl Running}''. Hold the mouse button down and drag the
+pointer down to ``{\sl Choose World}'' and let go.\index{Choosing A
+World} \index{Pop--up Menus}
+
+\item
+A file selector will pop up. This allows you to walk through the
+directory structure to find a file containing the specification of a
+world you want to run. You should see ``insects'' in the scrollable
+region on the right. Click on this word and the line it is on should
+change to white on black. Now click on ``{\sl OK}'' to select the
+world.
+
+\item
+Look at the ``{\sl Species}'' graph.\index{Species Levels Graph} It
+now has a legend, showing ``{\sl ant}'', ``{\sl fly}'' and ``{\sl
+cat}'' (``cat'' is short for caterpillar). The legend has appeared as
+the world you selected contains a site that contains all of these
+agent types.
+
+\item
+Now select ``{\sl Run 10 Generations}'' from the ``{\sl Running}''
+menu.\index{Running Menu} You should see the two graphs update and the
+{\bf xterm} will show the text: ``{\sl Run through generation 10.}''
+
+\item
+Let's edit the world and remove a few agents.\index{Editing The Stack}
+\index{Stack Editing} Click on the ``{\sl Edit}'' menu button and drag
+the pointer down to ``{\sl Stack}''. A window will appear showing you
+the population of agents present at the site. This is called the
+``stack'' at that site. It's a one--dimensional array of agents. Use
+the left mouse button to move the small arrowed cursor to the start of
+some line. Now hit Control--k twice on your keyboard. You should see
+the line in the stack disappear -- and with it some unfortunate
+agent. Control--k is an Emacs keybinding that kills the text until the
+end of the line. See appendix
+\ref{emacs-keybindings} for more information on the keybindings if
+these are not familiar to you.
+
+Now that you've removed the agent (or agents if you were feeling
+enthusiastic), hit the ``{\sl Amen}'' button at the top of the stack
+editor to make it so.
+
+\item
+Before restarting the world, choose ``{\sl Set Verbose Level...}''
+from the ``{\sl Control}'' menu at the top of the
+screen.\index{Verbose Level} Here you can type letters to see certain
+types of output in the {\bf xterm} window.  In the small gray window
+at the bottom of the panel that popped up, type the following
+incantation: ``gsukbx''. You can see what output each of these letters
+will produce by reading the text above the small text window. To type
+in the text window you'll need to move the mouse into it. Now click on
+the ``{\sl OK}'' button to dismiss the window.
+
+\item
+Choose ``{\sl Run 1 Generation}'' from the ``{\sl Running}''
+menu.\index{Running Menu} You should see various output appear in the
+{\bf xterm}. This will likely include information on the agents that
+were taxed during the generation and those that went bankrupt. There
+is a small chance you'll see a mutation or an agent killed in
+combat. The end of the output will show a population summary.
+
+\item
+Now we'll run to generation 100. Choose ``{\sl Run Until...}'' from
+the ``{\sl Running}'' menu.\index{Running Menu} In the small window
+that pops up, enter 100 and then click on ``{\sl OK}''. You should see
+the graphs rapidly update to generation 100. You'll also see a lot of
+text flashing by in the {\bf xterm} window. Often it is good to turn
+off all such output when you are about to run for a large number of
+generations.
+
+\item
+Select ``{\sl Variant Levels}''\index{Variant Levels Graph} from the
+``{\sl Graphs}'' menu. The graph will appear where the ``{\sl
+Worldwide Population Level}'' graph was (actually it's just on top of
+it). The top line (in red) shows the number of different genomes that
+have ever existed in the world. The bottom (blue) line shows the
+number that are currently alive. You can compare this number with the
+worldwide population level, and it will probably be quite a lot
+smaller. Obviously, some genomes have multiple copies -- presumably
+because they are doing something right.
+
+\item
+Finally, choose ``{\sl Cluster Living Population}''\index{Cluster
+Analysis} from the ``{\sl Examine}'' menu.\index{Examine Menu} You
+will see a tree displayed in the {\bf xterm} window that indicates how
+closely related the agents in the world are.  You will probably need
+to resize (or scroll) your {\bf xterm} window to see the whole
+tree. This tree will be explained in more detail later.
+
+\item
+To exit Echo, choose ``{\sl Exit}''\index{Exiting Echo} from the
+``{\sl Control}'' menu.  Of course you can continue to play if you
+like.
+
+\end{itemize}
+
+The next section gives more details about the kinds of things you just
+saw and did.
+
+
+\section{The Echo Interface}
+\index{Echo Interface}
+
+After starting Echo, you should see seven windows on your
+screen. Starting in the center at the top and moving
+counter--clockwise, these are the Control window, the World Editor,
+the Site Editor, the Agent Editor, a graph showing species levels, a
+graph showing the worldwide population level, and an {\bf xterm}
+window.
+
+\subsection{The Overall Look And Feel}
+\index{Echo Look and Feel}
+
+There are some high level features of the interface that have been
+designed to make the look and feel consistent. These are:
+
+\begin{itemize}
+
+\item
+\index{Mouse Buttons}
+In general, the interface makes no distinction between the buttons on
+your mouse (assuming you have more than a single button). You can use
+any button you like to push command buttons, or use popup menus.
+\index{Pop--up Menus} The only exception to this rule is described
+in the next point.
+
+\item
+\index{Text Windows}
+Some of the areas of the screen are a steely grey color. These are
+text windows. This color is used consistently to indicate an area of
+the screen where you may type characters. Text in these windows will
+always be black. All you need do is move the cursor into the grey area
+and start to type. Each of these is in fact a small editor with
+Emacs--like keybindings\footnote{If you are not familiar with Emacs,
+don't worry, you can move around with mouse button 1 and use the
+delete key to get rid of things you don't want. Appendix
+\ref{emacs-keybindings} gives a brief introduction to editing with
+Emacs.}.
+
+In a text window, the mouse may be used to copy and paste regions in
+the same fashion as in normal {\bf xterm} windows. The first button, when
+held down, can be used to drag out, and thus copy, a region (which
+will be highlighted). The second button pastes the copied text into
+the buffer at the cursor's location. The third button can be used to
+extend the copied region. This is something you should experiment with
+if you are not already familiar with this kind of mouse behavior.
+
+In addition, rapid double and triple clicks with the left mouse button
+can be used to select the word the cursor is on or the line the cursor
+is on. A single click with the first button just moves the text cursor
+to the location of the mouse.
+
+A search window can be popped up by typing Control--S, and the
+contents of a file can be read into the buffer using Meta--I, which
+pops up a window to read the file name. See the Emacs keybindings in
+appendix \ref{emacs-keybindings} for more information on operations in
+text windows.
+
+\item
+\index{Read Only Output}
+Blue areas where white text appears, such as the main output window,
+are always read--only.
+
+\item
+\index{Command Buttons}
+\index{Menu Bars}
+Command and menu buttons always have a red background and white text.
+These always indicate things you can click the mouse on to have some
+action performed. Command buttons carry out an action immediately,
+while menu buttons pop up a menu of options.  As mentioned above, no
+distinction is made here between the buttons on your mouse -- use
+whichever you like. \index{Mouse Buttons}
+
+\item
+\index{File Selectors}
+There are a number of occasions when Echo will need to get a file name
+from the user. To do this, it will display a file selector window.
+This window has various components. You may enter the file's name in
+the text window at the top of the file selector, and then click on
+``{\sl OK}''. Often simpler, is to use the mouse to select the file
+you want. The scrollable window labeled ``{\sl Directory Contents}''
+contains the list of files in the currently scanned directory. Echo
+tries to make sure that the default directory is a useful one (using
+the {\sc echo\_location} environment variable).
+
+You can select a file in the scrollable list by simply clicking on it
+with the mouse. The second mouse button can be used to scroll the
+list. If you click on the entry labeled ``{\sl ../}'' the file
+selector will read and display the contents of the parent directory.
+The ``{\sl Up}'' button can also be used to move up a level.  If you
+click on an entry that is a directory, the file selector will read and
+display that directory's contents. Directories can be identified by
+the trailing ``{\sl /}'' after their name.
+
+The ``{\sl OK}'' button selects the file and causes the file selector
+to disappear. The ``{\sl Cancel}'' button dismisses the file selector
+and cancels whatever function was called that made it appear
+originally. 
+
+\end{itemize}
+
+
+\subsection{The Control Window}
+\index{Control Window}
+
+The control window consists of five pull down menus. These are labeled
+``{\sl Control},'' ``{\sl Edit},'' ``{\sl Running},'' ``{\sl
+Graphs},'' and ``{\sl Examine}.''
+
+\begin{itemize}
+
+\item
+The ``{\sl Control}'' menu contains three options. The first, ``{\sl
+Set Verbose Level...}'' \index{Verbose Level} pops up a window that
+contains lines that briefly describe types of output that can be
+displayed in the main {\bf xterm} window. At the start of each of
+these lines is a key letter. In the small grey window at the bottom
+you may enter the letters corresponding to the types of output you
+want to see in the {\bf xterm}. This output will appear following each
+generation, so you must run at least one generation to see anything.
+
+The ``{\sl Show Seed}'' \index{Random Seeds} option of the ``{\sl
+Control}'' menu prints the current random seed value into the {\bf
+xterm}. This allows you access at any time to the seed that was used
+to set up the current run.
+
+The ``{\sl Exit}''\index{Exiting Echo} option does exactly that, it
+exits Echo completely. It does not currently ask for confirmation, so
+be careful!
+
+\item
+The ``{\sl Edit}'' \index{Editing Menu} menu has seven
+options. Most of these are very similar.  ``{\sl Worlds''}
+\index{Editing Worlds} will pop up
+a file selector to let you choose a world to edit. The file selector
+can be used to wander through a directory tree and select a file
+containing the specifications of a world. Use the mouse to click on
+the name of the file you want (or enter it in the top grey window) and
+then click the ``{\sl OK''} button to select it. The world you choose
+will appear in the World Editor window in the top left corner of the
+screen (more on that soon).
+
+Choosing ``{\sl New World}'' \index{Creating New Worlds} will clear the World
+Editor window and let you enter the details of a fresh world.
+
+The options ``{\sl Sites},'' \index{Editing Sites} ``{\sl New Site},''
+\index{Creating New Sites} ``{\sl Agents},'' \index{Editing Agents}
+and ``{\sl New Agent}'' \index{Creating New Agents} all behave in a
+similar fashion. They can be used to prepare for editing the
+characteristics of sites and agents in the Site Editor (middle left)
+and Agent Editor (bottom left) windows.
+
+The final option in the Editing menu is ``{\sl Stack.''}
+\index{Editing The Stack} \index{Stack Editing} This allows
+you to edit a site in a running world. Since we have not yet begun to
+see what happens when a world is actually running, this operation will
+be described later.
+
+\item
+The ``{\sl Running}'' \index{Running Menu} menu has nine options. The
+first, ``{\sl Choose World}'' \index{Choosing A World} is used to tell
+Echo which world you intend to run. This option must be used before an
+Echo run can begin. It also pops up a file selector so that you can
+choose a world.
+
+The next four options, \index{Running Echo} ``{\sl Run
+Indefinitely,}'' ``{\sl Run 1 Generation,}'' ``{\sl Run 10
+Generations,}'' and ``{\sl Run Until...}''  are all to do with running
+a world for a certain time. They should all be self explanatory. The
+last will pop up a window so you can enter a stopping generation
+number.
+
+The next two options, ``{\sl Pause''} \index{Pausing A Run} and ``{\sl
+Continue''} \index{Continuing A Paused Run} can be used to temporarily
+halt and restart a run. If you have used one of the above running
+options to run until generation 500 and suddenly decide you need to
+turn off the output in the main text window, you can use ``{\sl
+Pause}'', turn off the output and then ``{\sl Continue}'' to allow the
+run to proceed to generation 500. These two options can be used in
+this manner any time Echo is running an experiment.
+
+The ``{\sl Replay''} \index{Replaying A Run} option resets the world
+and re--initializes the random number generator so that the run can be
+re--done exactly. This is very useful when you would like to try some
+experiment and need to stop the world at an earlier point.
+
+The ``{\sl Seed''} \index{Random Seeds} option can be used to enter
+the random seed for a run.  The seed should be set {\em before} you
+choose the world to run. It is important that you perform these two in
+this order. If you do not specify a random seed for the run, one will
+be chosen for you. The seed chosen for you is guaranteed to be unique,
+and the random number generator has been highly scrutinized for
+randomness. The file {\bf random.c} contains a blow--by--blow
+description of the search for an acceptable generator.
+
+\item
+The ``{\sl Graphs}'' \label{graphs-menu} \index{Graphs Menu} menu can
+be used to pop up any of five graphs. Initially there are two places
+where graphs appear, and two of the five are shown by default. The
+species level graph always appears on the left while the other four
+are on its right. Of course, since these are normal X windows, you can
+move them around and resize them as you wish.  The five graphs are:
+
+\begin{itemize}
+\item
+The ``{\sl Species Levels}'' \index{Species Levels Graph} graph shows
+a legend (after you choose a world) and plots the population level of
+all the descendants of the original members of the ``species''
+\index{Species}. It is not really correct to call these groups species
+(lineage is more accurate), but I will not go into that here.
+
+\item
+The ``{\sl Worldwide Population Level}'' \index{Population Level
+Graph} graph shows the total number of agents alive in the world.
+
+\item
+The ``{\sl World Resource Levels}'' \index{Resource Levels Graph}
+graph shows how many of each resource exist (this is often very dull
+viewing).
+
+\item
+The ``{\sl Schema Level}'' \index{Schema Levels Graph} graph allows you
+to track the level of a schema in the population.
+
+\item
+The ``{\sl Variant Levels}'' \index{Variant Levels Graph} graph shows
+the number of genomes that have ever existed and the number of genomes
+that currently exist.
+
+\end{itemize}
+
+\item
+The ``{\sl Examine}'' \index{Examine Menu} menu allows you to look at
+some properties of the populations. The first option ``{\sl Choose
+Schema to Graph...}''  \index{Graphing A Schema} \index{Choosing A
+Schema To Graph} allows you to enter a regular expression
+\index{Regular Expressions} 
+corresponding to a schema you are interested in. The regular
+expression is in UNIX--style and is a pattern of resources that might
+be found on an agent's genome.  The simple details of these
+expressions are explained in section
+\ref{schema-tracking}.  More information on regular expressions can be
+found in the UNIX manual page for {\bf egrep}.
+
+The next two options, ``{\sl Cluster living population}'' and ``{\sl
+Cluster all individuals}'' \index{Cluster Analysis} both perform
+cluster analysis. You may choose to have either the current population
+clustered or every genome that ever existed clustered. The output will
+appear in the {\bf xterm} window, which should have a scrollbar in
+case the output is too long. Clustering is explained in section
+\ref{cluster-analysis}.
+
+\end{itemize}
+
+\subsection{The World Editor}
+\index{World Editor}
+\label{world-editor}
+
+The ``{\sl World Editor}'' is used to make changes to the properties
+of a world.  These changes do not affect the currently running
+world. You can choose the world you wish to alter (or a new world)
+from the ``{\sl Edit}'' menu in the ``{\sl Control}'' window. Worlds
+have thirteen properties. Eleven of these are edited by entering their
+values into the grey horizontal text windows to the right of their
+brief descriptions:
+
+\begin{itemize}
+
+\item
+Each world has a ``{\sl Name}''. \index{World Name} Usually this is
+the same as the ``{\sl File Name}'' \index{World File Name} in which
+the world is stored, but this need not be the case. The file name is
+the name of the file in the ``{\sl OBJECTS/worlds}'' \index{Echo
+Objects} directory pointed to by the {\sc echo\_location} environment
+variable. There can only be one world per file, but many worlds
+(stored in files with different names) may have the same name.
+
+\item
+Each world has some ``{\sl Number Of Resources}.'' \index{Number Of
+Resources} \index{Echo Resources} The resources are named a, b,
+c... depending on the number that exist. Typically this is a small
+number, say three or four.
+
+\item
+The ``{\sl Rows}'' \index{Rows} and ``{\sl Columns}'' \index{Columns}
+give the size of the two dimensional array of sites. \index{World
+Size} \index{World Geography}
+
+\item
+The ``{\sl Trading Fraction}'' \index{Trading Fraction} determines how
+much of the excess of a resource an agent gives away when it
+trades. Each agent trades a particular resource, and when it gets
+involved in a trading relationship with another agent, it uses this
+fraction to decide how much to give away.  The excess \index{Trading
+Excess} is defined to be the amount of the resource in question over
+and above what the agent needs for self--replication purposes.
+
+\item
+The ``{\sl Interaction Fraction}'' \index{Interaction Fraction}
+determines how many agent--agent interactions will take place each
+time step. This number is multiplied by the population size to arrive
+at a number of interactions. After this many interactions are
+performed, the sites produce resources again and the other aspects of
+an Echo cycle are executed.
+
+\item
+The ``{\sl Self Replication Fraction}'' \index{Self Replication
+Fraction} determines how much of its extra resources a parent will
+give to a child when self replicating. Self replication involves
+making a copy of one's genome when enough resources have accrued in
+the reservoirs. Once this happens, there may be extra resources, some
+of which might be given to the child to ensure that it is not too weak
+at birth.
+
+\item
+The ``{\sl Self Replication Threshold}'' \index{Self Replication
+Threshold} determines how many copies of its genome an agent must be
+capable of making before it actually makes a single one. Thus if this
+value is set at 2, the agent must accumulate twice as many of each
+resource in its reservoirs as it has in its genome. In this case, when
+it does make a copy of itself, it will have an excess of each resource
+equal to what it carries in its genome.  This extra can be divided
+between the agent and the new child according to the Self Replication
+Fraction described above.
+
+\item
+The ``{\sl Maintenance Probability}'' \index{Maintenance}
+\index{Taxation} determines the frequency with
+which sites charge a maintenance fee. This probability is used per
+site per agent per Echo cycle.
+
+\item
+The ``{\sl Neighborhood}'' \index{Neighborhood} \index{Migration} can
+be set to any of ``NONE'', ``EIGHT'' or ``NEWS'' to indicate how
+agents can migrate in the world. The first should be clear, it
+disables migration. The second means an agent can move to any of the
+eight adjacent sites (assuming it is not in a corner or on an edge)
+and the third allows only north, south, east or west moves.
+
+\end{itemize}
+
+In addition to these eleven properties, worlds have an array of {\bf
+Sites} and a ``{\sl Combat Matrix}.'' \index{Combat Matrix} These can
+both be edited by clicking the button at the top of the World Editor,
+which will cause a window to pop up.  The sites window should contain
+site file names (see below) in an array the size of the Rows and
+Columns as specified in the world's properties above. The combat
+matrix is a square array of side length the number of resources in the
+world. Its actual use is somewhat complicated and will be described
+more fully below under Combat.
+
+\subsection{The Site Editor}
+\index{Site Editor}
+\label{site-editor}
+
+Sites have ten properties, nine of which can be entered directly into
+the Site Editor window in the horizontal grey rectangles:
+
+\begin{itemize}
+
+\item
+As with worlds (and agents), sites have a ``{\sl Name}'' \index{Site
+Name} and a ``{\sl File Name}'' \index{Site File Name} in which they
+are stored. The actual location of the site file is in the ``{\sl
+OBJECTS/sites}'' \index{Echo Objects} directory.
+
+\item
+Each site has a ``{\sl Mutation Probability}.'' \index{Mutation}
+Mutation is performed in a genetic algorithm fashion. Each locus on
+each genome is mutated with this probability at the end of each
+cycle. The allele at a locus may ``mutate'' to the same allele value.
+
+\item
+The ``{\sl Crossover Probability}'' \index{Crossover}
+\index{Recombination} determines the probability that
+crossing over, or recombination, takes place when two agents reproduce
+sexually. If recombination does not take place, the agents are left
+untouched.
+
+\item
+The ``{\sl Random Death Probability}'' \index{Random Death} is the
+probability that an agent is killed without cause at the end of a
+cycle. This is typically set very low. After each cycle, every agent
+is killed for no reason with this probability.
+
+\item
+The ``{\sl Production Function}'' \index{Resource Production}
+determines how much of each resource the site produces at the end of
+each cycle. These values should be specified separated by white
+space. There should be as many of them as there are resources. The
+same is true for the next three properties.
+
+\item
+The ``{\sl Initial Resource Levels}'' \index{Initial Site Resource
+Levels} \index{Resource Levels Initially} are the resource levels that
+the site is allocated when the world is initially created.
+
+\item
+The ``{\sl Maximums}'' \index{Maximum Resource Levels} \index{Resource
+Levels Maximally} determine to what level each resource can grow if it
+remains ``on the ground'' (i.e. not picked up by an agent) at a site.
+
+\item
+The ``{\sl Maintenance}'' \index{Maintenance} \index{Taxation} is the
+tax charged by the site. Each agent is charged this tax after every
+cycle according to the maintenance probability set for the world. This
+probability is used to determine whether each agent individually gets
+taxed, not whether the site will charge all agents if the probability
+condition is met.
+
+\end{itemize}
+
+The final property of a site is its initial agent list. This can be
+accessed by clicking the mouse on the ``{\sl Agents}'' \index{Site
+Agent List} \index{Agents List At A Site} button at the top of the
+site editor. A window will pop up. Each line in this window is used to
+specify some number of agents. The agent names must be agent file
+names. Each name may be followed by white space and a decimal number
+indicating the number of agents of that type that should be created
+contiguously at that location. The agents in this list form the agent
+stack at that site.
+
+\subsection{The Agent Editor}
+\index{Agent Editor}
+\label{agent-editor}
+
+Agents have eleven properties:
+
+\begin{itemize}
+
+\item
+As with worlds and sites, agents have both a ``{\sl Name}''
+\index{Agent Name} and a
+``{\sl File Name}.'' \index{Agent File Name} The file name simply
+references a file in the directory ``{\sl OBJECTS/agents}.''
+\index{Echo Objects}
+
+\item
+Each agent has a ``{\sl Trading Resource}.'' \index{Echo Resources}
+\index{Trading Resources}  This is the resource that
+the agent, initially, trades. This may be mutated in the course of a
+run.
+
+\item
+Each agent is provided with some ``{\sl Initial Resources}.''
+\index{Agent Resource Levels Initially} \index{Echo Resources}  This
+specifies the resource levels in the agent's reservoir \index{Agent
+Reservoirs} when it is created. There should be as many numbers here
+as there are resources, each separated by white space.
+
+\item
+The ``{\sl Uptake Mask}'' \index{Uptake Masks} \index{Agent Uptake
+Mask} determines what resources the agent is able to pick up directly
+from the ground at the site. This should be a string of ``1'' or ``0''
+characters, one for each of the resources. They should not be
+separated by white space. A ``1'' indicates that the agent may pick up
+this resource, and a ``0'' that it may not. This mask is subject to
+mutation.
+
+\item
+The next six properties all specify tags \index{Tags} and conditions.
+\index{Conditions} These are
+used to determine with whom and how the agent interacts in the world.
+They are described in detail elsewhere
+\cite{holland-92a,holland-92b}. These ``genes'' can all grow and
+shrink (even to zero length) under mutation. \index{Mutation}
+
+\end{itemize}
+
+\subsection{The Graphs}
+\index{Graphs}
+
+There is not much to say about the graphs. The individual graphs are
+briefly described in section \ref{graphs-menu}. There is space
+allocated for two of them, side by side at the bottom of the
+screen. Only the species graph is ever displayed on the left. However,
+since they are fully functional X windows, you can use your window
+manager to resize and reposition them as you wish. The exit button on
+each graph window simply closes the window. Graphs can be redisplayed
+by selecting the graph in question from the Graph menu in the Control
+window. The graphs (currently) update every two hundred generations
+and there is no way to retrieve data once it moves off the left of the
+graph (other than by replaying the world). This will hopefully be
+changed sometime.
+
+\subsection{Textual Output}
+\index{X Windows}
+\index{Text Windows}
+
+Textual output appears in the {\bf xterm} window. This window should have a
+scroll bar so you can examine lengthy output. The {\bf --sl} option to
+{\bf xterm} can be used to set the number of lines that are saved off
+the top of the screen for scrollback purposes. If you invoke Echo with
+the supplied {\bf run--echo} script (or by adding the suggested line
+to your window manager's startup file), the {\bf xterm} created will
+have a scroll bar and will save two thousand lines of previous text.
+
+\section{Creating A World}
+\index{Creating A World}
+
+The Echo distribution comes with several worlds, sites and agents in
+the {\bf OBJECTS} directory. You should never need to directly edit
+the files under this directory, the world, site and agent editors are
+designed to read and write these for you.
+
+These editors are described in sections \ref{world-editor},
+\ref{site-editor} and \ref{agent-editor}.
+
+To create a world (including its sites and their agents) from scratch,
+choose ``{\sl New World}'' from the ``{\sl Edit}'' menu. This will
+display a blank world editor. Fill in the details of your new world,
+including a name and file name, and then ``{\sl Save}'' it. Notice
+that you need to fill in the sites array. Click on the
+``{\sl Sites}'' button to display a text window in which you enter
+the site names (actually the site file names). This should be an array
+that has as many rows and columns as you specify in the world editor.
+For an example, take a look at the world {\bf 4x4--insects} in the
+Echo distribution. This is a world with four rows and columns. Its
+site array specifies the same site 16 times (the site is also called
+{\bf 4x4--insects}.
+
+Another way to create a new world is to copy an existing
+one. \index{Copying Worlds} This is easily done. Suppose you wish to
+make a copy of the {\bf insects} world. Read it into the world editor
+and change its name and file name. Then make the other changes you
+want and save the new world. The same principle applies to making
+copies of sites and agents. \index{Copying Sites} \index{Copying
+Agents}
+
+Note that worlds refer to sites (in the ``{\sl Sites}'' text window of
+the world editor) and that sites in turn refer to agents (in the
+``{\sl Agents}'' text window of the site editor). This is obvious, but
+the fact that it implies a connection between the three editors you'll
+be using may not be so clear. If you are unclear about how to create
+world, sites and agents, the best way to look is to examine the ones
+in the Echo distribution.
+
+If you don't own the Echo distribution files, you will not be able to
+save your creations in the {\bf OBJECTS} directory that the
+distribution came with. \index{Write Permissions} There is a simple
+solution to this: simply copy the distribution's {\bf OBJECTS}
+directory elsewhere, and change your {\sc echo\_location} environment
+variable to indicate where your personal Echo objects are to be
+found. For example, if the Echo distribution is located in {\bf
+/usr/local/Echo}, you can create your own objects directory in your
+home directory with
+
+\begin{shell}
+\prompt\ cd
+\prompt\ cp --r /usr/local/Echo/OBJECTS Echo--objects
+\end{shell}
+
+and then change {\sc echo\_location} to be the {\bf Echo--objects}
+directory in your home directory.
+
+Of course, you don't need to copy the distribution's entire
+{\bf OBJECTS} directory, you can just create your own. Echo expects
+the directory specified in the {\sc echo\_location} variable to
+contain three sub--directories, named {\bf worlds}, {\bf sites}, and
+{\bf agents}.
+
+\section{Running A World}
+\index{Running A World}
+
+\subsection{Choosing A World To Run}
+\index{Choosing A World}
+
+The first step in running a world is choosing which world to run.  To
+do this, select the ``{\sl Choose World}'' option from the Running
+menu in the Control window. This pops up a file selector showing the
+available worlds. Once you choose a world, you can use the various
+entries in the ``{\sl Running}'' menu to actually run it.
+
+\subsection{Editing a Running World}
+\index{Editing Running Worlds}
+
+Although you cannot yet change attributes of sites and worlds while a
+run is in progress, you can make changes to the agents at a site. If
+you choose ``{\sl Stack}'' \index{Stack} in the Edit menu, a window
+will pop up containing the agents present at the site (you will be
+asked to enter site coordinates if you have multiple sites). In this
+window you can directly edit the genome of any agent. You can search
+for a particular string (use Control--s), you can read in a file of
+agents from disk (use Meta--i) or you can use the editor to remove or
+replicate some number of agents. Once you are done, you can use the
+``{\sl Amen}'' command button to make your new site reality. The help
+button will pop up a box describing the genome representation.
+
+\subsection{Verbose Output}
+\index{Output}
+\index{Text Windows}
+
+The ``{\sl Set Verbose Level...}'' \index{Verbose Level} option in the
+``{\sl Control}'' menu \index{Control Menu} can be used to make
+informative text appear in the X window. This has already been
+described above. Interesting output includes that for the letters {\sf
+g} (generation number), \index{Generation Number} {\sf s} (species
+summary), \index{Species Summary} {\sf u} (details of mutations),
+\index{Mutation} {\sf k} (who is killing whom), and {\sf d} (to see
+extinct genomes). \index{Extinct Genomes} \index{Dead Agents}
+
+\subsection{Cluster Analysis}
+\index{Cluster Analysis}
+\label{cluster-analysis}
+
+It is possible to perform a cluster analysis based on the genetic
+distance between the genomes. This can be done for the living genomes
+or all those that have ever lived. The output will appear in tree
+form in the {\bf xterm} window.
+
+The clustering is done by calculating the genetic distance between all
+pairs of agents. This distance is defined as the minimum number of
+mutations needed to transform the genome of one agent into the genome
+of the other. The two agents that are most closely related are grouped
+into a ``cluster''. By also defining the distance from an agent to a
+cluster and between separate clusters, it is simple to build a tree
+showing how closely related the individuals in a population are. This
+is done by successively merging the closest clusters (or individuals)
+into a larger cluster until only one remains. This process naturally
+defines a hierarchy of cluster relatedness which can be displayed as a
+tree.  The clustering algorithm runs in $O(n^3 )$, where $n$ is the
+number of individuals at the outset, so you may have to be patient if
+you have a large population.
+
+
+\subsection{Schema Tracking}
+\index{Schema Tracking}
+\label{schema-tracking}
+
+While the world is not running, you can enter a schema to graph by
+selecting that option in the ``{\sl Examine}'' \index{Graphing A
+Schema} \index{Choosing A Schema To Graph} menu. Genes are separated
+on the chromosome by an underscore (\_). The meta--characters
+$\hat{\:}$ and
+\$ can be used to tie the regular expression \index{Regular
+Expressions} to the beginning and end of the genome
+respectively. Square brackets ([\,]) can be used to denote a set of
+characters any one of which constitutes a match. A star (*) represents
+any number of the preceding expression and a plus (+) represents one
+or more of the preceeding expression. All this is very standard
+regular expression syntax, and this explanation is meant to be brief
+at best.
+
+As an example, we could look for agents that had the string ``aa''
+somewhere in their mating tag\footnote{Assume a world with four
+resources.}. This is matched by the expression \\
+\noindent
+$\hat{\:}$[abcd]*\_[abcd]*\_[abcd]*aa
+
+which allows anything (including nothing) in the first two genes and
+then anything (including nothing) followed by two a's in the third
+gene. The range ``[abcd]'' could also have been represented with
+``[a--d]''.
+
+To see the level of this schema in the population, select the Schema
+Level graph in the Graphs menu.
+
+\newpage
+\section*{Appendices}
+\appendix
+
+\section{Using FTP}
+\index{Using Ftp}
+\label{using-ftp}
+
+The following illustrates how the file may be retrieved. Your UNIX
+prompt is a percent sign. What the system prints is shown in a {\sl
+slanted} font, and what you type, as usual, is in {\sf sans serif}.
+
+\vspace{0.5in}
+\noindent
+\begin{sl}
+\prompt\ {\sf ftp santafe.edu}                                                  \\
+Connected to santafe.edu.                                                       \\
+220-  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * \\
+220-                                                                            \\
+220-   Anonymous access to the FTP area at SantaFe.edu is available:            \\
+220-                                                                            \\
+220-   ftp ftp.santafe.edu                                                      \\
+220-   Login: anonymous                                                         \\
+220-   Password: (Your email address)                                           \\
+220-                                                                            \\
+220-  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * \\
+220-                                                                            \\
+220 sfi FTP server (Version 2.0WU(10) Mon Apr 12 10:49:51 MDT 1993) ready.      \\
+Name (santafe.edu:terry): {\sf anonymous}                                       \\
+331 Guest login ok, send your complete e-mail address as password.              \\
+Password: {\sf Enter your email address.}                                       \\
+230-                                                                            \\
+230-  SFI FTP - SFI Anonymous FTP root directory.                               \\
+230-                                                                            \\
+230-  Directory: $\sim$ftp           Path: $\sim$ftp                            \\
+230-                                                                            \\
+230-    Welcome to the FTP area at SantaFe.edu...                               \\
+230-                                                                            \\
+230-    Everything useful is in the pub directory.  Type ``cd pub'' ...         \\
+230-                                                                            \\
+230-    If you have any questions or problems with this service,                \\
+230-    please send email to $<$ftp@santafe.edu$>$.                             \\
+230-                                                                            \\
+230-Please read the file README.Z                                               \\
+230-  it was last modified on Fri Mar 19 15:29:44 1993 - 179 days ago           \\
+230 Guest login ok, access restrictions apply.                                  \\
+ftp$>$ {\sf cd pub/Users/terry/echo}                                            \\
+250 CWD command successful.                                                     \\
+ftp$>$ {\sf binary}                                                             \\
+200 Type set to I.                                                              \\
+ftp$>$ {\sf get Echo--1.0.tar.Z}                                                \\
+200 PORT command successful.                                                    \\
+150 Opening BINARY mode data connection for Echo-1.0.tar.Z (925969 bytes).      \\
+226 Transfer complete.                                                          \\
+local: Echo--1.0.tar.Z remote: Echo--1.0.tar.Z                                  \\
+925969 bytes received in 6.1e+02 seconds (5.2 Kbytes/s)                         \\
+ftp$>$ {\sf quit}                                                               \\
+\end{sl}
+
+Now you have retrieved the entire distribution. The distribution
+consists of a number of files and directories, which were archived
+into a single file that was then compressed. The next job is to
+reverse these steps to recover the original Echo files.  To do this:
+
+\begin{shell}
+\prompt\ uncompress Echo--1.0.tar.Z \\*
+\prompt\ tar xf Echo--1.0.tar \\*
+\end{shell}
+
+This should result in the creation of a new directory, called {\bf
+Echo--1.0}. Check that that directory has been created. If so, and you
+have received no error messages, it is safe to remove the bundled
+distribution file with
+
+\begin{shell}
+\prompt\ rm Echo-1.0.tar
+\end{shell}
+
+\newpage
+\section{Environment Variables and X Resources}
+\label{setting-up}
+
+This appendix deals with setting up environment variables and X
+resources for those who preferred not to have this done automatically
+in section \ref{simple-setup}.
+
+You may wish to automatically install just the X resources, or just
+the shell's environment variables. Do this with either
+
+\begin{shell}
+\prompt\ make x--setup
+\end{shell}
+
+or
+
+\begin{shell}
+\prompt\ make sh--setup
+\end{shell}
+
+In both cases, the shell script that is invoked (either {\bf
+echo--x--setup} or {\bf echo--sh-setup}) tries to find an appropriate
+file to append some text to. It is fairly conservative and always
+makes a backup copy of any file it alters (in a file whose name ends
+with {\bf .bak}).
+
+There are several reasons why you may choose not to have either of
+these setups done automatically. If you are an experienced UNIX user,
+your shell startup and X resource files are probably not something
+you'll feel comfortable having someone else's shell script edit
+automatically. In this case, you should be able to decide how you wish
+to do what follows.
+
+Here are more details about exactly what needs to be done:
+
+\begin{itemize}
+
+\item
+The file {\bf Echo.ad} contains X window \index{X Windows} resource
+\index{X Resources} specifications.
+These set the various colors of the Echo interface, set the sizes and
+locations of the pieces of the interface and so on. If you know what
+all this means, you should put the contents of this file somewhere
+that the X toolkit will find them when Echo starts.
+
+\item
+Echo looks for certain environment variables \index{Environment
+Variables} that can be used to influence its behavior. None of these
+are required, but at least one is highly recommended.
+
+Echo \index{Echo Objects} comes with a collection of pre--defined
+worlds, sites and agents which are located in the {\bf OBJECTS}
+directory. If you have installed Echo in the directory {\bf
+/usr/local/echo} then you should set an environment variable called
+{\sc echo\_location} and give it the value
+
+\begin{verse}
+{\bf /usr/local/echo/OBJECTS}
+\end{verse}
+
+If you do not do this, you will always have to invoke Echo from the
+directory where you installed it for it to see the {\bf OBJECTS}
+directory. Eventually you may have your own directory of Echo objects
+and you can change this variable to point to it.
+
+The way to set the environment variable depends on the shell you are
+using. If you are in csh, the simplest thing to do is to place the
+line
+
+\begin{shell}
+setenv ECHO\_LOCATION /usr/local/echo/OBJECTS
+\end{shell}
+
+in your {\bf $\sim$/.login} file. Then, whenever you log in, the variable
+will be automatically set for you. To make it affect the current login
+session, you can also type the line at the shell's prompt.
+
+If you are not using csh or a variant of it, you should place the
+following lines in your {\bf $\sim$/.profile} file (or equivalent),
+
+\begin{shell}
+ECHO\_LOCATION=/usr/local/echo/OBJECTS \\*
+export ECHO\_LOCATION \\*
+\end{shell}
+
+And you can either log out and in again or type those two lines to the
+current shell to have them affect this session.
+
+If you aren't sure what shell you are running, type
+
+\begin{shell}
+\prompt\ echo \$SHELL
+\end{shell}
+
+and if the output ends in the letters {\sl csh}, then use the first
+method above. If not, use the second\footnote{If the shell name ends
+in {\sl bash}, the lines should go into your {\bf
+$\sim$/.bash\_profile} file if you have one and your {\bf
+$\sim$/.profile} if not.}.
+
+The other three environment variables are less important, but will
+make Echo start in a more attractive fashion. The variables and their
+recommended values are given below.  These settings will make Echo
+display a world, a site and an agent when it starts up. Otherwise the
+three editing areas will be blank.
+
+These variables can be set in exactly the same way that you set the
+variable {\sc echo\_location} above. If you use C shell or a variant
+of it, the following goes into your {\bf $\sim$/.login}:
+
+\begin{shell}
+setenv ECHO\_WORLD insects \\*
+setenv ECHO\_SITE insects \\*
+setenv ECHO\_AGENT fly \\*
+\end{shell}
+
+Otherwise, the following goes into your {\bf $\sim$/.profile}:
+
+\begin{shell}
+ECHO\_WORLD=insects \\*
+ECHO\_SITE=insects \\*
+ECHO\_AGENT=fly \\*
+export ECHO\_WORLD ECHO\_SITE ECHO\_AGENT \\*
+\end{shell}
+
+\end{itemize}
+
+\newpage
+\section{Emacs Keybindings}
+\index{Emacs Keybindings}
+\label{emacs-keybindings}
+
+In this section an uppercase {\sf C} will be used to represent the use
+of the Control key and an uppercase {\sf M} to represent the Meta
+key. Thus, {\sf C--x} indicates that you should hold down the Control
+key and while doing so, type an {\sf x}. The Meta key is used in an
+identical fashion, e.g.  {\sf M--d} tells you to first hold down Meta
+and while holding it, press the {\sf d} key.
+
+Table \ref{emacs-keybindings-table} shows the most useful key bindings
+present in all text windows.
+
+\begin{table}
+\begin{center}
+\begin{tabular}{||l|l||l|l||}
+\hline
+{\sf C--a} & Beginning Of Line.         & {\sf M--b}   & Backward Word. \\
+{\sf C--b} & Backward Character.        & {\sf M--d}   & Delete Next Word. \\
+{\sf C--d} & Delete Next Character.     & {\sf M--f}   & Forward Word. \\
+{\sf C--e} & End Of Line.               & {\sf M--i}   & Insert File. \\
+{\sf C--f} & Forward Character.         & {\sf M--v}   & Scroll Backwards. \\
+{\sf C--h} & Delete Previous Character. & {\sf M--$<$} & Beginning Of File. \\
+{\sf C--k} & Kill To End Of Line.       & {\sf M--$>$} & End Of File. \\
+{\sf C--l} & Redraw. & & \\
+{\sf C--n} & Next Line. & & \\
+{\sf C--p} & Previous Line. & & \\
+{\sf C--r} & Search Backwards. & & \\
+{\sf C--s} & Search Forwards. & & \\
+{\sf C--t} & Transpose Characters. & & \\
+{\sf C--v} & Scroll Forward. & & \\
+{\sf C--w} & Delete Selected Region. & & \\
+{\sf C--y} & Paste Deleted Region. & & \\
+\hline
+\end{tabular}
+\end{center}
+\caption{Useful Emacs Keybindings For Text Windows}
+\label{emacs-keybindings-table}
+\end{table}
+
+\newpage
+\section{Echo Widgets}
+\index{Echo Widgets}
+\label{echo-widgets}
+
+If you are not installing Echo on a SPARC machine, you will need to
+obtain and install various widget sets on your machine before you can
+make Echo. These are all freely available via {\bf ftp}. If you are
+not familiar with this sort of installation, it might be best to
+consult your system administrator.
+
+The widget packages all create libraries that Echo must be linked with
+when it is compiled. The {\bf Makefile} definition of {\bf LIBS} in
+the distribution assumes that these libraries can be found in the {\bf
+WIDGETS} directory. In fact, these libraries can be installed anywhere
+that is convenient, as long as the {\bf Makefile} is altered to
+reflect their location.
+
+The various widget libraries and their {\bf ftp} locations are as
+follows:
+
+\begin{itemize}
+
+\item {\bf Athena Plotter Widgets} \\
+Machine: {\bf ftp.uni--paderborn.de}, Location: {\bf /unix/tools}.
+
+\item {\bf Free Widget Foundation Widgets} \\
+Machine: {\bf ftp.let.rug.nl}, Location: {\bf /ftp/pub/FWF/fwf.tar.Z}.
+
+\item {\bf 3D Athena Widgets} \\
+Machine: {\bf ftp.x.org}, Location: {\bf /contrib/Xaw3d}.
+
+\end{itemize}
+
+Each of these widget sets comes with instructions on how to make and
+install the libraries that support the various widgets. The FWF and
+Xaw3d widgets are available for {\bf ftp} from many locations. Use
+{\bf xarchie} to find other sites.
+
+Once these libraries have been created and Echo's {\bf Makefile} knows
+where to find them, you should be able to proceed with the Echo
+installation itself.
+
+I apologize if you have to go through this procedure. It is the result
+of using the X toolkit and the need to find useful (free) widgets. I
+hope this will be solved in later Echo versions by using {\bf TCL} --
+though this will require that the machine receiving Echo has (or
+obtains) the {\bf TCL} libraries...
+
+\newpage
+\begin{thebibliography}{99}
+
+\bibitem {holland-92a}
+Holland, John H. (1992a).
+{\em The Echo Model},
+in ``Proposal for a Research Program in Adaptive Computation''.
+Santa Fe Institute, July 1992.
+
+\bibitem {holland-92b}
+Holland, John H. (1992b).
+{\em Adaptation in Natural and Artificial Systems}, 2nd Ed.,
+MIT Press, 1992.
+
+\bibitem {holland-93}
+Holland, John H. (1993).
+{\em ECHOING EMERGENCE : Objectives, Rough Definitions, and
+Speculations for Echo-class Models},
+To appear in ``Integrative Themes'', George Cowan, David Pines and
+David Melzner Eds. Santa Fe Institute Studies in the Sciences of
+Complexity, Proc. Vol XIX. Reading, MA: Addison--Wesley 1993.
+
+\end {thebibliography}
+
+\input{how-to.index}
+
+\end{document}

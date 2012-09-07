@@ -1,0 +1,9 @@
+Name : 200b
+Mutation_Probability : 0.001
+Crossover_Probability : 0.0
+Random_Death_Probability : 0.0
+Production_Function : 200 1
+Initial_Resource_Levels : 0 1
+Maximums : 1000 1
+Maintenance : 10 1
+Agents : 

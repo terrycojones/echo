@@ -1,0 +1,16 @@
+Name : few_a
+Trading_Fraction : 0.5
+Interaction_Fraction : 0.5
+Self_Replication_Fraction : 0.5
+Self_Replication_Threshold : 2.0
+Maintenance_Probability : 1.0
+Neighborhood : NONE
+Rows : 1
+Columns : 1
+Number_Of_Resources : 4
+Combat_Matrix : 4 0 2 1
+Combat_Matrix : 0 4 2 1
+Combat_Matrix : 2 2 4 0
+Combat_Matrix : 2 2 0 4
+Sites : 
+few_a

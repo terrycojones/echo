@@ -1,0 +1,469 @@
+#!/usr/local/bin/wish -f
+
+#
+# Canvas display variables.
+#
+set site_height             50
+set site_width              50
+set x_gap                    5
+set y_gap                    5
+
+#
+# Time variables.
+#
+set displayed_generation     0
+set ngenerations             0
+set time_delay               0
+set stop_button              0
+
+#
+# Color variables.
+#
+set level_width             20
+set level_height            10
+set nlevels                 10
+set color_scale_factor       0
+set color_scale_multiplier   2.0
+set levels_scale_exponent    1.0
+set levels_scale_multiplier  1.2
+
+#
+# Population variables.
+#
+set max_population          -1
+set world_population         0
+set total_pop_sizes(0)       0
+
+#
+# Controls whether the generation scale updates when playing.
+#
+set update_slider            1
+
+#
+# Convenient names for widgets.
+#
+set canvas  .f.canvas
+set scale   .f.scale
+
+
+
+if {$argc == 0} {
+  puts "Reading from stdin..."
+  set f stdin
+} else {
+  set filename [lindex $argv 0]
+  set f [open $filename r]
+}
+
+
+proc initialize {} {
+
+  set menu    .f.menu
+  set play    .f.play
+  set info    .f.info0
+  set info1   .f.info1
+
+  global f canvas canvas_height canvas_width stop_button \
+    displayed_generation ngenerations scale \
+    level_width level_height nlevels world_population
+
+  wm title . "Echo Site Viewer"
+  wm minsize . 1 1
+  wm iconbitmap . @bitmaps/jhh_smaller.bm
+  wm iconname . "Ants, flies and caterpillars!"
+
+
+  frame .f
+  pack .f -side top -expand 1 -fill both
+  
+  # .f.view holds the canvas and play buttons.
+  frame .f.view 
+
+  canvas $canvas -height $canvas_height -width $canvas_width -relief raised
+
+  frame .f.levels -relief raised
+
+  frame .f.levels.b1
+  frame .f.levels.b2
+
+  button .f.levels.b11 -bitmap @bitmaps/up.bm   -command {narrow_levels_range} -fg grey
+  button .f.levels.b12 -bitmap @bitmaps/up.bm   -command {narrow_color_range} -fg grey
+  button .f.levels.b21 -bitmap @bitmaps/down.bm -command {widen_levels_range}  -fg grey
+  button .f.levels.b22 -bitmap @bitmaps/down.bm -command {widen_color_range}  -fg grey
+
+  pack .f.levels.b11 .f.levels.b12 -side left -padx 10 -in .f.levels.b1
+  pack .f.levels.b21 .f.levels.b22 -side left -padx 10 -in .f.levels.b2
+
+  pack .f.levels.b1 -in .f.levels -side top -pady 10
+
+  for {set i 0} {$i < $nlevels} {incr i} {
+    frame  .f.levels.$i
+    label  .f.levels.$i.label  -width 5 -text $i
+    canvas .f.levels.$i.canvas -width $level_width -height $level_height -bg grey
+
+    pack   .f.levels.$i.label  -in .f.levels.$i -side left -fill y -padx 5
+    pack   .f.levels.$i.canvas -in .f.levels.$i -side left -fill y
+    pack   .f.levels.$i        -in .f.levels    -side top  -fill x
+  }
+
+  pack .f.levels.b2 -in .f.levels -side top -pady 10
+
+  frame $info -relief raised -borderwidth 1
+  frame $info.left
+  frame $info.right
+
+  label $info.left.1 -text "Generation Number"
+  label $info.left.2 -text "Generations Recorded"
+  label $info.left.3 -text "World Population"
+
+  label $info.right.1 -textvariable displayed_generation -width 5 -relief sunken
+  label $info.right.2 -textvariable ngenerations         -width 5 -relief sunken
+  label $info.right.3 -textvariable world_population     -width 5 -relief sunken
+
+  pack $info.left.1  $info.left.2  $info.left.3  -side top -in $info.left  -anchor w
+  pack $info.right.1 $info.right.2 $info.right.3 -side top -in $info.right -anchor e
+
+  pack $info.left  -side left -in $info -fill x
+  pack $info.right -side left -in $info
+
+  frame $play -relief flat -borderwidth 1
+
+  button $play.rewind -bitmap @bitmaps/rewind.bm       -padx 10 -fg grey \
+    -command {plot_generation 0}
+  button $play.rplay  -bitmap @bitmaps/rplay.bm        -padx 10 -fg grey \
+    -command {play_generations $displayed_generation 0}
+  button $play.rplay1 -bitmap @bitmaps/rplay1.bm       -padx 10 -fg grey \
+    -command {backward_generation}
+  button $play.stop   -bitmap @bitmaps/stop.bm         -padx 10 -fg grey \
+    -command {set stop_button 1}
+  button $play.play1  -bitmap @bitmaps/play1.bm        -padx 10 -fg grey \
+    -command {forward_generation}
+  button $play.play   -bitmap @bitmaps/play.bm         -padx 10 -fg grey \
+    -command {play_generations $displayed_generation [expr $ngenerations - 1]}
+  button $play.ffwd   -bitmap @bitmaps/fast_forward.bm -padx 10 -fg grey \
+    -command {plot_generation [expr $ngenerations - 1]}
+
+  set play_buttons "$play.rewind $play.rplay $play.rplay1 $play.stop $play.play1 $play.play $play.ffwd"
+
+  eval pack $play_buttons -side left -pady 10 -in $play
+
+  pack $canvas -side top -in .f.view
+  pack $play -side top -in .f.view
+
+  scale $scale -orient horizontal -relief raised -command "plot_generation" -from 0 -to 100 \
+    -label "Generation Selector" -showvalue 1
+
+  button .f.dismiss -bg seagreen -fg white -text "Dismiss" -command {destroy .} -relief raised
+  
+  frame $menu -relief raised -borderwidth 1
+
+  pack $menu      -side top  -fill x -in .f
+  pack .f.view    -side left         -in .f
+  pack $info      -side top  -fill x -in .f
+  pack $scale     -side top  -fill x -in .f
+  pack .f.levels  -side top          -in .f
+  pack .f.dismiss -side bottom       -in .f
+  
+  
+
+  #
+  # The Files menu.
+  #
+  menubutton .f.menu.files -text Files -menu .f.menu.files.m -underline 0
+  menu .f.menu.files.m
+
+  if {$f != "stdin"} {
+    .f.menu.files.m add command -label "Re-read" -command {reread_data} -underline 0
+  }
+  .f.menu.files.m add command -label "Open" -command {puts "read file"} -underline 0
+  .f.menu.files.m add command -label "Print Canvas..." -command {print_canvas} -underline 0
+  .f.menu.files.m add command -label "Quit" -command {destroy .} -underline 0
+  
+  #
+  # The Time menu.
+  #
+  menubutton .f.menu.time -text Time -menu .f.menu.time.m -underline 0
+  menu .f.menu.time.m
+  .f.menu.time.m add command -label "Jump To Generation..." -command {puts "Jump"} -underline 0
+  .f.menu.time.m add separator
+  .f.menu.time.m add radio -label "Slow" -variable time_delay -value 50
+  .f.menu.time.m add radio -label "Medium" -variable time_delay -value 20
+  .f.menu.time.m add radio -label "Fast" -variable time_delay -value 0
+  
+  pack .f.menu.files .f.menu.time -side left
+}
+
+
+proc draw_sites {} {
+  global canvas rows cols site_height site_width x_gap y_gap
+
+  for {set row 0} {$row < $rows} {incr row} {
+    for {set col 0} {$col < $cols} {incr col} {
+
+      set x1 [expr $x_gap + $col * ($x_gap + $site_width)]
+      set y1 [expr $y_gap + $row * ($y_gap + $site_height)]
+      set x2 [expr $x1 + $site_width]
+      set y2 [expr $y1 + $site_height]
+
+      $canvas create rectangle $x1 $y1 $x2 $y2 -fill grey -outline black -tags s.$row.$col
+      #$canvas create rectangle $x1 $y1 $x2 $y2 -fill grey -outline black -tags s
+    }
+  }
+}
+
+proc name_and_color_levels {} {
+
+  global max_population nlevels .f levels_scale_exponent displayed_generation
+
+  # set inc [expr $max_population / $nlevels]
+
+  for {set i 0} {$i < $nlevels} {incr i} {
+    set level [expr int(pow($i, $levels_scale_exponent))]
+    .f.levels.$i.canvas configure -bg [get_color $level]
+    .f.levels.$i.label  configure -text $level
+  }
+
+  plot_generation $displayed_generation
+}
+
+proc reread_data {} {
+
+  global f filename displayed_generation
+
+  close $f
+  set f [open $filename r]
+  read_rows_cols
+  # draw_sites
+  update
+  read_input
+  # plot_generation $displayed_generation
+  # update
+}
+
+proc narrow_levels_range {} {
+  global levels_scale_exponent levels_scale_multiplier
+
+  set levels_scale_exponent [expr $levels_scale_exponent * $levels_scale_multiplier]
+  name_and_color_levels
+}
+
+proc widen_levels_range {} {
+  global levels_scale_exponent levels_scale_multiplier
+
+  set levels_scale_exponent [expr $levels_scale_exponent / $levels_scale_multiplier]
+
+  if {$levels_scale_exponent < 1.0} {
+    set levels_scale_exponent 1.0
+  }
+
+  name_and_color_levels
+}
+
+proc narrow_color_range {} {
+  global color_scale_factor color_scale_multiplier
+
+  adjust_cscale [expr int($color_scale_factor * $color_scale_multiplier)]
+}
+
+proc widen_color_range {} {
+  global color_scale_factor color_scale_multiplier
+
+  adjust_cscale [expr int($color_scale_factor / $color_scale_multiplier)]
+}
+
+proc adjust_cscale {setting} {
+
+  global color_scale_factor displayed_generation
+
+  set color_scale_factor $setting
+
+  name_and_color_levels
+  plot_generation $displayed_generation
+}
+
+
+proc read_rows_cols {} {
+
+  global f nsites canvas_height canvas_width rows cols x_gap y_gap site_height site_width
+
+  if {[gets $f rows] < 0} {
+    puts stderr "Could not read number of rows!"
+    exit
+  }
+
+  if {[gets $f cols] < 0} {
+    puts stderr "Could not read number of cols!"
+    exit
+  }
+
+  set nsites [expr $rows * $cols]
+  set canvas_height [expr $y_gap * ($rows + 1) + $site_height * $rows]
+  set canvas_width [expr $x_gap * ($cols + 1) + $site_width * $cols]
+}
+
+proc read_input {} {
+
+  global f ngenerations nsites pop total_pop_sizes color_scale_factor max_population scale \
+    total_pop_sizes
+
+  set generation -1
+  set ngenerations 0
+  set max_population -1
+
+  while {[gets $f line] >= 0} {
+    
+    incr generation
+    incr ngenerations
+
+    set pop($generation) [split $line { }]
+
+    if {[llength $pop($generation)] != $nsites + 2} {
+      puts "Found line with [llength $pop($generation)] site populations instead of $nsites"
+      break
+    }
+
+    set total_pop_sizes($generation) [lindex $pop($generation) $nsites]
+
+    set max_gen_pop [lindex $pop($generation) [expr $nsites + 1]]
+    if {$max_gen_pop > $max_population} {
+      set max_population $max_gen_pop
+    }
+
+    update
+  }
+
+  set color_scale_factor [expr 65535 / $max_population]
+  # set color_scale_factor [expr 2147483647 / $max_population]
+  # set color_scale_factor 1000
+  # puts "color_scale_factor is $color_scale_factor"
+  name_and_color_levels
+  $scale configure -to $generation
+}
+
+proc get_color {pop_level} {
+  global color_scale_factor
+
+  if {$pop_level == 0} {
+    return "#ffffffffffff"
+  }
+
+  # set level [expr 4294967295 - $pop_level * $color_scale_factor]
+  set level [expr $pop_level * $color_scale_factor]
+
+  #puts "pop_level is $pop_level\nlevel is $level\ncolor scale factor is $color_scale_factor"
+
+  if {$level < 0} {
+    set level 0
+  } else {
+    if {$level > 65535} {
+      set level 65535
+    }
+  }
+
+  # this gives yellow to navy blue, level 0..65535
+  # return [format "#%04x%04x%04x" [expr 65535 - $level] [expr 65535 - $level] $level]
+
+  # this gives cyan to red, level 0..65535
+  return [format "#%04x%04x%04x" $level [expr 65535 - $level] [expr 65535 - $level]]
+
+  #puts "level is $level"
+
+  #if {$level < 65536} {
+  #puts "1st format gives [format "#%04x0000ffff" $level]"
+  #puts "pop level $pop_level, level $level, [format "#%04x0000ffff" $level]"
+  #return [format "#%04x0000ffff" $level]
+  #} else {
+  #puts "2nd format gives [format "#ffff0000%04x" [expr 65535 - ($level >> 16)]]
+  #puts "pop level $pop_level, level $level, [format "#ffff0000%04x" [expr 65535 - ($level >> 16)]]"
+  #return [format "#ffff0000%04x" [expr 65535 - ($level >> 16)]]
+}
+
+# the next gives from white to red, with level = 0..65535.
+# return [format "#ffff%04x%04x" $level $level]
+
+# the next line gives a range from yellow to red, with level = 0..65535.
+# return [format "#ffff%04x0000" $level]
+}
+
+
+proc plot_generation {generation} {
+
+  global displayed_generation pop rows cols canvas scale update_slider \
+    world_population total_pop_sizes
+
+  for {set row 0} {$row < $rows} {incr row} {
+    for {set col 0} {$col < $cols} {incr col} {
+
+      $canvas itemconfigure s.$row.$col \
+	-fill [get_color [lindex $pop($generation) [expr $row * $cols + $col]]]
+    }
+  }
+
+  set displayed_generation $generation
+  set world_population $total_pop_sizes($generation)
+
+  if {$update_slider == 1} {
+    $scale set $generation
+  }
+
+  update
+}
+
+
+proc backward_generation {} {
+  global displayed_generation
+
+  if {$displayed_generation != 0} {
+    plot_generation [expr $displayed_generation - 1]
+  }
+}
+
+proc forward_generation {} {
+  global displayed_generation ngenerations
+
+  if {$displayed_generation != [expr $ngenerations - 1]} {
+    plot_generation [expr $displayed_generation + 1]
+  }
+}
+
+
+proc play_generations {from to} {
+  global displayed_generation stop_button ngenerations time_delay scale update_slider
+
+  set stop_button 0
+  set update_slider 0
+
+  if {$displayed_generation != $from} {
+    plot_generation $from
+  }
+
+  if {$from < $to} {
+    set inc 1
+  } else {
+    set inc -1
+  }
+
+  while {$displayed_generation != $to && $stop_button == 0} {
+    plot_generation [expr $displayed_generation + $inc]
+    update
+    after $time_delay
+  }
+
+  $scale set $displayed_generation
+  set update_slider 1
+  set stop_button 0
+}
+
+
+read_rows_cols
+initialize
+draw_sites
+update
+read_input
+plot_generation 0
+update
+
+
+# Local Variables:
+# mode:tcl
+# End: ***

@@ -1,0 +1,106 @@
+#!/bin/sh
+
+#
+# This script tries to install Echo's X resource defaults.
+#
+
+
+#
+# Source the common function and variable definitions.
+#
+if [ ! -f echo-sh-common ]
+then
+	echo "Could not find echo-sh-common! Check your Echo distribution."
+	exit 1
+else
+	. echo-sh-common
+fi
+
+#
+# The X defaults file in the distribution.
+#
+DEFS=Echo.ad
+
+
+check_file_exists $DEFS
+
+case "$HOME" in
+	"") fatal "You have no \$HOME environment variable set!" ;;
+	*) check_dir_exists $HOME ;;
+esac
+
+
+#
+# Check for ~/.Xdefaults
+#
+XDEFS=$HOME/.Xdefaults
+
+if file_exists $XDEFS
+then
+	if file_writable $XDEFS
+	then
+		message "Appending Echo's X resources to \"$XDEFS\""
+		cp $XDEFS $XDEFS.bak
+		cat $DEFS >> $XDEFS
+		exit 0
+	else
+		fatal "Your $XDEFS file is not writable."
+	fi
+fi
+
+#
+# Check for ~/.Xresources
+#
+XDEFS=$HOME/.Xresources
+
+if file_exists $XDEFS
+then
+	if file_writable $XDEFS
+	then
+		message "Appending Echo's X resources to \"$XDEFS\""
+		cp $XDEFS $XDEFS.bak
+		cat $DEFS >> $XDEFS
+		exit 0
+	else
+		fatal "Your $XDEFS file is not writable."
+	fi
+fi
+
+
+#
+# Check XAPPLRESDIR
+#
+
+case "$XAPPLRESDIR" in
+	"") ;;
+	*)
+		check_dir_exists $XAPPLRESDIR
+		check_file_writable $XAPPLRESDIR
+		XDEFS=$XAPPLRESDIR/Echo
+
+		if file_exists $XDEFS
+		then
+			if file_writable $XDEFS
+			then
+				message "Appending Echo's X resources to \"$XDEFS\""
+				cp $XDEFS $XDEFS.bak
+				cat $DEFS >> $XDEFS
+				exit 0
+			else
+				fatal "$XDEFS is not writable!"
+			fi
+		else
+			message "Installing Echo's X resources in \"$XDEFS\""
+			cp $DEFS $XDEFS
+			exit 0
+		fi ;;
+esac
+
+
+#
+# Give up trying to be smart, put it in ~/.Xdefaults
+#
+
+message "Creating ~/.Xdefaults to hold Echo's X resources."
+cp $DEFS $HOME/.Xdefaults
+exit 0

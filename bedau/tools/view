@@ -1,0 +1,1 @@
+bedau_stats -nb 150 -bs 30 | sed -e 's/[1-9][0-9]*/\*/g' | tr -d ' ' | tr 0 ' '

@@ -1,0 +1,64 @@
+
+9/12/92  stop dumping core
+
+9/13/92  made atehna plotting widget run
+9/13/92  add combat payoff matrix to the world.
+
+9/14/92  added command line options processing
+9/14/92  added support for no graphics runs
+
+9/15/92  fixed run menu logic
+9/15/92  added method for reproducing a run
+9/15/92  added no-graphics option to test for speed.
+9/15/92  added some option processing (-world, -seed, -generations)
+9/15/92  added popups when errors occur in editing.
+	
+9/16/92  added "new world", "new site" and "new agent" options to edit menu.
+9/16/92  fixed problem with the add one generation target
+9/16/92  fixed saving twice when there is an error problem.
+
+9/17/92  added self reproduction fraction; the resources given to an offspring.
+9/17/92  added JHH output style.
+9/17/92  JHH bitmap added to control menu.
+9/17/92  Made population levels graph work fine.
+9/17/92  Added resources level graphing.
+
+9/19/92  Did layout
+9/19/92  Fixed run through generation -1 problem with run indefinitely.
+
+10/15/92 Added hashing stuff to start collecting genomes
+
+10/16/92 Completed genome collection and species graphing.
+
+10/19/92 Made verbose option be a string to give greater control over what's shown.
+
+10/20/92 Added verbose menu option to allow runtime setting.
+
+10/21/92 Made a new seed be generated each new run. Is this a good idea in general?
+10/21/92 Added seed setting window to running menu.
+10/21/92 Added output of the site stack details.
+
+10/22/92 Prepared for UNM demo.
+10/22/92 Found combat payoff bug (not a surprise :-))
+10/22/92 Added agent instance printing to lots of verbose options.
+10/22/92 Made DEBUG take a string to allow more flexible output tailoring.
+10/22/92 Made it possible to just look at kills within combat.
+
+10/23/92 Gave UNM demo.
+
+10/26/92 Fixed(?) bug with recalculating makeup after mutation.
+10/26/92 Fixed fleeing probability bug.
+
+
+1993
+         Got underscores out of menu item names.
+         Made dialogs have the same width.
+         Made stack deletion obey geography.
+         Made agent creation through self-rep obey geography (child born next to parent)
+
+04/02/93 Started adding crossover.
+04/10/93 Finished adding/debugging two-point crossover.
+04/12/93 Really finished crossover - fixed two small omissions.
+04/12/93 Made the -world option cause Echo to start with that world instantiated.
+04/12/93 Added sex and self-replication options to allow for these things to be controlled from command line.
+

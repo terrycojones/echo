@@ -1,0 +1,1007 @@
+%!PS-Adobe-3.0 EPSF-3.0
+%%Pages: 1
+%%Title: (curve.ps)
+%%DocumentNeededResources: font Helvetica Courier
+%%BoundingBox:  71 506 502 721
+%%Creator: Blt_graph (Tk version 3.6)
+%%CreationDate: Wed Aug 17 14:11:12 1994
+%%EndComments
+
+
+200 dict begin
+
+/BgColorProc 0 def	% Background color procedure (for symbols)
+/BorderProc 0 def	% Border outline procedure (for symbols)
+/StippleProc 0 def	% Stipple procedure (for bar segments)
+/DashesProc 0 def	% Dashes procedure (for line segments)
+
+
+/encoding {ISOLatin1Encoding} def
+systemdict /encodefont known {
+    /realsetfont /setfont load def
+    /setfont { encoding encodefont realsetfont } def
+} if
+
+/Stroke { gsave stroke grestore } def
+
+/Fill { gsave fill grestore } def
+
+/SetFont { 	% Stack: pointSize fontName
+    findfont exch scalefont setfont
+} def
+
+/SetDashes {		% Stack: numDashes
+    dup 0 eq { pop [] 0 setdash } { 1 array astore 0 setdash } ifelse
+} def
+
+/Box {			% Stack: x y width height
+    newpath
+        exch 4 2 roll moveto
+        dup 0 rlineto
+        exch 0 exch rlineto
+        neg 0 rlineto
+    closepath
+} def
+
+/SetFgColor {		% Stack: red green blue
+    CL 0 eq { pop pop pop 0 0 0 } if
+    setrgbcolor
+    CL 1 eq { currentgray setgray } if
+} def
+
+/SetBgColor {		% Stack: red green blue
+    CL 0 eq { pop pop pop 1 1 1 } if
+    setrgbcolor
+    CL 1 eq { currentgray setgray } if
+} def
+
+% The next two definitions are taken from "$tk_library/prolog.ps"
+
+% desiredSize EvenPixels closestSize
+%
+% The procedure below is used for stippling.  Given the optimal size
+% of a dot in a stipple pattern in the current user coordinate system,
+% compute the closest size that is an exact multiple of the device's
+% pixel size.  This allows stipple patterns to be displayed without
+% aliasing effects.
+
+/EvenPixels {
+    % Compute exact number of device pixels per stipple dot.
+    dup 0 matrix currentmatrix dtransform
+    dup mul exch dup mul add sqrt
+
+    % Round to an integer, make sure the number is at least 1, and compute
+    % user coord distance corresponding to this.
+    dup round dup 1 lt {pop 1} if
+    exch div mul
+} bind def
+
+% width height string filled StippleFill --
+%
+% Given a path and other graphics information already set up, this
+% procedure will fill the current path in a stippled fashion.  "String"
+% contains a proper image description of the stipple pattern and
+% "width" and "height" give its dimensions.  If "filled" is true then
+% it means that the area to be stippled is gotten by filling the
+% current path (e.g. the interior of a polygon); if it's false, the
+% area is gotten by stroking the current path (e.g. a wide line).
+% Each stipple dot is assumed to be about one unit across in the
+% current user coordinate system.
+
+/StippleFill {
+    % Turn the path into a clip region that we can then cover with
+    % lots of images corresponding to the stipple pattern.  Warning:
+    % some Postscript interpreters get errors during strokepath for
+    % dashed lines.  If this happens, turn off dashes and try again.
+
+    gsave
+    {eoclip}
+    {{strokepath} stopped {grestore gsave [] 0 setdash strokepath} if clip}
+    ifelse
+
+    % Change the scaling so that one user unit in user coordinates
+    % corresponds to the size of one stipple dot.
+    1 EvenPixels dup scale
+
+    % Compute the bounding box occupied by the path (which is now
+    % the clipping region), and round the lower coordinates down
+    % to the nearest starting point for the stipple pattern.
+
+    pathbbox
+    4 2 roll
+    5 index div cvi 5 index mul 4 1 roll
+    6 index div cvi 6 index mul 3 2 roll
+
+    % Stack now: width height string y1 y2 x1 x2
+    % Below is a doubly-nested for loop to iterate across this area
+    % in units of the stipple pattern size, going up columns then
+    % across rows, blasting out a stipple-pattern-sized rectangle at
+    % each position
+
+    6 index exch {
+	2 index 5 index 3 index {
+	    % Stack now: width height string y1 y2 x y
+
+	    gsave
+	    1 index exch translate
+	    5 index 5 index true matrix {3 index} imagemask
+	    grestore
+	} for
+	pop
+    } for
+    pop pop pop pop pop
+    grestore
+    newpath
+} bind def
+
+/DrawSegment {	% Stack: x1 y1 x2 y2
+    newpath 4 2 roll moveto lineto stroke
+} def
+
+/DrawText {		% Stack: ?bgColorProc? boolean centerX centerY
+			% 	 strWidth strHeight baseline theta str
+    gsave
+	7 -2 roll translate	% Translate to center of bounding box
+	exch neg rotate		% Rotate by theta
+	exch 4 2 roll
+	2 copy 2 copy 2 copy
+
+	% If needed, draw the background area, setting the bg color
+
+	-0.5 mul exch -0.5 mul exch 4 -2 roll Box
+        7 -1 roll { gsave 7 -1 roll exec fill grestore } if
+
+	% Move to the text string starting position
+
+	-.5  mul 5 -1 roll add exch -.5 mul exch moveto
+	pop exch dup dup 4 2 roll
+
+        % Adjust character widths to get desired overall string width
+        % adjust X = (desired width - real width) / #chars
+
+ 	stringwidth pop sub exch length div 0 3 -1 roll
+
+	% Flip back the scale so that the string is not drawn in reverse
+
+	1 -1 scale
+	ashow
+    grestore
+} def
+
+/DrawBitmap {		% Stack: ?bgColorProc? boolean centerX centerY
+			%	 width height theta imageStr
+    gsave
+	6 -2 roll translate	% Translate to center of bounding box
+	4 1 roll neg rotate	% Rotate by theta
+
+	% Find upperleft corner of bounding box
+
+	2 copy -.5 mul exch -.5 mul exch translate
+	2 copy scale		% Make pixel unit scale
+        newpath
+            0 0 moveto 0 1 lineto 1 1 lineto 1 0 lineto
+        closepath
+
+	% Fill rectangle with background color
+
+	4 -1 roll { gsave 4 -1 roll exec fill grestore } if
+
+	% Paint the image string into the unit rectangle
+
+	2 copy true 3 -1 roll 0 0 5 -1 roll 0 0 6 array astore 5 -1 roll
+        imagemask
+    grestore
+}def
+
+% Symbols:
+
+% Skinny-cross
+/Sc {			% Stack: x y symbolSize
+    gsave
+	3 -2 roll translate 45 rotate
+	0 0 3 -1 roll Sp
+    grestore
+} def
+
+% Skinny-plus
+/Sp {			% Stack: x y symbolSize
+    gsave
+	3 -2 roll translate
+	2 idiv  	% Stack: radius
+	dup 2 copy	% Stack: radius radius radius radius
+	newpath neg 0 moveto 0 lineto
+	gsave BgColorProc fill grestore stroke
+	newpath neg 0 exch moveto 0 exch lineto
+	gsave BgColorProc fill grestore stroke
+    grestore
+} def
+
+% Cross
+/Cr {			% Stack: x y symbolSize
+    gsave
+	3 -2 roll translate 45 rotate
+	0 0 3 -1 roll Pl
+    grestore
+} def
+
+% Plus
+/Pl {			% Stack: x y symbolSize
+    gsave
+	3 -2 roll translate
+	dup 2 idiv  	% Stack: size radius
+	exch 6 idiv 	% Stack: radius delta
+
+	%
+	%          2   3	The plus/cross symbol is a
+	%			closed polygon of 12 points.
+	%      0   1   4    5	The diagram to the left
+	%           x,y		represents the positions of
+	%     11  10   7    6	the points which are computed
+	%			below.
+	%          9   8
+	%
+
+	newpath
+	    2 copy exch neg exch neg moveto dup neg dup lineto
+	    2 copy neg exch neg lineto 2 copy exch neg lineto
+	    dup dup neg lineto 2 copy neg lineto 2 copy lineto
+	    dup dup lineto 2 copy exch lineto 2 copy neg exch lineto
+	    dup dup neg exch lineto exch neg exch lineto
+	closepath
+	Fill BorderProc
+    grestore
+} def
+
+% Circle
+/Ci {			% Stack: x y symbolSize
+    3 copy pop
+    moveto newpath
+        2 div 0 360 arc
+    closepath Fill BorderProc
+} def
+
+% Square
+/Sq {			% Stack: x y symbolSize
+    dup dup 2 div dup
+    6 -1 roll exch sub exch
+    5 -1 roll exch sub 4 -2 roll Box
+    Fill BorderProc
+} def
+
+% Line
+/Li {			% Stack: x y symbolSize
+    3 1 roll exch 3 -1 roll 2 div 3 copy
+    newpath
+        sub exch moveto add exch lineto
+    stroke
+} def
+
+% Diamond
+/Di {			% Stack: x y symbolSize
+    gsave
+	3 1 roll translate 45 rotate 0 0 3 -1 roll Sq
+    grestore
+} def
+
+
+%%BeginSetup
+gsave			% Save the graphics state
+
+% Default line style parameters
+
+1 setlinewidth		% width
+1 setlinejoin		% join
+0 setlinecap		% cap
+0 SetDashes		% dashes
+
+% Adjust coordinate system to use X11 coordinates
+
+0 792 translate
+1 -1 scale
+
+% User defined page layout
+
+/CL 1 def
+71 71 translate
+%%EndSetup
+
+14 /Times-Roman SetFont
+0.999985 0.999985 0.999985 SetBgColor  
+72 30 347 121 Box Fill
+gsave clip
+
+
+% Element "x"
+
+0.999985 0 0 SetFgColor  
+/DashesProc {} def
+1 setlinewidth
+newpath 74 34 moveto
+108 45 lineto
+129 92 lineto
+143 105 lineto
+154 117 lineto
+163 124 lineto
+171 125 lineto
+177 128 lineto
+183 130 lineto
+188 131 lineto
+193 132 lineto
+197 132 lineto
+201 132 lineto
+205 133 lineto
+208 134 lineto
+212 134 lineto
+215 134 lineto
+218 135 lineto
+220 136 lineto
+223 136 lineto
+225 137 lineto
+227 137 lineto
+230 137 lineto
+232 137 lineto
+234 138 lineto
+236 138 lineto
+238 138 lineto
+239 138 lineto
+241 138 lineto
+243 138 lineto
+245 138 lineto
+246 139 lineto
+248 139 lineto
+249 139 lineto
+251 140 lineto
+252 140 lineto
+253 140 lineto
+255 140 lineto
+256 140 lineto
+257 140 lineto
+258 140 lineto
+260 140 lineto
+261 140 lineto
+262 141 lineto
+263 141 lineto
+264 141 lineto
+265 141 lineto
+266 141 lineto
+267 141 lineto
+268 141 lineto
+269 141 lineto
+270 141 lineto
+271 141 lineto
+272 141 lineto
+273 141 lineto
+274 141 lineto
+275 141 lineto
+276 142 lineto
+276 142 lineto
+277 142 lineto
+278 142 lineto
+279 142 lineto
+280 142 lineto
+281 142 lineto
+281 142 lineto
+282 142 lineto
+283 142 lineto
+284 142 lineto
+284 142 lineto
+285 142 lineto
+286 142 lineto
+286 143 lineto
+287 143 lineto
+288 143 lineto
+288 143 lineto
+289 143 lineto
+290 143 lineto
+290 143 lineto
+291 143 lineto
+292 143 lineto
+292 143 lineto
+293 143 lineto
+293 143 lineto
+294 143 lineto
+295 143 lineto
+295 143 lineto
+296 143 lineto
+296 143 lineto
+297 143 lineto
+297 143 lineto
+298 143 lineto
+299 143 lineto
+299 144 lineto
+300 144 lineto
+300 144 lineto
+301 144 lineto
+301 144 lineto
+302 144 lineto
+302 144 lineto
+303 144 lineto
+303 144 lineto
+304 144 lineto
+304 144 lineto
+305 144 lineto
+305 144 lineto
+306 144 lineto
+306 144 lineto
+306 144 lineto
+307 144 lineto
+307 144 lineto
+308 144 lineto
+308 144 lineto
+309 144 lineto
+309 144 lineto
+310 144 lineto
+310 144 lineto
+310 144 lineto
+311 144 lineto
+311 144 lineto
+312 144 lineto
+312 144 lineto
+313 144 lineto
+313 144 lineto
+313 145 lineto
+314 145 lineto
+314 145 lineto
+315 145 lineto
+315 145 lineto
+315 145 lineto
+316 145 lineto
+316 145 lineto
+316 145 lineto
+317 145 lineto
+317 145 lineto
+318 145 lineto
+318 145 lineto
+318 145 lineto
+319 145 lineto
+319 145 lineto
+319 145 lineto
+320 145 lineto
+320 145 lineto
+320 145 lineto
+321 145 lineto
+321 145 lineto
+321 145 lineto
+322 145 lineto
+322 145 lineto
+322 145 lineto
+323 145 lineto
+323 145 lineto
+323 145 lineto
+324 145 lineto
+324 145 lineto
+324 145 lineto
+325 145 lineto
+325 145 lineto
+325 145 lineto
+326 145 lineto
+326 145 lineto
+326 145 lineto
+327 145 lineto
+327 145 lineto
+327 145 lineto
+328 145 lineto
+328 145 lineto
+328 145 lineto
+328 145 lineto
+329 145 lineto
+329 145 lineto
+329 145 lineto
+330 145 lineto
+330 145 lineto
+330 145 lineto
+330 145 lineto
+331 145 lineto
+331 145 lineto
+331 145 lineto
+332 145 lineto
+332 145 lineto
+332 145 lineto
+332 145 lineto
+333 145 lineto
+333 145 lineto
+333 145 lineto
+333 145 lineto
+334 145 lineto
+334 145 lineto
+334 145 lineto
+335 145 lineto
+335 145 lineto
+335 145 lineto
+335 145 lineto
+336 145 lineto
+336 145 lineto
+336 145 lineto
+336 145 lineto
+337 145 lineto
+337 145 lineto
+337 145 lineto
+337 145 lineto
+338 145 lineto
+338 145 lineto
+338 145 lineto
+338 145 lineto
+339 145 lineto
+339 145 lineto
+339 145 lineto
+339 146 lineto
+340 146 lineto
+340 146 lineto
+340 146 lineto
+340 146 lineto
+340 146 lineto
+341 146 lineto
+341 146 lineto
+341 146 lineto
+341 146 lineto
+342 146 lineto
+342 146 lineto
+342 146 lineto
+342 146 lineto
+342 146 lineto
+343 146 lineto
+343 146 lineto
+343 146 lineto
+343 146 lineto
+344 146 lineto
+344 146 lineto
+344 146 lineto
+344 146 lineto
+344 146 lineto
+345 146 lineto
+345 146 lineto
+345 146 lineto
+345 146 lineto
+346 146 lineto
+346 146 lineto
+346 146 lineto
+346 146 lineto
+346 146 lineto
+347 146 lineto
+347 146 lineto
+347 146 lineto
+347 146 lineto
+347 146 lineto
+348 146 lineto
+348 146 lineto
+348 146 lineto
+348 146 lineto
+348 146 lineto
+349 146 lineto
+349 146 lineto
+349 146 lineto
+349 146 lineto
+349 146 lineto
+350 146 lineto
+350 146 lineto
+350 146 lineto
+350 146 lineto
+350 146 lineto
+350 146 lineto
+351 146 lineto
+351 146 lineto
+351 146 lineto
+351 146 lineto
+351 146 lineto
+352 146 lineto
+352 146 lineto
+352 146 lineto
+352 146 lineto
+352 146 lineto
+353 146 lineto
+353 146 lineto
+353 146 lineto
+353 146 lineto
+353 146 lineto
+353 146 lineto
+354 146 lineto
+354 146 lineto
+354 146 lineto
+354 146 lineto
+354 146 lineto
+354 146 lineto
+355 146 lineto
+355 146 lineto
+355 146 lineto
+355 146 lineto
+355 146 lineto
+356 146 lineto
+356 146 lineto
+356 146 lineto
+356 146 lineto
+356 146 lineto
+356 146 lineto
+357 146 lineto
+357 146 lineto
+357 146 lineto
+357 146 lineto
+357 146 lineto
+357 146 lineto
+358 146 lineto
+358 146 lineto
+358 146 lineto
+358 146 lineto
+358 146 lineto
+358 146 lineto
+359 146 lineto
+359 146 lineto
+359 146 lineto
+359 146 lineto
+359 146 lineto
+359 146 lineto
+359 146 lineto
+360 146 lineto
+360 146 lineto
+360 146 lineto
+360 146 lineto
+360 146 lineto
+360 146 lineto
+361 146 lineto
+361 146 lineto
+361 146 lineto
+361 146 lineto
+361 146 lineto
+361 146 lineto
+361 146 lineto
+362 146 lineto
+362 146 lineto
+362 146 lineto
+362 146 lineto
+362 146 lineto
+362 146 lineto
+363 146 lineto
+363 146 lineto
+363 146 lineto
+363 146 lineto
+363 146 lineto
+363 146 lineto
+363 146 lineto
+364 146 lineto
+364 147 lineto
+364 147 lineto
+364 147 lineto
+364 147 lineto
+364 147 lineto
+364 147 lineto
+365 147 lineto
+365 147 lineto
+365 147 lineto
+365 147 lineto
+365 147 lineto
+365 147 lineto
+365 147 lineto
+366 147 lineto
+366 147 lineto
+366 147 lineto
+366 147 lineto
+366 147 lineto
+366 147 lineto
+366 147 lineto
+367 147 lineto
+367 147 lineto
+367 147 lineto
+367 147 lineto
+367 147 lineto
+367 147 lineto
+367 147 lineto
+367 147 lineto
+368 147 lineto
+368 147 lineto
+368 147 lineto
+368 147 lineto
+368 147 lineto
+368 147 lineto
+368 147 lineto
+369 147 lineto
+369 147 lineto
+369 147 lineto
+369 147 lineto
+369 147 lineto
+369 147 lineto
+369 147 lineto
+369 147 lineto
+370 147 lineto
+370 147 lineto
+370 147 lineto
+370 147 lineto
+370 147 lineto
+370 147 lineto
+370 147 lineto
+370 147 lineto
+371 147 lineto
+371 147 lineto
+371 147 lineto
+371 147 lineto
+371 147 lineto
+371 147 lineto
+371 147 lineto
+372 147 lineto
+372 147 lineto
+372 147 lineto
+372 147 lineto
+372 147 lineto
+372 147 lineto
+372 147 lineto
+372 147 lineto
+372 147 lineto
+373 147 lineto
+373 147 lineto
+373 147 lineto
+373 147 lineto
+373 147 lineto
+373 147 lineto
+373 147 lineto
+373 147 lineto
+374 147 lineto
+374 147 lineto
+374 147 lineto
+374 147 lineto
+374 147 lineto
+374 147 lineto
+374 147 lineto
+374 147 lineto
+375 147 lineto
+375 147 lineto
+375 147 lineto
+375 147 lineto
+375 147 lineto
+375 147 lineto
+375 147 lineto
+375 147 lineto
+375 147 lineto
+376 147 lineto
+376 147 lineto
+376 147 lineto
+376 147 lineto
+376 147 lineto
+376 147 lineto
+376 147 lineto
+376 147 lineto
+376 147 lineto
+377 147 lineto
+377 147 lineto
+377 147 lineto
+377 147 lineto
+377 147 lineto
+377 147 lineto
+377 147 lineto
+377 147 lineto
+377 147 lineto
+378 147 lineto
+378 147 lineto
+378 147 lineto
+378 147 lineto
+378 147 lineto
+378 147 lineto
+378 147 lineto
+378 147 lineto
+378 147 lineto
+379 147 lineto
+379 147 lineto
+379 147 lineto
+379 147 lineto
+379 147 lineto
+379 147 lineto
+379 147 lineto
+379 147 lineto
+379 147 lineto
+380 147 lineto
+380 147 lineto
+380 147 lineto
+380 147 lineto
+380 147 lineto
+380 147 lineto
+380 147 lineto
+380 147 lineto
+380 147 lineto
+380 147 lineto
+381 147 lineto
+381 147 lineto
+381 147 lineto
+381 147 lineto
+381 147 lineto
+381 147 lineto
+381 147 lineto
+381 147 lineto
+381 147 lineto
+381 147 lineto
+382 147 lineto
+382 147 lineto
+382 147 lineto
+382 147 lineto
+382 147 lineto
+382 147 lineto
+382 147 lineto
+382 147 lineto
+382 147 lineto
+382 147 lineto
+383 147 lineto
+383 147 lineto
+383 147 lineto
+383 147 lineto
+383 147 lineto
+383 147 lineto
+383 147 lineto
+383 147 lineto
+383 147 lineto
+383 147 lineto
+384 147 lineto
+384 147 lineto
+384 147 lineto
+384 147 lineto
+384 147 lineto
+384 147 lineto
+384 147 lineto
+384 147 lineto
+384 147 lineto
+384 147 lineto
+385 147 lineto
+385 147 lineto
+385 147 lineto
+385 147 lineto
+385 147 lineto
+385 147 lineto
+385 147 lineto
+385 147 lineto
+385 147 lineto
+385 147 lineto
+385 147 lineto
+386 147 lineto
+386 147 lineto
+386 147 lineto
+386 147 lineto
+386 147 lineto
+386 147 lineto
+386 147 lineto
+386 147 lineto
+386 147 lineto
+386 147 lineto
+386 147 lineto
+387 147 lineto
+387 147 lineto
+387 147 lineto
+387 147 lineto
+387 147 lineto
+387 147 lineto
+387 147 lineto
+387 147 lineto
+387 147 lineto
+387 147 lineto
+387 147 lineto
+388 147 lineto
+388 147 lineto
+388 147 lineto
+388 147 lineto
+388 147 lineto
+388 147 lineto
+388 147 lineto
+388 147 lineto
+388 147 lineto
+388 147 lineto
+388 147 lineto
+389 147 lineto
+389 147 lineto
+389 147 lineto
+389 147 lineto
+389 147 lineto
+389 147 lineto
+389 147 lineto
+389 147 lineto
+389 147 lineto
+389 147 lineto
+389 147 lineto
+390 147 lineto
+390 147 lineto
+390 147 lineto
+390 147 lineto
+390 147 lineto
+390 147 lineto
+390 147 lineto
+390 147 lineto
+390 147 lineto
+390 147 lineto
+390 147 lineto
+390 147 lineto
+391 147 lineto
+391 147 lineto
+391 147 lineto
+391 147 lineto
+391 147 lineto
+391 147 lineto
+391 147 lineto
+391 147 lineto
+391 147 lineto
+391 147 lineto
+391 147 lineto
+391 147 lineto
+392 147 lineto
+392 147 lineto
+392 147 lineto
+392 147 lineto
+392 147 lineto
+DashesProc stroke
+
+% Unset clipping
+grestore
+
+0.999985 0.999985 0.999985 SetBgColor  
+0 0 431 30 Box Fill
+0 30 72 121 Box Fill
+419 30 12 121 Box Fill
+0 151 431 64 Box Fill
+14 /Times-Roman SetFont
+0 0 0 SetFgColor  
+false 245 15.5 118 15 12 0 (Abundance by Rank) DrawText
+14 /Times-Roman SetFont
+0 0 0 SetFgColor  
+false 245 200.5 30 15 12 0 (Rank) DrawText
+14 /Times-Roman SetFont
+0 0 0 SetFgColor  
+false 74.5 174.5 23 15 12 0 (1E0) DrawText
+14 /Times-Roman SetFont
+0 0 0 SetFgColor  
+false 188.5 174.5 23 15 12 0 (1E1) DrawText
+14 /Times-Roman SetFont
+0 0 0 SetFgColor  
+false 303.5 174.5 23 15 12 0 (1E2) DrawText
+14 /Times-Roman SetFont
+0 0 0 SetFgColor  
+false 417.5 174.5 23 15 12 0 (1E3) DrawText
+0 0 0 SetFgColor  
+1 setlinewidth
+0 SetDashes
+417 154 74 154 DrawSegment
+108 154 108 159 DrawSegment
+129 154 129 159 DrawSegment
+143 154 143 159 DrawSegment
+154 154 154 159 DrawSegment
+163 154 163 159 DrawSegment
+171 154 171 159 DrawSegment
+177 154 177 159 DrawSegment
+183 154 183 159 DrawSegment
+188 154 188 159 DrawSegment
+74 154 74 163 DrawSegment
+223 154 223 159 DrawSegment
+243 154 243 159 DrawSegment
+257 154 257 159 DrawSegment
+268 154 268 159 DrawSegment
+277 154 277 159 DrawSegment
+285 154 285 159 DrawSegment
+292 154 292 159 DrawSegment
+297 154 297 159 DrawSegment
+303 154 303 159 DrawSegment
+188 154 188 163 DrawSegment
+337 154 337 159 DrawSegment
+357 154 357 159 DrawSegment
+371 154 371 159 DrawSegment
+383 154 383 159 DrawSegment
+392 154 392 159 DrawSegment
+399 154 399 159 DrawSegment
+406 154 406 159 DrawSegment
+412 154 412 159 DrawSegment
+417 154 417 159 DrawSegment
+303 154 303 163 DrawSegment
+417 154 417 163 DrawSegment
+14 /Times-Roman SetFont
+0 0 0 SetFgColor  
+false 15.5 90 68 15 12 90 (Abundance) DrawText
+14 /Times-Roman SetFont
+0 0 0 SetFgColor  
+false 45.5 103.5 21 15 12 0 (100) DrawText
+14 /Times-Roman SetFont
+0 0 0 SetFgColor  
+false 46 58.5 20 15 12 0 (200) DrawText
+0 0 0 SetFgColor  
+1 setlinewidth
+0 SetDashes
+69 34 69 147 DrawSegment
+69 125 64 125 DrawSegment
+69 80 64 80 DrawSegment
+69 103 60 103 DrawSegment
+69 36 64 36 DrawSegment
+69 58 60 58 DrawSegment
+showpage
+%Trailer
+grestore
+end
+%EOF

@@ -1,0 +1,7 @@
+set out 'plotfile'
+set term post 
+replot
+set out
+set term x11
+# !lpr -h plotfile
+replot

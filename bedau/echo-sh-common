@@ -1,0 +1,114 @@
+#
+# Some shell functions used with setting up the
+# Echo distribution.
+#
+
+PATH=/usr/bin:/usr/ucb:/bin:$PATH
+myname=`basename $0`
+cwd=`pwd`
+
+#
+# Issue an error message to stderr and exit.
+#
+fatal()
+{
+	echo "$myname: $@" 1>&2
+	exit 1
+}
+
+#
+# Issue a message to stderr, but don't exit.
+#
+message()
+{
+	echo "$myname: $@" 1>&2
+}
+
+#
+# dir_exists()
+#
+# Return 0 or 1 according to whether $1 exists and is a directory.
+#
+dir_exists()
+{
+        if test -d $1
+        then
+                return 0
+        else
+                return 1
+        fi
+}
+
+#
+# check_dir_exists()
+#
+# Check that the first argument is a directory. Exit if not.
+#
+check_dir_exists()
+{
+        if dir_exists $1
+        then
+                return
+        fi
+
+        fatal "directory \"$1\" does not exist."
+}
+
+#
+# file_exists()
+#
+# Return 0 or 1 according to whether $1 exists and is a file.
+#
+file_exists()
+{
+        if test -f $1
+        then
+                return 0
+        else
+                return 1
+        fi
+}
+
+#
+# check_file_exists()
+#
+# Check that the first argument is a file. Exit if not.
+#
+check_file_exists()
+{
+        if file_exists $1
+        then
+                return
+        fi      
+        fatal "file \"$1\" does not exist."
+}
+
+#
+# file_writable()
+#
+# Return 0 or 1 according to whether $1 is writable.
+#
+file_writable()
+{
+        if test -w $1
+        then
+                return 0
+        else
+                return 1
+        fi
+}
+
+#
+# check_file_writable()
+#
+# Exit if $1 is not writable.
+#
+check_file_writable()
+{
+        if test -w $1
+        then
+                return
+        fi
+
+	fatal "file \"$1\" is not writable."
+}

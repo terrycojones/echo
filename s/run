@@ -1,0 +1,21 @@
+#!/bin/sh
+
+d=/net/user/terry/r/echo
+
+### picuris taos nambe zia zuni winnetou acoma cochiti ute
+
+for i in winnetou acoma
+do
+  n=200
+  suff=${n}.${n}.${n}.${n}
+  o=$d/RESULTS/${suff}.$i
+  e=$o.errors
+  
+  if [ $i = "$HOST" ]
+  then
+    nice -19 $d/Echo.ng -runs 50 -graphics -world insects.$suff -g 500 >> $o 2>> $e &
+  else
+    rsh $i nice -19 $d/Echo.ng -runs 50 -graphics -world insects.$suff -g 500 \>\> $o 2\>\> $e </dev/null >/dev/null &
+  fi
+done
+

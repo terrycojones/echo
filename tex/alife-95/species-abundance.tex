@@ -1,0 +1,260 @@
+\section{Ecological Considerations}
+\label{species-abundance}
+
+Does the model described in the previous sections behave similarly to
+natural ecological systems?  Comparing Echo with properties of ecological 
+systems might help us answer this question; some such properites are listed 
+below:
+\begin{itemize}
+\item Stable patterns of interactions among variants, or trophic networks,
+such as the ant-fly-catepillar triangle described in [REFERENCE], or
+[CITE YALE GROUP].
+\item Different levels of resources, i.e., what happens when the
+amount of resources pumped into the system at each time step is
+increased or decreased?  
+\item Relative species abundance (trajectories, duration,
+distributions).
+\item Community assembly patterns.
+\item Cataclysmic events such as meteors, droughts, etc.
+\item Isolation effects---what happens when a number of sites are
+allowed to evolve independently (with no migration) and then
+the sites are connected (i.e., migration is enabled).
+\item Flows of resources---are there resource sources and sinks?  How
+quickly do resources flow through the system?  With what are rates of
+flows correlated?
+\item Transitions from single-cellular to multi-cellular organization
+(this last question requires certain extensions to the Echo model
+described in Section \ref{echo-overview}.
+\end{itemize}
+We have examined several of these questions informally by observing
+running Echo models.  In these studies, we start Echo either with a
+population of arbitrarily chosen [randomly constructed] agents or 
+(more typically) with a fixed collection of agents (e.g., that implement a 
+trophic triangle).
+
+[a paragraph here on the Yale work.]
+
+In the remainder of this paper, we consider one of these properties in
+detail---species abundance patterns.  The experiments described in the
+following two sections show how species abundance patterns can be used
+to test whether or not Echo exhibits ecologically plausible behavior.
+We use two techniques to test the hypothesis that diversity patterns
+in Echo resemble those of natural systems: quantitative and
+qualitative expectations and a neutral model.  To make a falsifiable
+comparison with biological systems, we consider two ecological
+patterns, each of which has similar quantitative properties in many
+different ecosystems---the Preston curve and the species-area scaling
+relation.  This allows us to compare Echo diversity patterns with
+empirical patterns of species abundance.  In the case of the Preston
+curve, careful quantitative comparisons are problematic for
+several reasons, so we report more detailed results for the
+species-area scaling relation.  Because evolution of agent genotypes
+is the mechanism of principle interest in Echo, we define a neutral
+model that removes specific selective pressures and compare
+its behavior with that of the original Echo model.
+
+%In the introduction, we discussed difficulties in modeling CAS, and
+%relative merits of Echo as a model of CAS.
+
+% \subsection{Species Diversity}
+ 
+Species diversity in ecological communities is often considered the
+single most interesting ecological variable
+\cite{Hutchinson59,May75,May86,Brown81}.  One reason for this interest
+is the overwhelming number of species found on Earth; approximately 30
+million species live today, and a great many more have lived and
+suffered extinction \cite{Brown94,Raup91}.  Another reason is that
+species diversity is believed to play a role in the stability of
+ecosystems to perturbations or invasions.  Ultimately, the science of
+ecology seeks means for predicting species diversity, by identifying
+those mechanisms which regulate it, for example \cite{Brown81}:
+\begin{quote}
+  One of the greatest remaining challenges in biology is to explain
+  the diversity of living things.  What determines the number and
+  kinds of animals, plants and microbes that live together in one
+  place?  What causes variation in diversity from one place to
+  another?  What accounts for changes in the abundance and identity of
+  species over time?  How do individual species contribute to the
+  diversity and stability of the natural world? (p. 877)
+\end{quote}
+ 
+A related property of ecological communities is the relative
+abundances of species.  Consider a sample of vegetation from a
+semi-arid desert or tropical forest.  What is the distribution of
+individuals into species?  Many factors will contribute to this
+distribution.  These include ecological factors (e.g., the presence or
+absence of various predators or mutualists, and relative population
+sizes and distances), environmental factors (e.g., temperature,
+availability of precipitation, and soil texture and quality), and
+experimental factors (e.g., size of sample, scale of observer, and
+location of the sample).  Ecologists have performed such sampling
+countless times from many biota.  One purpose of such
+sampling is to describe the way $N_{tot}$ individuals present are
+partitioned into $S_{tot}$ species, and in particular, to determine
+whether the distribution of species fits a mathematically distinct
+pattern.  If it does, then it is relevant to ask what biological
+processes could produce this pattern.  Such analyses help to identify
+processes that regulate species diversity.
+
+\subsection{The Preston Distribution}
+\label{preston-distribution}
+
+When sampling experiments are performed on natural ecosystems, a
+common result is that most species sampled have few representatives;
+that is, most species are rare, but a few are common
+\cite{Preston62a,May75,Brown81,Brown94}.  Preston's canonical
+log-normal distribution is the most widely accepted formalization of
+the relative commonness and rarity of species.  When species counts
+are plotted on linear axes, the distribution is unimodal and
+right-skewed with an extremely long tail.  Because it is impossible to
+observe less than a single individual representing a species, these
+distributions are truncated on the left at what Preston called the
+``veil line.''  When plotted on a log-transformed $x$-axis, the
+distribution above the veil line closely resembles a normal
+distribution.  Preston observed this and postulated that species
+counts follow log-normal distributions.
+
+To construct these curves, Preston counted abundances of sampled
+species and grouped them into a series of ``octaves''
+\cite{Preston48}.  An octave is simply a logarithmic (base 2) grouping
+of species abundances.  His octaves were labeled ``$<1$'', ``1--2'',
+``2--4'', and so forth.  Preston plotted octaves on the $x$-axis and
+the number of species per octave, a frequency of frequencies, on the
+$y$-axis. If a species abundance fell within octave boundaries, it
+counted as one species in that octave. If an abundance fell on the
+boundary between octaves, (as will any value which is a power of 2),
+one-half was counted in the two neighboring octaves.
+
+Preston constructed these curves for a number of biota,
+and found their general shape was well approximated by a Gaussian
+(normal) distribution of the form $$ y = y_0 e^{-{(aR)}^2} $$ where
+$y$ is the number of species falling into the $R^{th}$ octave left or
+right of the modal octave, $y_0$ is the value of the mode of the
+distribution and $a$ is a constant, related to the logarithmic
+standard deviation ($\sigma$) such that $a = (2\sigma)^{-\frac{1}{2}}$
+\cite{Preston48,MacArthurAndWilson67}.  In particular, Preston found
+that the value of $a$ tended to be in the vicinity of $0.2$.  This
+observation gave rise to the ``canonical'' log-normal distribution 
+\cite{Preston62a,Preston62b}.  In the canonical distribution, the
+general log-normal distribution is reduced to a family of log-normal
+distributions with similar variance. This relationship makes it
+possible to predict relative species abundances given only the
+number of individuals or the number of species
+\cite{Preston62a,Sugihara80}. 
+
+[INSERT HERE pp. 13-18 (edited down) and data from Forrest/Jones Echo paper
+---possibly in the results section (PTH prefers that stuff goes in results)]
+
+Several considerations lead us to question whether the log-normal
+distribution is an important consequence of identifiable ecological
+processes or whether it is simply the expected outcome of a random
+process with certain properties.  It is well-known that
+log-normal distributions often arise when random processes are the
+outcomes of multiplicatively compounded subprocesses
+\cite{AitchisonBrown57,May75,May86,Hogg90a,MontrollSchlesinger82,Sugihara80}.
+
+%Could the constraint on observed variance also result from
+%non-biological causes?  [STEPH/pETER: what are we really trying to say
+%here?]  
+% In Section \ref{neutral-model}, we address this question by
+% using a neutral model to study species diversity.  But, it didn't
+% tell us much
+
+Randomly compounded subprocesses can account for log-normal
+distributions in general, but they fail to account for Preston's
+``canonical'' log-normal, in which distributions always have similar
+variance.  A number of steps used to construct Preston curves may
+limit species abundance distributions to the canonical family.  For
+example, the procedure of splitting a count between octaves forces an
+inflection of the curve about a mode of one.  In the case of
+singletons (species with only one representative), half of the counts
+are assigned to the octave labelled ``$<1$'', and half of the counts
+are assigned to the ``1--2'' octave.  Species with 2, 3, or 4
+representatives will also fall into the ``1--2'' octave, so this
+octave will generally have a greater value than the ``$<1$'' octave.
+Thus, the observation of an inflection near the veil line is caused by
+the binning procedure used in constructing the histogram.  If an
+alternative procedure were used, we might not observe an inflection,
+and perhaps not infer a unimodal distribution.  Other researchers have
+indicated that fitting a specific nonlinear function to discretized
+data \cite{Pielou77}, as well as sampling and histogram binning procedures
+\cite{May75,May86} complicate the task of testing formally for a
+canonical log-normal distribution.  All of these complications make it
+difficult to explain what mechanisms cause the Preston distribution.
+
+%[MOVE THIS SENTENCE.  IT'S REDUNDANT HERE.]  Do ecological processes
+%or chance alone produce the canonical log-normal distribution?  This
+%is one question we will address using a neutral model to study species
+%diversity.  [PETER: how does the neutral model address this question?]
+
+Whether or not a meaningful statistical test can be performed,
+describing the relative abundaces of species is an ecologically
+meaningful activity, and serves as an important first check of how
+Echo compares with empirical distributions of abundance.  Our data
+show a good qualitative resemblance, under a wide range of Echo
+operating conditions, as shown in Figure \ref{fig:preston-curves} and
+\cite{ForrestAndJones94}  [PTH says this statement should be moved into the
+results section].  However, we believe that a more meaningful
+test can be performed by studying a related phenomenon---the relation of
+species richness ($S_{tot}$) to size of habitat (or sample).  This
+is a better way to compare Echo with empirical systems for two
+reasons: the species-area function is linear (and therefore much
+easier to identify than a Preston distribution), and the slope of the 
+line should match the value observed in nature.
+
+\subsection{The Species-Area Scaling Relation}
+
+As more individuals are collected, more species will be found.
+Preston observed that doubling the number of individuals sampled will
+``unveil'' another octave in the species curve by moving all species
+counts one bin to the right \cite{Preston48,Preston62a}.  One way to
+collect more individuals is to increase the area of the sample.  This
+can be achieved either by increasing sample size, or by
+sampling from similar habitats of increasing area.  Conveniently,
+islands in an archipelago provide ecologists with natural sampling
+units of varied size, all with similar climate and terrain. 
+
+When species richness is tallied for islands of increasing area, the
+following scaling relation holds:  $S_{tot} = cA^z$, where $S_{tot}$
+is the total number of species, $A$ is the area of the habitat (e.g.,
+an island or mountaintop), and $c$ and $z$ are regression constants.
+For empirical ecological communities with a canonical log-normal
+distribution of abundances, $z \approx \frac{1}{4}$.  This relation and the
+value for $z$ can be predicted from the Preston distribution
+\cite{Preston62a,May75,Pielou77} and is well supported empirically
+\cite{Preston62a,MacArthurAndWilson67,DurrettAndLevin95}.
+
+The species-area scaling relation is an important ecological
+pattern.  The theory of island biogeography theory is predicated
+on species-area relations \cite{MacArthurAndWilson67}.  In
+conservation biology, this relation has been used to predict the
+effects of different reserve sizes on species diversity.  Although the
+species-area relation can be derived from Preston's canonical
+log-normal distribution, a satisfactory explanation of the processes
+that regulate this relation has not been advanced
+\cite{DurrettAndLevin95}.  Exceptions to the species-area relation can be 
+found (see, e.g., \cite{Preston80}), which help identify mechanisms
+which shape the species-area curve.  For instance, a value for $z$
+larger than $\frac{1}{4}$ is typically found when sampling at the continental
+scale.  This is taken to reflect the effect of greater habitat
+heterogeneity represented by vast regions of complex terrain
+\cite{MacArthurAndWilson67}.
+
+%[STEPH: do we need the rest of this 
+%paragraph?] Trivially, the value for $z$ must range between 
+%0 and 1.  The case of $z=0$ implies no turnover in species with
+%increasing area, while $z=1$ implies that doubling area will double
+%$S$, or that there is no redundancy of species with increasing area
+%\cite{May75}.
+
+The Preston curve and species-area scaling relation are two relatively
+robust ecological phenomena.  The next section describes experiments
+that ask whether Echo exhibits these phenomena, both for the original
+and the neutral versions of Echo.  The species-area curve is our
+primary focus for formal quantitative comparision, for the reasons
+just discussed, but we include some data on Preston distributions for
+comparison.  An earlier study \cite{ForrestAndJones94} examined more
+carefully whether Echo populations resemble Preston distributions but
+did not use a neutral model.
+
+

@@ -1,0 +1,5 @@
+bashrc ()
+{
+	unset BASH_SETUP
+	. ~/.bashrc
+}

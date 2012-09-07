@@ -1,0 +1,19 @@
+#!/bin/sh
+
+case "$LOCATION" in
+	sfi) dir=/net/user/terry/r/echo/bedau ;;
+	home) dir=/u/terry/r/echo/bedau ;;
+esac
+
+ECHO_LOCATION=$dir/OBJECTS
+export ECHO_LOCATION
+
+ECHO_WORLD=insects
+ECHO_SITE=insects
+ECHO_AGENT=fly
+
+export ECHO_WORLD
+export ECHO_SITE
+export ECHO_AGENT
+
+$dir/Echo -graphics no $@

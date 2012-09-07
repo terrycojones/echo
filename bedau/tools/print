@@ -1,0 +1,16 @@
+#!/bin/sh
+
+case `basename $0` in
+	iprint) x=../bin/insert-pop ;;
+	print) x=cat ;;
+	*) echo "I don't know my own name!"; exit 1;;
+esac
+
+for i in $*
+do
+	gzip -d -c gene$i.gz | 
+	$x |
+	./bedau_stats -options options.gene$i -bs 0.26 > gene$i.usage
+	ssplot -O gene$i.ps gene$i.usage
+	#lpr -s gene$i.ps
+done

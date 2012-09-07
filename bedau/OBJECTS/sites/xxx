@@ -1,0 +1,10 @@
+Name : xxx
+Mutation_Probability : 0.0005
+Crossover_Probability : 0.7
+Random_Death_Probability : 0.0001
+Production_Function : 5 5 5 5
+Initial_Resource_Levels : 0 0 0 0
+Maximums : 10 10 10 10
+Maintenance : 1 1 1 1
+Agents : 
+xxx

@@ -1,0 +1,97 @@
+#!/bin/sh
+
+PATH=$HOME/r/echo/tex/complex-94/bin:$PATH
+
+name="`basename $0`"
+
+prob=
+sample=cat
+preston=cat
+add_linenumbers=0
+
+case "$name" in
+	make-graph) 
+		title="Abundance by Rank"
+		xtitle=Rank
+		ytitle=Abundance
+		add_linenumbers=1
+	;;
+	make-sampled-graph)
+		case $# in
+			0 | 1) echo "usage: $name probability {legend-entry datafiles}..."; exit 1;;
+		esac
+		
+		prob=$1
+		shift
+		sample="sample $prob"
+		title="Abundance by Rank ($prob sampling probability)"
+		xtitle=Rank
+		ytitle=Abundance
+		add_linenumbers=1
+	;;
+	make-preston-graph)
+		case $# in
+			0) echo "usage: $name {legend-entry datafiles}..."; exit 1;;
+		esac
+
+		title="Preston Species Curve"
+		xtitle=Octave
+		ytitle="Species per Octave"
+		preston=preston
+	;;
+	make-sampled-preston-graph)
+		case $# in
+			0 | 1) echo "usage: $name probability {legend-entry datafiles}..."; exit 1;;
+		esac
+
+		title="Species Curve ($1 sampling probability)"
+		xtitle=Octave
+		ytitle="Species per Octave"
+		sample="sample $1"
+		prob=$1
+		preston=preston
+		shift
+	;;
+	*) echo "$0: I don't recognize my own name!"; exit 1;;
+esac
+
+args=
+remove=
+
+while [ $# -ne 0 ]
+do
+	case $# in
+		1) 
+			case $sample in
+				cat) echo "usage: $name {legend-entry datafiles}...";;
+				*) echo "usage: $name probability {legend-entry datafiles}...";;
+			esac
+
+			exit 1
+		;;
+	esac
+
+	legend="$1"
+	shift
+	x=`basename $1`
+	args="$args '$legend' /tmp/$$.$x"
+	remove="$remove /tmp/$$.$x"
+	echo Processing $1
+	awk '{print $1}' $1 | $sample | sort | uniq -c | sort -n -r | awk '{print $1}' | $preston > /tmp/$$.$x
+
+	case $add_linenumbers in
+		1) 
+			awk '{printf "%d %d\n", NR, $1}' /tmp/$$.$x > /tmp/$$.${x}1
+			mv /tmp/$$.${x}1 /tmp/$$.$x
+		;;
+	esac
+
+	shift
+done
+
+eval graph \"$title\" \"$xtitle\" \"$ytitle\" 0 curve$prob $args
+
+rm -f $remove
+#echo rm -f $remove
+
+

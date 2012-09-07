@@ -1,0 +1,394 @@
+#!/usr/local/bin/wish -f
+
+set initialized 0
+
+#
+# Canvas display variables.
+#
+set site_height             25
+set site_width              25
+set x_gap                    5
+set y_gap                    5
+
+#
+# Color variables.
+#
+set level_width             20
+set level_height            10
+set nlevels                 10
+set color_scale_factor       0
+set color_scale_multiplier   2.0
+set levels_scale_exponent    2.48
+set levels_scale_multiplier  1.2
+
+#
+# Resource 'a' levels
+#
+set a_levels(0,0)            0
+set max_a_level              0
+
+#
+# Convenient names for widgets.
+#
+set canvas  .f.canvas
+set scale   .f.scale
+set menu    .f.menu
+
+
+#
+# Variables concerned with where water is to be found.
+#
+set nwater_sites             0
+set water_sites_x(0)         0
+set water_sites_y(0)         0
+set water_width              7
+set water_height             7
+
+
+if {$argc == 0} {
+  puts "Reading from stdin..."
+  set f stdin
+} else {
+  set filename [lindex $argv 0]
+  set f [open $filename r]
+}
+
+proc initialize {} {
+
+  global f canvas menu canvas_height canvas_width scale \
+    level_width level_height nlevels site_width
+
+  wm title . "Echo Resource Viewer"
+  wm minsize . 1 1
+  wm iconbitmap . @bitmaps/jhh_smaller.bm
+  wm iconname . "Ants, flies and caterpillars!"
+
+
+  frame .f
+  pack .f -side top -expand 1 -fill both
+  
+  # .f.view holds the canvas
+  frame .f.view 
+
+  canvas $canvas -height $canvas_height -width $canvas_width -relief raised
+
+  frame .f.levels -relief groove -borderwidth 2
+
+  frame .f.levels.b1
+  frame .f.levels.b2
+
+  button .f.levels.b11 -bitmap @bitmaps/rplay.bm   -command {narrow_levels_range} -fg grey
+  button .f.levels.b12 -bitmap @bitmaps/rplay.bm   -command {narrow_color_range} -fg grey
+  button .f.levels.b21 -bitmap @bitmaps/play.bm -command {widen_levels_range}  -fg grey
+  button .f.levels.b22 -bitmap @bitmaps/play.bm -command {widen_color_range}  -fg grey
+
+  pack .f.levels.b11 .f.levels.b12 -padx 10 -in .f.levels.b1
+  pack .f.levels.b21 .f.levels.b22 -padx 10 -in .f.levels.b2
+
+  pack .f.levels.b1 -in .f.levels -side left -pady 10
+
+  for {set i 0} {$i < $nlevels} {incr i} {
+    frame  .f.levels.$i
+    label  .f.levels.$i.label  -width 3 -text $i
+    canvas .f.levels.$i.canvas -width $level_width -height $level_height -bg grey
+
+    pack   .f.levels.$i.label  -in .f.levels.$i -fill y
+    pack   .f.levels.$i.canvas -in .f.levels.$i -fill y
+    pack   .f.levels.$i        -in .f.levels    -side left -fill x
+  }
+
+  pack .f.levels.b2 -in .f.levels -side left -pady 10
+
+  scale .f.sidescale -orient horizontal -relief raised -command "destroy_sites" -from 1 -to 50 \
+    -label "Site Size" -showvalue 1
+  .f.sidescale set $site_width
+
+
+  #  button .f.print   -text "Print"   -command {print_canvas} -relief raised
+  
+  frame $menu -relief raised -borderwidth 1
+  pack $menu -fill x -in .f
+
+  #
+  # The Files menu.
+  #
+  menubutton .f.menu.files -text Files -menu .f.menu.files.m -underline 0
+  menu .f.menu.files.m
+
+  .f.menu.files.m add command -label "Quit" -command {destroy .} -underline 0
+
+  pack .f.menu.files -side left -in $menu
+
+  pack .f.sidescale -in .f.view -fill x
+  pack $canvas -in .f.view
+  pack .f.levels -in .f.view
+
+  pack .f.view    -side left -in .f
+}
+
+
+proc draw_sites {} {
+  global canvas rows cols site_height site_width x_gap y_gap a_levels
+
+  for {set row 0} {$row < $rows} {incr row} {
+    for {set col 0} {$col < $cols} {incr col} {
+
+      set x1 [expr $x_gap + $col * ($x_gap + $site_width)]
+      set y1 [expr $y_gap + $row * ($y_gap + $site_height)]
+      set x2 [expr $x1 + $site_width]
+      set y2 [expr $y1 + $site_height]
+
+      $canvas create rectangle $x1 $y1 $x2 $y2 \
+	-fill [get_color $a_levels($row.$col)] \
+	-outline black -tags s.$row.$col
+    }
+  }
+}
+
+proc destroy_sites {size} {
+  global canvas site_height site_width site_height displayed_generation initialized \
+    canvas_height canvas_width
+
+  if {$initialized == 0} {
+    return
+  }
+  
+  $canvas delete all
+
+  set_canvas_dimensions $size
+  
+  $canvas configure -width $canvas_width -height $canvas_height
+  
+  draw_sites
+  draw_water_sites
+  update
+}
+
+proc name_and_color_levels {} {
+
+  global max_population nlevels .f levels_scale_exponent 
+
+  for {set i 0} {$i < $nlevels} {incr i} {
+    set level [expr int(pow($i, $levels_scale_exponent))]
+    .f.levels.$i.canvas configure -bg [get_color $level]
+    .f.levels.$i.label  configure -text $level
+  }
+}
+
+proc narrow_levels_range {} {
+  global levels_scale_exponent levels_scale_multiplier
+
+  set levels_scale_exponent [expr $levels_scale_exponent * $levels_scale_multiplier]
+  name_and_color_levels
+  redraw_sites
+}
+
+proc widen_levels_range {} {
+  global levels_scale_exponent levels_scale_multiplier
+
+  set levels_scale_exponent [expr $levels_scale_exponent / $levels_scale_multiplier]
+
+  if {$levels_scale_exponent < 1.0} {
+    set levels_scale_exponent 1.0
+  }
+
+  name_and_color_levels
+  redraw_sites
+}
+
+proc narrow_color_range {} {
+  global color_scale_factor color_scale_multiplier
+
+  adjust_cscale [expr int($color_scale_factor * $color_scale_multiplier)]
+}
+
+proc widen_color_range {} {
+  global color_scale_factor color_scale_multiplier
+
+  adjust_cscale [expr int($color_scale_factor / $color_scale_multiplier)]
+}
+
+proc adjust_cscale {setting} {
+
+  global color_scale_factor
+
+  set color_scale_factor $setting
+
+  name_and_color_levels
+  redraw_sites
+}
+
+
+proc read_rows_cols {} {
+
+  global f nsites canvas_height canvas_width rows cols x_gap y_gap site_height site_width
+
+  if {[gets $f rows] < 0} {
+    puts stderr "Could not read number of rows!"
+    exit
+  }
+
+  if {[gets $f cols] < 0} {
+    puts stderr "Could not read number of cols!"
+    exit
+  }
+
+  set nsites [expr $rows * $cols]
+  set canvas_height [expr $y_gap * ($rows + 1) + $site_height * $rows]
+  set canvas_width [expr $x_gap * ($cols + 1) + $site_width * $cols]
+}
+
+proc set_canvas_dimensions {side} {
+
+  global canvas_height canvas_width rows cols x_gap y_gap site_height site_width
+
+  set site_height $side
+  set site_width $side
+  
+  set canvas_height [expr $y_gap * ($rows + 1) + $site_height * $rows]
+  set canvas_width [expr $x_gap * ($cols + 1) + $site_width * $cols]
+}
+
+proc read_a_levels {} {
+
+  global f rows cols a_levels max_a_level color_scale_factor
+
+  for {set row 0} {$row < $rows} {incr row} {
+    for {set col 0} {$col < $cols} {incr col} {
+      if {[gets $f a_levels($row.$col)] <= 0} {
+	puts stderr "Could not read resource 'a' level for site ($row, $col)"
+	exit
+      }
+
+      if {$a_levels($row.$col) > $max_a_level} {
+	set max_a_level $a_levels($row.$col)
+      }
+    }
+  }
+
+  set color_scale_factor [expr 65535 / $max_a_level / 2]
+}
+
+
+
+proc read_water_sites {} {
+
+  global f nwater_sites water_sites_x water_sites_y
+  
+  while {[gets $f line] > 0} {
+    # read the sites that have water available. these are terminated by a blank line.
+
+    set tmp [split $line { }]
+
+    if {[llength $tmp] != 2} {
+      puts "Found water site line with [llength $tmp] fields instead of 2."
+      break
+    }
+
+    
+    set water_sites_x($nwater_sites) [lindex $tmp 0]
+    set water_sites_y($nwater_sites) [lindex $tmp 1]
+    
+    incr nwater_sites
+  }
+}
+
+proc draw_water_sites {} {
+
+  global f canvas nwater_sites water_sites_x water_sites_y water_width water_height \
+    x_gap y_gap site_width site_height 
+  
+  for {set i 0} {$i < $nwater_sites} {incr i} {
+    
+    set row $water_sites_x($i)
+    set col $water_sites_y($i)
+    
+    $canvas itemconfigure s.$row.$col -width 4 -outline blue
+  }
+}
+
+proc redraw_sites {} {
+
+  global f canvas rows cols a_levels
+  
+  for {set row 0} {$row < $rows} {incr row} {
+    for {set col 0} {$col < $cols} {incr col} {
+    
+      $canvas itemconfigure s.$row.$col -fill [get_color $a_levels($row.$col)]
+    }
+  }
+}
+
+proc get_color {pop_level} {
+  global color_scale_factor
+
+  if {$pop_level == 0} {
+    return "#ffffffff0000"
+  }
+
+  # set level [expr 4294967295 - $pop_level * $color_scale_factor]
+  set level [expr $pop_level * $color_scale_factor]
+
+  #puts "pop_level is $pop_level\nlevel is $level\ncolor scale factor is $color_scale_factor"
+
+  if {$level < 0} {
+    set level 0
+  } else {
+    if {$level > 65535} {
+      set level 65535
+    }
+  }
+
+  # this gives yellow to navy blue, level 0..65535
+  # return [format "#%04x%04x%04x" [expr 65535 - $level] [expr 65535 - $level] $level]
+
+  # this gives cyan to red, level 0..65535
+  #return [format "#%04x%04x%04x" $level [expr 65535 - $level] [expr 65535 - $level]]
+
+  # yellow to red?
+  return [format "#ffff%04x0000" [expr 65535 - $level]]
+}
+
+
+#proc get_color {pop_level} {
+#  global color_scale_factor
+#
+#  if {$pop_level == 0} {
+#    return "#ffffffff0000"
+#  }
+#
+#  set level [expr 65535 - $pop_level * $color_scale_factor]
+#
+#  if {$level < 0} {
+#    set level 0
+#  } else {
+#    if {$level > 65535} {
+#      set level 65535
+#    }
+#  }
+#
+#  return [format "#%04x%04x0000" $level $level]
+#}
+
+
+proc print_canvas {} {
+  global canvas
+
+  $canvas postscript -colormode gray -file resource-canvas.ps -pageheight 7i -pagewidth 7i
+}
+  
+
+read_rows_cols
+read_water_sites
+read_a_levels
+initialize
+set initialized 1
+draw_sites
+draw_water_sites
+name_and_color_levels
+update
+
+
+# Local Variables:
+# mode:tcl
+# End: ***

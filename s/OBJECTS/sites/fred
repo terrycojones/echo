@@ -1,0 +1,10 @@
+Name : fred
+Mutation_Probability : 0.001
+Crossover_Probability : 0.7
+Random_Death_Probability : 0.0003
+Production_Function : 100 100 100 100
+Initial_Resource_Levels : 1000 1000 1000 1000
+Maximums : 100 100 100 100
+Maintenance : 2 1 4 1
+Agents : 
+fred 100

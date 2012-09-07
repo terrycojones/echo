@@ -1,0 +1,76 @@
+
+The files in this directory are designed to take the output files from
+an Echo run and turn them into files that can be graphed to produce
+species curves.
+
+The files are
+
+	cluster-to-species
+	graph
+*	make-graph
+*	make-preston-graph -> make-graph
+*	make-sampled-graph -> make-graph
+*	make-sampled-preston-graph -> make-graph
+	preston
+*	process-abundance
+	sample
+	cluster-cluster
+
+
+only those with an * are designed to be called by the user.  When an
+Echo run is done, the OBJECTS directory will contain files of the form
+seed.population and seed.cluster, where seed is some (usually) large
+integer. Assume for the purposes of example, that seed = 776503203.
+
+The you should do the following
+
+process-abundance 776503203
+
+This will produce three files: 
+    776503203.species
+    776503203.genome-abundance
+    776503203.genome-by-species. 
+
+The last of these may take a long time to generate (e.g 10 minutes
+for a few thousand agents in the final population).
+
+You can then use any of the make-graph variants to view the files. You
+can either view the plain population file, or the file where the agents
+are grouped by "species" (i.e. the files 776503203.population and
+776503203.genome-by-species).
+
+You create the graphs by giving make-graph an even number of
+arguments. The odd numbered arguments correspond to names for the
+legend, and the even numbered arguments correspond to files of data.
+Thus for instance:
+
+make-graph '100 resources' 776503203.by-species
+
+you can give any number of such pairs of arguments.
+
+
+It is also possible to have the data file sampled before being
+graphed. To do this, use make-sampled-graph and provide a sampling
+probability as a first argument and pairs of legend and file names
+after that as above. E.g.
+
+make-sampled-graph 0.7 '100 resources' 776503203.by-species
+
+which will only pass on 70% of the data lines (on average) to the
+graph program.  Each line is selected independently at random with a
+0.7 chance.
+
+If you use the 'preston' version of either of these programs, the data
+will be grouped into octaves the way Preston did it.
+
+
+That's it. I think. The other programs you can look at and figure them
+out for yourself. After all, you probably wrote them...
+
+Terry Jones
+11 August 1994
+
+
+P.S. The legend is off in the graphs by default. You can get it on by
+     hitting the configure button, choosing Legend and then making
+     it mapped. Or you can turn it on in the graph script.

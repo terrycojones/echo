@@ -1,0 +1,117 @@
+% \documentstyle [nooutdent,fullpage,11pt] {article}
+\documentstyle [11pt] {article}
+
+\begin {document}
+\pagestyle {empty}
+
+\title {{\bf Thesis Ideas For ECHO}}
+
+\author
+{Terry Jones }
+
+\maketitle
+
+\begin{abstract}
+There are several aspects of evolution that I find interesting and
+would be interested in studying within {\bf ECHO}. Most of them could not
+be done within {\bf ECHO} as it currently stands. What follows is a brief
+outline of each with a discussion of what sorts of things would need
+to be added to the model to accomodate the experiment.
+\end{abstract}
+
+\section{Arms Races}
+This is a very interesting subject for me. Evolution seems to be a
+huge mass of intertwined arms races. I don't know who coined the term,
+but I first encountered it, I think, in "The Selfish Gene". John
+Holland has reported that he observed an arms race in an early run of
+his version of {\bf ECHO}, in which agent's tags became increasingly
+long.
+
+It seems to me that an arms race would not need to involve tags
+becoming longer necessarily. An arms race is a chase through
+chromosome space and there is no need for the direction taken to be
+unidirectional. Perhaps the unidirectional ones are the simplest to
+identify as arms races though. Within {\bf ECHO} it would be enough
+for an agent to mutate a chromsome to make trading or comabat matching
+revert to an earlier stage in the history of the run. What I mean by
+this is that combat initiation, say, is determined by walking down the
+different agent's tags and conditions doing an allele by allele
+comparison. If an agent that would otherwise have been attacked
+mutates a single locus (as opposed to increasing the chromosome's
+length), it is also escalating the arms race.
+
+With more thought, it seems that all evolutionary steps can be
+interpreted as being some sort of move in an arms race game. This is
+especially true when thinking of agent--agent interactions, but is
+also true under some milder interpretation when thinking about
+agent--environment interactions (if the environment is changing).
+
+{\bf ECHO} could perhaps be used to study arms races in some detail. I
+am not sure what could be learnt or what the explicit goal of such an
+undertaking would be. I am not familiar with any arms race literature,
+if there is such a thing. This would probably be a case of examining
+the existing theories on the subject, picking some aspect that was the
+subject of interest or controversy (or whatever) and seeing what
+happened in {\bf ECHO}.
+
+It is not clear how to encourage {\bf ECHO} to exhibit behavior that
+is more easily interpreted as arms race like (by this I mean in the
+John Holland example style). It is not at all clear that one would
+want to do this anyway. More probably, it would be better to make a
+definition of an arms race something similar to the above (a chase
+through chromosome space) and develop better tools for watching such
+things in the current version of {\bf ECHO}.
+
+\section{Parasitism}
+
+\section{Speciation And Punctuated Equilibrium}
+
+This is a very interesting area which is of great interest to
+biologists. Gould and Elderidge(?) proposed that evolution does not
+always move in small steps and that major events, for example
+speciation, occur rather as fast jumps. There is a large body of
+literature on the subject. Some of it, the more popular stuff, I have
+read. Both Gould and Dawkins have written quite a bit on the subject.
+
+An essential question that would need to be answered before
+undertaking any experiments here is: in {\bf ECHO}, what is a species?
+The answer to this question is not clear. The simplest is probably
+that a species is defined by equivalence classes of agents that can
+mate. This does not consider what the agent is named (fly, ant etc.)
+but hopefully agents with such suggestive names could not mate
+initially. Note that this definition of species is not a direct
+mapping onto the biological definition -- in fact there is, as I
+remember, no clear cut biological definition.
+
+Two problems come immediately to mind. One is that the chromosomes in
+John's typical agents are so short that, for example, a standard fly
+is only two mutations from being able to mate with a standard
+caterpillar. This is not something that I have observed happen (in any
+case I do not do any mating), but it would be bound to arise. The
+obvious solution is to make the chromosomes longer to make this sort
+of thing rarer. This is not to say that it should be made impossible,
+just highly unlikely I suppose.
+
+The problem with the obvious solution is that if mating tags and
+conditions are increased in length, then an agent whose tag or
+condition mutates by one position will probably not be able to mate
+with any other agent, including copies of itself. This agent may not 
+die as a result. Is this bad? It is at least unrealistic in a ``mate
+or die'' world, but perhaps not in a world with self--replication
+(like {\bf ECHO}). The length of the chromosomes (and the similarity
+between the agent's mating tag and condition) would deteremine when it
+was likely that this agent would find a mate.
+
+Another point is that, as Gould presents it, speciation happens
+quickly in geographically isolated populations that somehow get cut
+off and in which environmental conditions are different in some
+important way from those that the rest of the species are used to
+dealing with. I would probably need to make some provision for some
+sort of events like this to occur within {\bf ECHO}. Possibly this
+could be as simple as turning off and then on migration between two
+sites.
+
+\section{Ants, Flies and Caterpillars}
+
+
+\end{document}

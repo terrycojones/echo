@@ -1,0 +1,258 @@
+%The self-reproduction threshold is used to determine
+%when enough resources have been collected. For example, if the genome
+%contains three ``a'' resources and the self-reproduction threshold is
+%two, then the reservoir must contain at least six ``a''
+%resources before replicating.  A similar requirement must be satisfied
+%for each of the resource types.
+
+
+%\noindent*{Self-reproduction}
+%\label{dynamics:self-reproduction}
+
+%An agent may self-reproduce when it acquires sufficient resources.
+%In self-reproduction, an agent makes a copy of its genome using the
+%resources it has stored in its reservoir. The self-reproduction
+%threshold is used to determine when enough resources have been
+%collected. For example, if the genome contains three ``a'' resources
+%and the self-reproduction threshold is two, then the reservoir must
+%contain at least siz ``a'' resources before self-reproduction can take
+%place. A similar requirement must be satisfied for each of the
+%resource types. 
+
+\section{Deleted Stuff}
+
+\subsubsection{The Structure of an Echo World}
+
+
+%% STEPH: do you think it's better to put all our parameter settings 
+%%        in a table at the end of this section (or at the start of the
+%%        one on results), rather than having them scattered through
+%%        this section? I do I think.
+
+%%  TERRY: I THINK THEY SHOULD ALL BE GATHERED TOGETHER IN A TABLE.
+
+\noindent{Worlds}
+
+The design of an Echo world requires the choice of a geography of
+sites. In the current implementation, this geography must form a
+rectangular array, though the general class of Echo models makes no
+such restriction. In this paper, we shall only be concerned with
+simple Echo models in which there is a single site. The choice of
+geography usually involves a choice of the properties of the various
+sites that will be created.
+
+Another high-level decision in the construction of a world is the
+choice of the number of resource types that will exist in the world.
+
+There are a number of other global properties of a world that need to
+be set:
+
+\begin{itemize}
+\item
+The {\em interaction fraction\/} determines the number of agent-agent
+interactions that will occur at a site in each Echo cycle. This is
+determined by multiplying this fraction by the population at a
+site. This many pairs of agents will be selected to interact. A value
+of 0.02 was used in the results of this paper.
+
+\item
+The {\em self-reproduction fraction\/} and {\em self-reproduction
+threshold\/} determine when agents in the world will be allowed to
+self-reproduce. Self-reproduction is described in
+section~\ref{dynamics:self-reproduction}. The first of these
+world-wide parameters determines the division of excess resources
+between parent and offspring after self-reproduction. The second
+determines the level of resource accumulation necessary for
+self-reproduction to occur. This is the number of copies of itself
+that an agent must be able to make before it actually does make a
+single copy. If this value is set to one, the parent and child will
+initially have no resources, making them especially vulnerable to
+taxation. These parameters were set to 0.5 and 2 in the Echo world
+used in this paper.
+
+\item
+The {\em trading fraction\/} determines what proportion of an agent's
+excess trading resource it will exchange in a trading interaction with
+another agent. Trade is described in section~\ref{dynamics:trade}. A
+value of 0.5 was used in this paper.
+
+\item
+The {\em taxation probability\/} is the probability that an agent gets
+taxed in an Echo cycle. Taxation is described in
+section~\ref{dynamics:taxation}. A value of 0.1 was used in this paper.
+
+\item
+The {\em neighborhood\/} determines the possible directions of
+migration between sites. The three possibilities, given a rectangular
+array of sites, are none (i.e. no migration), the four compass points
+or the compass points plus the diagonals. Of course in the Echo model
+described here, there is only a single site, and thus there can be no
+migration between sites regardless of how this parameter is set.
+\end{itemize}
+
+An Echo world also requires the definition of a {\em combat matrix},
+but a full discussion of that is beyond the scope of this paper.
+%% STEPH: is it????
+This matrix is used in the calculation of combat outcome
+probabilities. For details, see~\cite{Holland92}. Combat is described
+in section~\ref{dynamics:combat}.
+
+
+\noindent{Sites}
+
+An Echo site may initially contain an arbitrary number of agents.
+These are arranged in a one-dimensional array. The probability that a
+pair of agents will be chosen to interact falls off exponentially with
+increasing distance between agents in this array. The user must decide
+which agents initially reside at each site, and in what order they
+should appear in the array.
+
+There are three probabilities that must be set for each site:
+
+\begin{itemize}
+\item
+The {\em mutation probability\/} is similar to that used in a genetic
+algorithm.
+%% STEPH: citation needed here????
+Each locus of the genome of each agent at the site undergoes mutation
+with the given probability at the end of each Echo cycle. In the Echo
+model of this paper, this was set to 0.0005.
+
+\item
+The {\em crossover probability\/} is also used in a way that is
+similar to the crossover probability of a genetic algorithm. It
+determines the probability that two agents that are to undergo sexual
+reproduction will be subject to crossover. In the Echo
+model of this paper, this was set to 0.7.
+
+\item
+The {\em random death probability\/} determines the probability that
+each agent at the site will be killed for no reason each Echo cycle.
+This is described in section~\ref{dynamics:ZAP} and was set to 0.0001
+in our experiments.
+\end{itemize}
+
+In addition to these probabilities, every site must also specify four
+resource level vectors. Each of these consists of a vector of
+non-negative integers whose length is the same as the number of
+resource types in the world.  These vectors are used as follows:
+
+\begin{itemize}
+\item
+The {\em production\/} vector contains the number of resources of each
+resource type that will be produced by the site in each Echo cycle.
+
+\item
+The {\em initial\/} vector contains the number of resources of each
+resource type that will be present at the site when it is first
+created.
+
+\item
+The {\em maximum\/} vector contains the maximum level of each resource
+type that can accumulate at the site.
+
+\item
+The {\em maintenance\/} vector contains the number of each resource
+type that will be charged to an agent when it is taxed, as described
+in section~\ref{dynamics:taxation}.
+\end{itemize}
+
+%\noindent*{Uptake of Resources}
+
+%In every cycle, all the agents at a site compete for all the resources
+%their uptake masks allow them to collect. The site produces resources
+%according to its production vector, and these are distributed as
+%equally as possible amongst the agents at the site that are
+%genetically able to collect them.
+
+%\noindent*{Return of Resources}
+
+%When an agent at a site dies for some reason, its resources are
+%returned to the environment and become immediately available to other
+%agents at that site.
+
+%\noindent*{Taxation}
+%\label{dynamics:taxation}
+
+%In each cycle, each site exacts a resource tax from each agent with a
+%given (worldwide) probability. This can be thought of as economic
+%taxation, or as the cost required to live at the site. Biologically,
+%this can be thought of as metabolic cost.
+
+%\noindent*{Random Death}
+%\label{dynamics:ZAP}
+
+%In each cycle, every agent in the world is killed for no apparent
+%reason with some low probability. This can be interpreted as bad luck
+%or as a mechanism that prevents agents from getting too old. If they
+%are not killed some other way (through combat or taxation), they will
+%eventually be randomly deleted.
+
+
+STUFF ABOUT SPECIES ABUNDANCE:
+
+%A number of attempts have been made to fit observed species abundance
+%data to distributions. These include distributions based on harmonic
+%numbers \cite{Corbet42}, a logarithmic distribution due largely to
+%Fisher \cite{FisherCorbetWilliams43}, a class of truncated lognormal
+%distributions \cite{Preston48,Preston62a,Preston62a}, the Poisson
+%lognormal \cite{Bulmer74}, various distributions arising from
+%MacArthur's ``broken stick'' model \cite{MacArthur57,MacArthur60} and
+%a sequential broken stick model of \cite{Sugihara80} that, with
+%seemingly reasonable assumptions, gives rise to Preston's
+%``canonical'' lognormal distribution.
+
+% \footnote{This is
+% a generalization, not a re-phrasing, of MacArthur's broken stick model
+% \cite{MacArthur57} which posits a distribution in addition to the
+% perspective.}. Aspects of this combinatorial viewpoint have been
+% well-studied in mathematics. For instance, the number of partitions
+% into non-empty sets is given by the Stirling numbers of the second
+% kind.
+
+% These questions can
+% naturally be extended to collections of samples and to partitions of
+% samples.  In other words, biologists have been interested in the {\em
+% distributions} of the sizes of such partitionings, the extent to which
+% certain distributions are ubiquitous, and the reasons behind this.
+
+% In the remainder of this section we give a brief
+% outline of the answers that have been proposed.
+
+% Preston's canonical lognormal distribution is doubly important since
+% the conditions under which a lognormal curve is a member of Preston's
+% canonical family give rise to the species-area constant of
+% $z \simeq \frac{1}{4}$ in the species-area relationship $S = cA^z$
+% \cite{Preston62a,Sugihara80,May75}. 
+
+%This is based on sequential
+%division of niche space, and can be described in terms of MacArthur's
+%combinatorial broken stick model, with the crucial difference in
+%resultant distribution arising from breaking the stick {\em
+%sequentially\/} rather than simultaneously.
+
+%The first thing we should do when considering species abundance in
+%Echo is to be wary when talking of species. Within biology, there has
+%been much discussion about what exactly a species is, how species are
+%created and how they can be delineated
+%\cite{Mayr82,Mayr88,Eldredge89}. For the purposes of this paper, it is
+%not necessary to propose and defend a definition of species in
+%Echo. This can be done, indeed it is not too hard to delimit species
+%in Echo using Mayr's {\em Biological Species Concept\/} \cite{Mayr42}
+%or Paterson's {\em Specific Mate Recognition System\/}
+%\cite{Paterson85}. 
+
+%We are interested in various ways of
+%looking at Echo populations that may prove in accord with work on
+%species abundance. This can later be used to help decide what in Echo
+%could reasonably be considered a species, if it proves necessary to
+%say what a species in Echo is. We propose to let processes observed in
+%real biological systems help to draw conclusions about the nature of
+%Echo, rather than to make a priori definitions and attempt to impose
+%them on biology. 
+
+% The figure is not based on any grouping of Echo individuals into
+% ``species.'' In fact, it may not be unreasonable to consider
+% individual Echo agents as species, as has been suggested by James
+% Brown (private communication).
+

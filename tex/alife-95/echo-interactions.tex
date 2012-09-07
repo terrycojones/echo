@@ -1,0 +1,109 @@
+\section{Interactions in Echo}
+\label{echo-interactions}
+\label{agent-agent}
+
+There are three main forms of agent-agent interaction: combat, trading
+and mating. All of these interactions take place between agents
+that are located at the same site and all involve the transfer of
+resources between agents
+
+\subsection{Combat}
+\label{dynamics:combat}
+
+Combat is an idealization of any antagonistic interaction between
+real-world entities. It does not imply that the agents are actually
+fighting, although this is not precluded. If two agents in a
+real-world system are behaving in a competitive fashion, this would be
+modeled in Echo by designing the agents in such a way that they would
+engage in combat. When combat occurs, one agent is always killed, and
+its resources are given to the survivor.\footnote{In more recent formulations
+of Echo \cite{Holland94,Holland95a}, the interaction need not be so
+extreme and results in a transfer of resources (possibly in both
+directions, and possibly in a very uneven fashion) between the agents.}
+
+When two agents meet, it is first determined whether or not either
+agent will attack the other.  An agent $A$ will attack an agent $B$ if
+its combat condition is a prefix of $B$'s offense tag.  [TERRY: is
+this right?  SHouldn't it be B's defense tag?]  an agent is given a
+chance to flee (which it does with a probability equivalent to the
+probability of it losing in the combat encounter).  The calculation of
+the probability of victory in combat is based on matching $A$'s
+offense tag with $B$'s defense tag and vice versa. The resource
+characters that comprise these genes are used as an index into a {\em
+combat matrix}, with special provisions for zero-length genes and for
+genes of unequal length.  This is somewhat complicated and is not
+described fully here.
+
+As a result of this computation, each agent receives some number of
+points. If $\alpha$ and $\beta$ are the points awarded to $A$ and $B$,
+then $A$ will win the combat with a probability of $\alpha / (\alpha +
+\beta)$.  The resources that comprise the loser (both its genome and
+the contents of its reservoir) are given to the winner and the loser
+is removed from the population.
+
+\subsection{Trade}
+\label{dynamics:trade}
+
+If two agents are chosen to interact and they do not engage in combat,
+they are given the opportunity to trade and mate. Unlike combat,
+trading and mating must be by mutual agreement. Agents $A$ and $B$
+will trade if $A$'s trading condition is a prefix of $B$'s offense tag
+and vice versa. Notice that the offense tag is used here as well as in
+determining whether combat will occur.
+
+When trade takes place, each agent contributes its excess trading
+resource.  Excess is defined to be the amount of resource that an
+agent possesses above that which is required to replicate its genome,
+plus some reserves (world-level parameters control how much reserve an
+agent retains).  Thus an agent provides some fraction of the resource
+that it does not need for the next self-reproduction. This may be
+zero, in which case an agent does not provide anything in the
+trade. This behavior is analogous to a form of deception or bluffing.
+An agent cannot know in advance if another agent will supply a
+positive quantity of a resource, or what that resource might be. This
+might seem to be an odd form of trade, but agents can learn to
+recognize each other based on their trading tags. Agents whose tags
+tend to involve them in disadvantageous trades will tend to reproduce
+less quickly and tend to have smaller probabilities of being able to
+meet taxation demands.
+
+\subsection{Recombination}
+
+Agents that interact and do not engage in combat may exchange genetic
+information through recombination.  As in many genetic algorithms, the
+new agents replace their parents in the population.  Recombination
+occurs between two agents $A$ and $B$ if $A$ finds $B$ acceptable and
+vice versa. $A$ will find $B$ acceptable if (1) $A$'s mating
+condition is a non-zero prefix of $B$'s mating tag or (2) both $A$'s
+mating condition and $B$'s mating tag are zero length. The restriction
+to non-zero prefixes is designed to stop agents with zero-length
+mating conditions from rapid proliferation. Such an agent finds all
+other agents desirable (including copies of itself). To prevent this,
+an agent with a zero-length mating condition will only find an agent
+with a zero-length mating tag acceptable. This is a slight departure
+from the description of mating given in
+\cite{Holland92}.  Figure~\ref{fig:agent-agent} shows a simplified
+view of the two-way matching process used to determine whether mating
+will occur.
+
+\begin{figure}[htb]
+\begin{center}
+\leavevmode
+\psfig{figure=figures/agent-agent.ps}
+\caption{A simplified view of the two-way tag and condition matching
+that is used by agents to determine whether mating will occur.
+\label{fig:agent-agent}}
+\end{center}
+\end{figure}
+
+When sexual reproduction does occur, a form of two-point crossover is
+employed. This is complicated by the fact that genomes are variable
+length; one can choose a crossover point in one agent but find that
+the same crossover point does not exist in the other.  Briefly, a
+recombination proceeds by (1) selecting two genes to contain crossover
+points, (2) choosing crossover points in each gene in each agent, and
+(3) crossing over in the manner of two-point crossover. The operation
+conserves resources (i.e., resources are not created or destroyed) but
+the ratio of genetic material from each parent in each of the children
+will typically not be 50:50.
+

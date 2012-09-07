@@ -1,0 +1,29 @@
+#!/bin/sh
+cwd=`pwd`
+
+cat > run-echo <<EOT
+#!/bin/sh
+
+if [ ! -d $cwd ]
+then
+	echo "Cannot find Echo directory $cwd"
+	exit 1
+fi
+
+cd $cwd 2>/dev/null
+
+case \$? in
+	0) ;;
+	*) echo "Could not cd to \"$cwd\"."; exit 1;;
+esac
+
+#
+# Change the path so it goes through . since
+# this is where the cluster program lives.
+#
+PATH=.:$PATH
+
+xterm -title 'ECHO status' -fn 9x15 -sl 2000 -sb -geometry 85x24+355+53 -bg DodgerBlue1 -fg white -e Echo &
+EOT
+
+chmod +x run-echo

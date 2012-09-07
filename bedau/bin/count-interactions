@@ -1,0 +1,70 @@
+#!/usr/bin/perl
+
+#
+# level-averages
+#
+# This looks for lines in stdin which have the form
+# "7 blocks completed after 24000 evaluations"
+# and "9 blocks not completed after 56000 evaluations"
+# and keeps statistics on the number of times each level
+# is reached and how long it took to get there.
+# A block is the same as a level, this code uses level everywhere.
+#
+# The stats are dumped at the end.
+#
+
+require "getopts.pl";
+
+&Getopts("f:i:s:");
+
+open(KILLS, ">kills.data");
+open(TRADES, ">trades.data");
+open(MATES, ">mates.data");
+
+$kills = $mates = $trades = $generations = 0;
+
+$opt_s = 0 unless $opt_s;
+$opt_f = -1 unless $opt_f;
+$opt_i = 50 unless $opt_i;
+
+while (<>) {
+    
+    chop;
+    
+    if (/kills/){
+	$kills++;
+    }
+
+    if (/mates/){
+	$mates++;
+    }
+
+    if (/trades/){
+	$trades++;
+    }
+
+    if (/COMPLETE/){
+	$generations++;
+
+	if ($generations >= $opt_s &&
+	    ($opt_f == -1 || $generations <= $opt_f) &&
+	    $generations % $opt_i == 0){
+	    $g = $generations / $opt_i;
+	    printf KILLS "$g $kills\n";
+	    printf TRADES "$g $trades\n";
+	    printf MATES "$g $mates\n";
+	}
+    }
+}
+
+close(KILLS);
+close(TRADES);
+close(MATES);
+
+system "./graph kills.data mates.data trades.data $opt_i";
+
+
+# Local Variables:
+# mode:perl
+# End:
+

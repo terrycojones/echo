@@ -1,0 +1,10 @@
+Name : cat+sex
+Initial_Reserves : 10 10 10 10
+Trading_Resource : b
+Uptake_Mask : 1111
+Offense_Tag : d
+Defense_Tag : a
+Mating_Tag : da
+Combat_Condition : c
+Trade_Condition : b
+Mating_Condition : da

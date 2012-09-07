@@ -1,0 +1,22 @@
+#!/bin/sh
+
+if [ ! -d /disks/disk1/Users/terry/r/echo/s ]
+then
+	echo "Cannot find Echo directory /disks/disk1/Users/terry/r/echo/s"
+	exit 1
+fi
+
+cd /disks/disk1/Users/terry/r/echo/s 2>/dev/null
+
+case $? in
+	0) ;;
+	*) echo "Could not cd to \"/disks/disk1/Users/terry/r/echo/s\"."; exit 1;;
+esac
+
+#
+# Change the path so it goes through . since
+# this is where the cluster program lives.
+#
+PATH=.:.:/System/Users/terry/bin:/System/Users/terry/bin/sparc:/network/software/packages/gnu/bin:/network/software/bin:/usr/ucb:/bin:/network/software/packages/X/bin:/etc:/usr/etc:/usr/lib
+
+xterm -title 'ECHO status' -fn 9x15 -sl 2000 -sb -geometry 85x24+355+53 -bg DodgerBlue1 -fg white -e Echo &

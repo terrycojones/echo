@@ -1,0 +1,183 @@
+\section{Introduction}
+\label{intro}
+
+Many interesting systems are difficult to analyze and control using
+traditional methods.  These include natural ecosystems, immune
+systems, cognitive systems, economies and other social organizations,
+and arguably, modern computers.  One source of difficulty arises from
+nonlinear interactions among system components.  Nonlinearities can
+lead to unanticipated emergent behaviors, a phenomenon that has been
+well documented and studied in physical, chemical, biological, and
+social systems [CITE TAYLOR, ALife II?], as well as in some forms of
+computation \cite{Forrest91b}.  Nonlinear systems with interesting
+emergent behavior are often referred to as {\em complex systems}.  A
+second form of complexity arises when the primitive components of the
+system can change their specification, or evolve, over time.  Systems
+with this additional property are sometimes called {\em complex
+adaptive systems\/}
+\cite{Holland95a}.  Here, we will use the term {\em complex adaptive
+system\/} (CAS) to refer to a system with the following properties:
+\begin{enumerate}
+\item A collection of primitive components, called ``agents.''
+\item Interactions among agents and between agents and their
+  environment.
+\item Unanticipated global behaviors that result from the
+  interactions.
+\item Agents adapt their behavior to other agents and environmental
+  constraints.
+\item System components and behaviors evolve as a consequence (4).
+\end{enumerate}
+
+% There are also all the usual problems of
+% verifying that complex simulation code is correct.  
+
+It can be quite difficult to model systems with these properties
+analytically.  Useful and predictive mathematical treatments are
+difficult, due primarily to the following: nonlinearities (as
+discussed above), discreteness, spatial inhomogeneities, and the
+changing behavior of the primitive elements of the system.
+Discreteness arises, for example, in time (as in the case of
+generations in population genetics), state spaces, and internal
+variable values, while spatial heterogeneities arise through resource
+gradients, nonuniform operating conditions (e.g., different mutation
+rates in different parts of the body [cite Kepler and Perelson], or
+even random drift.  Both discreteness and spatial heterogeneity can
+have a significant effect on system behavior.  For example, Durrett
+and Levin \cite{DurrettAndLevin93a} present an elegant description of
+how both both properties affect the predictive power of conventional
+methods, including ordinary differential equations and
+reaction-diffusion systems, on a classical problem in ecology.  As a
+consequence, many of the standard approximations for infinite-sized
+systems and techniques developed for studying asymptotic behavior of
+continuous nonlinear dynamical systems cannot be directly applied to
+discrete or spatially heterogeneous systems.  Finally, adaptation is
+central in CAS\@.  Because the primitive components of the system can
+change over time, different agents may behave according to different
+rules at different times.  Individual variants are important and can
+determine the overall system trajectory, which precludes modeleing
+only their aggregate behavior.  Although the underlying evolutionary
+mechanisms themselves can in principle be modeled, as suggested in
+\cite{Farmer90}, this is a difficult undertaking, and most such
+efforts to date have been notably unsuccessful in describing the
+behavior of any particular evolutionary system.
+[...this is a difficult undertaking and this level of detail is
+usually omitted when modeling complicated systems.  Further, outcomes
+of stochastic processes or ``frozen accidents'' can have irreversible
+effects on system dynamics \cite{GellMann94,GellMann95}.  Omit rest
+of paragraph...PTH] 
+For example, analytical models in population genetics typically
+describe two-locus systems at equilibrium, often assuming infinite
+population sizes, while the cases in which we are interested involve
+relatively small populations with richer interactions (i.e., longer
+genomes).
+
+An alternative to analytical models of CAS is simulation.  Detailed
+simulations are also problematic, because it is often impossible to get
+all of the details correct.  Consider, for example, the vertebrate
+immune system which has been estimated to express over $10^7$
+different receptors simultaneously [STEPH: REFERENCE].  Modeling the
+physical chemistry of just one receptor/ligand binding event, even at
+an abstract level, requires enormous amounts of computation, and it is
+therefore infeasible to model the expressed repertoire of receptors
+precisely.  This problem exists for many large complicated systems,
+but because nonlinear systems can be highly dependent on seemingly
+small details, even a trivial inaccuracy in the model could lead to
+wildly erroneous results.  One approach to this problem is to strip
+away as much detail as possible, retaining only the essential
+interactions.  The goal is then to develop models whose behavior is
+robust with respect to the details of the interactions (e.g., avoiding
+parameter tweaking to coax a system to produce desired behaviors), and
+which produces the broad categories of behaviors in which we are
+interested.  An implication of this approach is that such models will
+rarely, if ever, be able to make precise quantitative predictions.
+The model described in this paper, called Echo, is an example of this
+approach, as are many artificial-life models.
+
+Echo is a mechanistic model in the sense that it encodes (as a
+computational artifact) a theory about which mechanisms are most
+relevant in ecosystems.  In Echo, certain primitive components and
+interactions are built in, and when the model is ``run,'' i.e.,
+simulated, these mechanisms give rise to various macro-level
+properties.  The goal is that the relevant behaviors will arise
+spontaneously as a consequence of the primitive mechanisms.  This is
+quite a different kind of explanation than simply predicting what will
+happen next without representing the underlying mechanisms explicitly.
+Of course, prediction is important for models like Echo, but it is
+quite a different kind of prediction than that typically associated
+with simulations.  In this paper, we use the word ``model'' to
+describe the design decisions we have made about which components and
+interactions are included and which are not.  This might be confusing
+because the model is described in terms of computational structures,
+like ``agent,'' ``stack,'' and ``rules.''  Our model is really a
+high-level simulation of generic ecological behavior.
+
+%This style of modeling is quite different from the
+%differential-equation style of models used most frequently to model
+%nonlinear dynamical systems.  In agent-based models, each ``actor''
+%and each interaction among actors (i.e., not just each type of
+%interaction) is represented (simulated) explicitly.  Individuals are
+%capable of quite different kinds of behaviors (the agents in the
+%system are heterogeneous).  Agent-based models are discrete in most
+%dimensions, typically time, state, and update rules.  As a result,
+%these computational models are difficult to analyze.
+
+Echo is related to several earlier CAS models.
+Genetic algorithms \cite{Holland92} focus on the evolutionary
+component of CAS\@.  They are reasonably well understood and mature,
+but ignore several important features, including resource allocation,
+heterogeneity, and endogenous fitness.  Classifier systems
+\cite{HollandEtAl86} apply genetic algorithms to a cognitive modeling 
+framework.  Similarly, Echo extends genetic algorithms to an
+ecological setting, adding the concepts of geography (location),
+competition for resources, and interactions among individuals
+(coevolution).  Echo is intended to capture important generic
+properties of ecological systems, and not necessarily to model any
+particular ecology in detail.  Echo's contribution to ecological
+modeling lies in the fact that evolution is built in as a fundamental
+component of the system.  Most existing ecological models 
+\cite{May74,Caswell89,DeAngelisAndGross92} do not have such an evolutionary 
+component.  Thus, it is difficult to address issues such as flows of
+information and resources in many-species assemblages, patterns
+of speciation and extinction in ecological communities, and effects
+of spatial heterogeneity on population dynamics.
+
+Echo also resembles more recent CAS implementations.  These include Swarm
+\cite{Langton94}, Sugarscape \cite{Epstein94}, and the 
+Evolutionary Reinforcement Learning (ERL) model
+\cite{AckleyAndLittman92}.  Echo describes a
+family of models, but it is not a generic modeling platform like
+Swarm.  Swarm supports a wide range of agent types and interaction
+rules, but Echo makes specific commitments about the form of system
+components (agents, resources, interactions).  Echo does resemble
+Sugarscape in several respects, but it differs in specific details
+(e.g., the complexity of each individual agent) and in its focus on
+ecological principles.  ERL provides two levels of learning (there is
+only one in Echo) and is not intended as a general ecological model.
+[GET ACKLEY TO HELP HERE.]  
+
+%Echo extends classical genetic algorithms
+%in several important ways: (1) fitness is endogenous, (2) individuals,
+%called agents, have both a genome and a local state (a reservoir of
+%stored resources) that persists through time, and (3) genomes have
+%variable length.
+
+The original conception of Echo, including motivation, design
+decisions, and overall structure were introduced in
+\cite{Holland92,Holland94,Holland95a}.  In these works, a family of
+progressively more elaborate Echo models is outlined.  Our goal in
+this paper is to describe more fully one specific Echo model and to
+show how one might study the extent to which Echo does or does not
+capture important properties of ecological systems.  
+Sections \ref{echo-overview}, \ref{echo-cycle}, and \ref{echo-interactions} 
+describe the Echo model we have implemented.  An important aspect of
+our study is the idea of a neutral model.  
+Neutral models are useful for testing what mechanisms are necessary to
+produce an observed pattern \cite{NiteckiAndHoffman87}.  We propose a 
+neutral model that allows us to assess the effect of evolutionary pressures on
+Echo's behavior, and we compare its behavior with that of our original
+Echo implementation.  Sections \ref{species-abundance} and
+\ref{results} report experiments (with and without the neutral model)
+on the relative abundance of species in Echo, a characteristic feature
+of ecological systems.  This raises some fundamental questions, such
+as how to define species in Echo and what scientific purpose is served
+by such models, which we also discuss.

@@ -1,0 +1,16 @@
+#! /usr/local/bin/perl
+#
+# ssbehead - remove ssbug/bug data header
+
+# search to the data separator tag, ignoring everything before it
+while (defined($_ = <>)) {
+    last if /^\#*[= \t]*DATA[= \t]*$/;
+}
+
+# back to shell in case it was unsuccessful
+exit -1 unless defined $_;
+
+# print out anything that remains
+while (defined($_ = <>)) {
+    print;
+}
